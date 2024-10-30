@@ -44,6 +44,8 @@ public class SignUp {
     @FXML
     private Label messageLabel;
 
+    private final DatabaseHelper dbHelper = new DatabaseHelper();
+
     @FXML
     public void initialize() {
         // Thêm các câu hỏi bảo mật vào ComboBox
@@ -73,9 +75,13 @@ public class SignUp {
         if (username.isEmpty() || password.isEmpty() || name.isEmpty() || securityQuestion == null || answer.isEmpty()) {
             showAlert("Error", "Please fill in all fields.");
         } else {
-            // Xử lý logic tạo tài khoản ở đây
-            showAlert("Success", "Account created successfully!");
-            handleBackButton();
+            boolean isInserted = dbHelper.insertUser(username, name, password, securityQuestion, answer);
+            if (isInserted) {
+                showAlert("Success", "Account created successfully!");
+                handleBackButton();
+            } else {
+                showAlert("Error", "Something went wrong!");
+            }
             // Thêm mã để lưu tài khoản vào cơ sở dữ liệu hoặc file
         }
     }

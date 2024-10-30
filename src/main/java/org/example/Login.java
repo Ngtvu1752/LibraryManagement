@@ -29,6 +29,7 @@ public class Login {
     @FXML
     private Button forgotPasswordButton; // Kết nối với nút Forgot password
 
+    private final DatabaseHelper dbHelper = new DatabaseHelper();
     // Phương thức khởi tạo
     @FXML
     public void initialize() {
@@ -59,7 +60,13 @@ public class Login {
 
     private boolean isValidLogin(String studentId, String password) {
         // Kiểm tra thông tin đăng nhập với cơ sở dữ liệu hoặc danh sách người dùng
-        return true; // Thay bằng logic kiểm tra thật sự
+        System.out.println("Student ID: " + studentId);
+        boolean valid = dbHelper.userExists(studentId, password);
+        if(valid == true) {
+            System.out.println("Student ID: " + studentId + " Password: " + password);
+            return true;
+        }
+        else return false;
     }
 
     private void openHomePage() {
