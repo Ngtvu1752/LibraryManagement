@@ -70,7 +70,6 @@ public class Login {
     }
 
     private void openHomePage() {
-        // Mở trang chính (Home Page)
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/HomePage.fxml"));
             Parent root = loader.load();
@@ -80,6 +79,7 @@ public class Login {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+            showAlert("Error", "Could not open Home Page.");
         }
     }
 

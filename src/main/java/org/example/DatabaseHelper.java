@@ -3,9 +3,9 @@ package org.example;
 import java.sql.*;
 
 public class DatabaseHelper {
-    private static final String URL = "jdbc:mysql://localhost:3306/library_db"; // Địa chỉ database
+    private static final String URL = "jdbc:mysql://localhost:3308/library_db"; // Địa chỉ database
     private static final String USERNAME = "root"; // Tên người dùng MySQL
-    private static final String PASSWORD = "23021752"; // Mật khẩu MySQL
+    private static final String PASSWORD = ""; // Mật khẩu MySQL
 
     public Connection connect() {
         Connection connection = null;
@@ -24,8 +24,8 @@ public class DatabaseHelper {
         return connection;
     }
 
-    public boolean insertUser(String username, String name, String password, String question, String answer) {
-        String sql = "INSERT INTO users(username, name, password, question, answer) VALUES(?,?,?,?,?)";
+    public boolean insertUser(String username, String name, String password, String question, String answer, String role) {
+        String sql = "INSERT INTO users(username, name, password, question, answer, role) VALUES(?,?,?,?,?, ?)";
         if (usernameExists(username)) {
             System.out.println("Username already exists, please choose another name");
             return false;
@@ -38,6 +38,7 @@ public class DatabaseHelper {
                 ps.setString(3, password);
                 ps.setString(4, question);
                 ps.setString(5, answer);
+                ps.setString(6, role);
                 ps.executeUpdate();
                 System.out.println("Add them user thanh cong");
                 return true;
@@ -78,7 +79,7 @@ public class DatabaseHelper {
     public static void main(String[] args) {
         DatabaseHelper helper = new DatabaseHelper();
         helper.insertUser("VU", "YeuQH", "12345", "Qh la cua ai",
-                "Cua bo may");
+                "Cua bo may", "student");
         boolean exists = helper.usernameExists("Dmm");
         if (exists) {
             System.out.println("Username already exists, please choose another name");

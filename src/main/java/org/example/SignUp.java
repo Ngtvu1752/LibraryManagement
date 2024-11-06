@@ -70,12 +70,12 @@ public class SignUp {
         String name = nameField.getText();
         String securityQuestion = securityQuestionComboBox.getValue();
         String answer = answerField.getText();
-
+        String role = "Student";
         // Kiểm tra thông tin
         if (username.isEmpty() || password.isEmpty() || name.isEmpty() || securityQuestion == null || answer.isEmpty()) {
             showAlert("Error", "Please fill in all fields.");
         } else {
-            boolean isInserted = dbHelper.insertUser(username, name, password, securityQuestion, answer);
+            boolean isInserted = dbHelper.insertUser(username, name, password, securityQuestion, answer, role);
             if (isInserted) {
                 showAlert("Success", "Account created successfully!");
                 handleBackButton();
