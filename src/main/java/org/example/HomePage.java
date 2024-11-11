@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -37,6 +38,11 @@ public class HomePage {
     }
 
     private void handleNewBook() {
+        User currentUser = SessionManager.getCurrentUser();
+        if (!currentUser.getRole().equals("admin")) {
+            showAlert("Access Denied", "Only Admin can add books.");
+            return;
+        }
         try {
             // Load file FXML của cửa sổ NewBook
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/NewBook.fxml"));
@@ -84,5 +90,13 @@ public class HomePage {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

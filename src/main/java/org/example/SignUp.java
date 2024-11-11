@@ -44,7 +44,7 @@ public class SignUp {
     @FXML
     private Label messageLabel;
 
-    private final DatabaseHelper dbHelper = new DatabaseHelper();
+    private StudentDAO studentDAO = new StudentDAO();
 
     @FXML
     public void initialize() {
@@ -71,16 +71,19 @@ public class SignUp {
         String securityQuestion = securityQuestionComboBox.getValue();
         String answer = answerField.getText();
         String role = "Student";
-        // Kiểm tra thông tin
+        // Kiểm tra thông tin0
+
         if (username.isEmpty() || password.isEmpty() || name.isEmpty() || securityQuestion == null || answer.isEmpty()) {
             showAlert("Error", "Please fill in all fields.");
         } else {
-            boolean isInserted = dbHelper.insertUser(username, name, password, securityQuestion, answer, role);
+            String hashedPassword = PasswordUtil.hashPassword(password);
+            Student newStudent = new Student(username, hashedPassword, name, securityQuestion, answer);
+            boolean isInserted = studentDAO.save(newStudent);
             if (isInserted) {
                 showAlert("Success", "Account created successfully!");
                 handleBackButton();
             } else {
-                showAlert("Error", "Something went wrong!");
+                showAlert("Error", "Username already exists, please choose another name");
             }
             // Thêm mã để lưu tài khoản vào cơ sở dữ liệu hoặc file
         }

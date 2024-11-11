@@ -8,7 +8,7 @@ public class DatabaseHelperTest {
 
     @Test
     public void testConnect() {
-        DatabaseHelper dbHelper = new DatabaseHelper();
+        DatabaseHelper dbHelper = DatabaseHelper.getInstance();
         assertNotNull("Kết nối với cơ sở dữ liệu thất bại" ,dbHelper.connect() );
     }
 }

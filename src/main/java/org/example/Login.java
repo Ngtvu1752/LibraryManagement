@@ -1,4 +1,5 @@
 package org.example;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -11,6 +12,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Login {
 
@@ -29,13 +34,17 @@ public class Login {
     @FXML
     private Button forgotPasswordButton; // Kết nối với nút Forgot password
 
-    private final DatabaseHelper dbHelper = new DatabaseHelper();
+    private DatabaseHelper dbHelper = DatabaseHelper.getInstance();
+
     // Phương thức khởi tạo
     @FXML
     public void initialize() {
         signInButton.setOnAction(event -> handleSignIn());
         signUpButton.setOnAction(event -> handleSignUp());
         forgotPasswordButton.setOnAction(event -> handleForgotPassword());
+
+        studentIdField.setOnAction(event -> handleSignIn());
+        passwordField.setOnAction(event -> handleSignIn());
     }
 
     private void handleSignIn() {
@@ -46,11 +55,10 @@ public class Login {
         if (studentId.isEmpty() || password.isEmpty()) {
             showAlert("Error", "Please enter Student ID and Password.");
         } else {
-            // Kiểm tra thông tin đăng nhập (ví dụ: kiểm tra với cơ sở dữ liệu)
-            if (isValidLogin(studentId, password)) {
-                // Mở trang chính
+            User user = authenticate(studentId, password);
+            if (user != null) {
+                SessionManager.setCurrentUser(user);
                 openHomePage();
-                // Đóng trang đăng nhập
                 closeLoginPage();
             } else {
                 showAlert("Error", "Invalid Student ID or Password.");
@@ -58,15 +66,43 @@ public class Login {
         }
     }
 
+    private User authenticate(String username, String password) {
+        String sql = "SELECT * FROM users WHERE username = ? /*AND password = ?*/";
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+//            pstmt.setString(2, password);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                String storedPassword = rs.getString("password");
+                String role = rs.getString("role");
+                String question = rs.getString("question");
+                String answer = rs.getString("answer");
+                String name = rs.getString("name");
+               if (storedPassword.equals(password) || PasswordUtil.checkPassword(password, storedPassword) ) {
+                    if (role.equals("admin")) {
+                        return new Admin(username, password, name, question, answer);
+                    } else if (role.equals("student")) {
+                        return new Student(username, password, name, question, answer);
+                    }
+                } else {
+                    showAlert("Error","Incorrect account or password");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
     private boolean isValidLogin(String studentId, String password) {
         // Kiểm tra thông tin đăng nhập với cơ sở dữ liệu hoặc danh sách người dùng
         System.out.println("Student ID: " + studentId);
         boolean valid = dbHelper.userExists(studentId, password);
-        if(valid == true) {
+        if (valid == true) {
             System.out.println("Student ID: " + studentId + " Password: " + password);
             return true;
-        }
-        else return false;
+        } else return false;
     }
 
     private void openHomePage() {
@@ -106,7 +142,7 @@ public class Login {
             // Thiết lập tiêu đề và hiển thị stage
             signUpStage.setTitle("Sign Up");
             signUpStage.show();
-            
+
             // Nếu muốn ẩn cửa sổ hiện tại
             Stage currentStage = (Stage) signUpButton.getScene().getWindow(); // Dùng signUpButton
             currentStage.hide();
@@ -115,6 +151,7 @@ public class Login {
             showAlert("Error", "Could not open sign up page.");
         }
     }
+
     private void handleForgotPassword() {
         // Xử lý quên mật khẩu (có thể mở một cửa sổ mới hoặc gửi yêu cầu đặt lại mật khẩu)
         showAlert("Info", "Redirecting to Forgot Password page...");
