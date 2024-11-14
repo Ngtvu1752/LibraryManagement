@@ -6,7 +6,7 @@ import java.util.Optional;
 public interface DAO<T> {
     List<T> getAll();
 
-    Optional<T> findById(int id);
+
 
     boolean save(T t);
 

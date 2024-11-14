@@ -1,7 +1,5 @@
 package org.example;
 
-import javafx.fxml.FXML;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,7 +39,6 @@ public class StudentDAO implements DAO<Student> {
         return students;
     }
 
-    @Override
     public Optional<Student> findById(int id) {
         String sql = "SELECT * FROM users WHERE id = ? AND role = 'student'";
         try (Connection conn = dbHelper.connect();
