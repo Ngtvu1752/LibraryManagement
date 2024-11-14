@@ -1,11 +1,13 @@
 package org.example;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.*;
 
 public class DatabaseHelper {
     private static final String URL = "jdbc:mysql://localhost:3306/library_db"; // Địa chỉ database
     private static final String USERNAME = "root"; // Tên người dùng MySQL
-    private static final String PASSWORD = "23021752"; // Mật khẩu MySQL
+    private static final String PASSWORD = ""; // Mật khẩu MySQL
     private static DatabaseHelper instance;
 
     private DatabaseHelper() {
@@ -36,16 +38,19 @@ public class DatabaseHelper {
     }
 
     public boolean userExists(String username, String password) {
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+        String sql = "SELECT password FROM users WHERE username = ?";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
-            pstmt.setString(2, password);
             ResultSet rs = pstmt.executeQuery();
-            return rs.next();
+
+            if (rs.next()) {
+                String storedHash = rs.getString("password");
+                return BCrypt.checkpw(password, storedHash);
+            }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return false;
+            e.printStackTrace();
         }
+        return false;
     }
 }
