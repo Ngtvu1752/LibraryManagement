@@ -31,8 +31,8 @@ public class DatabaseHelperTest {
         stmt.executeUpdate("CREATE TABLE users (" + "id INT AUTO_INCREMENT PRIMARY KEY," + "username VARCHAR(50) NOT NULL," + "name VARCHAR(100) NOT NULL," + "password VARCHAR(100) NOT NULL," + "question VARCHAR(100) NOT NULL," + "answer VARCHAR(100) NOT NULL," + "role VARCHAR(100) NOT NULL" + ");");
 
         // Chèn dữ liệu mẫu vào bảng users
-        stmt.executeUpdate("INSERT INTO users (username, name, password, question, answer, role) " + "VALUES ('testUser', 'Test User', '" + "testPassword" + "', 'What is your pet name?', 'Fluffy', 'user')");
-        stmt.executeUpdate("INSERT INTO users (username, name, password, question, answer, role) " + "VALUES ('anotherUser', 'Another User', '" + "anotherPassword" + "', 'What is your favorite color?', 'Blue', 'admin')");
+        stmt.executeUpdate("INSERT INTO users (username, name, password, question, answer, role) " + "VALUES ('testUser', 'Test User', '" + "testPassword" + "', 'What was the name of your first pet?', 'Dog', 'user')");
+        stmt.executeUpdate("INSERT INTO users (username, name, password, question, answer, role) " + "VALUES ('anotherUser', 'Another User', '" + "anotherPassword" + "', 'What was the name of your first pet?', 'Cat', 'admin')");
     }
 
     @Test
