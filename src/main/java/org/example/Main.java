@@ -14,6 +14,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("Login Application");
         primaryStage.setScene(new Scene(root, 700, 538)); // Kích thước cửa sổ
+        primaryStage.setResizable(false);
         primaryStage.show(); // Hiển thị cửa sổ
     }
 
