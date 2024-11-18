@@ -7,44 +7,58 @@
 
 <AnchorPane prefHeight="553.0" prefWidth="748.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.HomePage">
    <children>
+      <!-- Background Image -->
       <ImageView fitHeight="603.0" fitWidth="907.0" layoutX="-118.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@HomePage.jpg" />
          </image>
       </ImageView>
 
-      <Button fx:id="newBookButton" layoutX="10.0" layoutY="19.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="115.0" text="New Book" />
-      <ImageView fitHeight="20.0" fitWidth="25.0" layoutX="14.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+      <!-- New Book Button -->
+      <Button fx:id="newBookButton" layoutX="281.0" layoutY="45.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="344.0" text="New Book" />
+      <ImageView fitHeight="58.0" fitWidth="46.0" layoutX="371.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons8-add-book-100.png" />
          </image>
       </ImageView>
 
-      <Button fx:id="statisticButton" layoutX="163.0" layoutY="19.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="115.0" text="Statistic" />
-      <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="174.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@icons8-export-collections-48.png" />
-         </image>
-      </ImageView>
-
-      <Button fx:id="returnBookButton" layoutX="322.0" layoutY="19.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="115.0" text="Return book" />
-      <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="325.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+      <!-- Return Book Button -->
+      <Button fx:id="returnBookButton" layoutX="281.0" layoutY="130.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="344.0" text="Return Book" />
+      <ImageView fitHeight="46.0" fitWidth="46.0" layoutX="371.0" layoutY="130.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons8-return-book-100.png" />
          </image>
       </ImageView>
 
-      <Button fx:id="findBookButton" layoutX="486.0" layoutY="19.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="115.0" text="Find book" />
-      <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="495.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+      <!-- Find Book Button -->
+      <Button fx:id="findBookButton" layoutX="281.0" layoutY="210.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="344.0" text="Find Book" />
+      <ImageView fitHeight="46.0" fitWidth="46.0" layoutX="371.0" layoutY="210.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons8-find-100.png" />
          </image>
       </ImageView>
 
-      <Button fx:id="logoutButton" layoutX="655.0" layoutY="19.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="109.0" text="Logout" />
-      <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="667.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+      <!-- Logout Button -->
+      <Button fx:id="logoutButton" layoutX="280.0" layoutY="481.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="344.0" text="Logout" />
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="380.0" layoutY="485.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons8-logout-100.png" />
+         </image>
+      </ImageView>
+
+      <!-- Manage Student Button -->
+      <Button fx:id="manageStudentButton" layoutX="280.0" layoutY="294.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="344.0" text="Manage Student" />
+      <ImageView fitHeight="46.0" fitWidth="46.0" layoutX="355.0" layoutY="294.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons8-export-collections-48.png" />
+         </image>
+      </ImageView>
+
+      <!-- Manage Book Button -->
+      <Button fx:id="manageBookButton" layoutX="281.0" layoutY="383.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="344.0" text="Manage Book" />
+      <ImageView fitHeight="104.0" fitWidth="46.0" layoutX="362.0" layoutY="383.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons8-book-100.png" />
          </image>
       </ImageView>
    </children>

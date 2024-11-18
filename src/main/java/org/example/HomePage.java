@@ -17,7 +17,10 @@ public class HomePage {
     private Button newBookButton;
 
     @FXML
-    private Button statisticButton;
+    private Button manageStudentButton;
+
+    @FXML
+    private Button manageBookButton;
 
     @FXML
     private Button returnBookButton;
@@ -30,8 +33,10 @@ public class HomePage {
 
     @FXML
     public void initialize() {
+        // Thiết lập sự kiện cho các nút
         newBookButton.setOnAction(event -> handleNewBook());
-        statisticButton.setOnAction(event -> handleStatistic());
+        manageStudentButton.setOnAction(event -> handleManageStudent());
+        manageBookButton.setOnAction(event -> handleManageBook());
         returnBookButton.setOnAction(event -> handleReturnBook());
         findBookButton.setOnAction(event -> handleFindBook());
         logoutButton.setOnAction(event -> handleLogout());
@@ -59,8 +64,17 @@ public class HomePage {
         }
     }
 
-    private void handleStatistic() {
-        System.out.println("Statistic button clicked");
+    private void handleManageStudent() {
+        try {
+            // Tải FXML và mở cửa sổ "Manage Student"
+            openNewWindow("/ManageStudent.fxml", "Manage Student");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleManageBook() {
+        System.out.println("Manage Book button clicked");
     }
 
     private void handleReturnBook() {
@@ -90,6 +104,18 @@ public class HomePage {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    private void openNewWindow(String fxmlPath, String title) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath));
+        Parent root = fxmlLoader.load();
+
+        Stage stage = new Stage();
+        stage.setTitle(title);
+        stage.initModality(Modality.APPLICATION_MODAL); // Chặn tương tác với các cửa sổ khác
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     private void showAlert(String title, String message) {
