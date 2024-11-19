@@ -1,0 +1,31 @@
+/* Tùy chỉnh Button */
+.button {
+    -fx-background-color: #4682B4; /* Màu nền xanh nước biển */
+    -fx-text-fill: white; /* Màu chữ trắng */
+    -fx-font-weight: bold; /* Chữ đậm */
+    -fx-font-size: 14px; /* Kích thước chữ */
+    -fx-background-radius: 50%; /* Bo góc nền hoàn toàn */
+    -fx-border-radius: 50%; /* Bo góc viền hoàn toàn */
+    -fx-pref-width: 50px; /* Chiều rộng nút */
+    -fx-pref-height: 50px; /* Chiều cao nút */
+    -fx-padding: 0; /* Xóa khoảng cách bên trong */
+    -fx-alignment: center; /* Căn giữa nội dung */
+}
+
+/* Khi hover vào Button */
+.button:hover {
+    -fx-background-color: #5A9BD4; /* Màu nền sáng hơn khi hover */
+}
+
+/* Khi Button được nhấn (pressed) */
+.button:pressed {
+    -fx-background-color: #31688E; /* Màu nền đậm hơn khi nhấn */
+}
+
+/* Khi Button bị disable */
+.button:disabled {
+    -fx-background-color: #D3D3D3; /* Màu xám khi nút bị vô hiệu hóa */
+    -fx-text-fill: #A9A9A9; /* Chữ màu xám nhạt */
+    -fx-border-radius: 20px; /* Giữ bo góc */
+    -fx-background-radius: 20px; /* Giữ bo góc */
+}
