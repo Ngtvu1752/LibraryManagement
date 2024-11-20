@@ -10,7 +10,7 @@ public interface DAO<T> {
 
     boolean save(T t);
 
-//    void delete(T t);
+    void delete(T t);
 //
 //    void update(T t);
 }

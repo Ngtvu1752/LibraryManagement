@@ -70,7 +70,6 @@ public class SignUp {
         String name = nameField.getText();
         String securityQuestion = securityQuestionComboBox.getValue();
         String answer = answerField.getText();
-        String role = "Student";
         // Kiểm tra thông tin0
 
         if (username.isEmpty() || password.isEmpty() || name.isEmpty() || securityQuestion == null || answer.isEmpty()) {

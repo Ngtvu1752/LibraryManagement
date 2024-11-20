@@ -38,10 +38,38 @@ public class NewBook {
 
     DatabaseHelper dbHelper = DatabaseHelper.getInstance();
 
+    private GoogleBooksService googleBooksService = new GoogleBooksService();
+
+
     @FXML
     public void initialize() {
+        isbnField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.trim().isEmpty()) {
+                isbnField.setOnAction(event -> fetchBookDetails(newValue.trim()));
+            }
+        });
         saveButton.setOnAction(event -> saveBookToDatabase());
         closeButton.setOnAction(event -> closeWindow());
+    }
+
+    private void fetchBookDetails(String isbn) {
+        try {
+            Book book = googleBooksService.fetchBookDetails(isbn);
+            if (book != null) {
+                titleField.setText(book.getTitle());
+                authorField.setText(book.getAuthor());
+                languageField.setText(book.getLanguage());
+                subjectField.setText(book.getSubject());
+            } else {
+                showAlert("No Data", "No book found with the provided ISBN.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to fetch book details. Check your internet connection or API key.");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            showAlert("Error", e.getMessage());
+        }
     }
 
     private void saveBookToDatabase() {
@@ -84,5 +112,13 @@ public class NewBook {
         // Lấy Stage hiện tại của cửa sổ NewBook và đóng nó
         Stage currentStage = (Stage) closeButton.getScene().getWindow();
         currentStage.close();
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

@@ -14,9 +14,6 @@ import java.io.IOException;
 public class HomePage {
 
     @FXML
-    private Button newBookButton;
-
-    @FXML
     private Button manageStudentButton;
 
     @FXML
@@ -26,19 +23,14 @@ public class HomePage {
     private Button returnBookButton;
 
     @FXML
-    private Button findBookButton;
-
-    @FXML
     private Button logoutButton;
 
     @FXML
     public void initialize() {
         // Thiết lập sự kiện cho các nút
-        newBookButton.setOnAction(event -> handleNewBook());
         manageStudentButton.setOnAction(event -> handleManageStudent());
         manageBookButton.setOnAction(event -> handleManageBook());
         returnBookButton.setOnAction(event -> handleReturnBook());
-        findBookButton.setOnAction(event -> handleFindBook());
         logoutButton.setOnAction(event -> handleLogout());
     }
 
@@ -74,7 +66,20 @@ public class HomePage {
     }
 
     private void handleManageBook() {
-        System.out.println("Manage Book button clicked");
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ManageBook.fxml"));
+            Parent root = fxmlLoader.load();
+            Stage currentBookStage = (Stage) manageBookButton.getScene().getWindow();
+            Stage manageBookStage = new Stage();
+            manageBookStage.setScene(new Scene(root));
+            manageBookStage.show();
+
+            currentBookStage.hide();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
     }
 
     private void handleReturnBook() {

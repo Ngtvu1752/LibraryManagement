@@ -58,7 +58,11 @@ public class Login {
             User user = authenticate(studentId, password);
             if (user != null) {
                 SessionManager.setCurrentUser(user);
-                openHomePage();
+                if (user.getRole().equals("student")) {
+                    openHomePageStudent();
+                } else {
+                    openHomePageAdmin();
+                }
                 closeLoginPage();
             } else {
                 showAlert("Error", "Invalid Student ID or Password.");
@@ -79,14 +83,15 @@ public class Login {
                 String question = rs.getString("question");
                 String answer = rs.getString("answer");
                 String name = rs.getString("name");
-               if (storedPassword.equals(password) || PasswordUtil.checkPassword(password, storedPassword) ) {
+                if (storedPassword.equals(password) || PasswordUtil.checkPassword(password, storedPassword)) {
                     if (role.equals("admin")) {
                         return new Admin(username, password, name, question, answer);
                     } else if (role.equals("student")) {
                         return new Student(username, password, name, question, answer);
                     }
                 } else {
-                    showAlert("Error","Incorrect account or password");
+                    System.out.println("sai mk");
+                    showAlert("Error", "Incorrect account or password");
                 }
             }
         } catch (SQLException e) {
@@ -105,7 +110,7 @@ public class Login {
         } else return false;
     }
 
-    private void openHomePage() {
+    private void openHomePageAdmin() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/HomePage.fxml"));
             Parent root = loader.load();
@@ -116,6 +121,20 @@ public class Login {
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error", "Could not open Home Page.");
+        }
+    }
+
+    private void openHomePageStudent() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/StudentHomePage.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Student Home");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Could not open Student Home");
         }
     }
 

@@ -10,14 +10,14 @@
 <AnchorPane prefHeight="553.0" prefWidth="748.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.HomePage">
    <children>
       <!-- Background Image -->
-      <ImageView fitHeight="603.0" fitWidth="907.0" layoutX="-118.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="603.0" fitWidth="907.0" layoutX="-116.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@HomePage.jpg" />
          </image>
       </ImageView>
 
       <!-- Return Book Button -->
-      <Button fx:id="returnBookButton" layoutX="281.0" layoutY="206.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="344.0" text="Return Book" />
+      <Button fx:id="returnBookButton" layoutX="279.0" layoutY="204.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="344.0" text="Return Book" />
       <ImageView fitHeight="46.0" fitWidth="46.0" layoutX="371.0" layoutY="206.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons8-return-book-100.png" />

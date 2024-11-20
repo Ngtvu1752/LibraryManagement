@@ -7,21 +7,19 @@ public class Book {
     private String subject;
     private String language;
     private int quantity;
-    private int isAvail;
     private int borrowed;
 
-    public Book (String ISPN, String title, String author, String subject, String language, int quantity, int isAvail, int borrowed) {
+    public Book (String ISPN, String title, String author, String subject, String language, int quantity, int borrowed) {
         this.ISPN = ISPN;
         this.title = title;
         this.author = author;
         this.subject = subject;
         this.language = language;
         this.quantity = quantity;
-        this.isAvail = isAvail;
         this.borrowed = borrowed;
     }
 
-    public Book(String ISPN, String title, String author, String subject, String language, int quantity) {
+    public Book(String ISPN, String title, String author, String language, int quantity) {
         this.ISPN = ISPN;
         this.title = title;
         this.author = author;
@@ -52,10 +50,6 @@ public class Book {
 
     public int getQuantity() {
         return quantity;
-    }
-
-    public int getIsAvail() {
-        return isAvail;
     }
 
     public int getBorrowed() {

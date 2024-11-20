@@ -14,7 +14,6 @@ public class BookDAO implements DAO<Book> {
     private static final String SELECT_ALL = "select * from book";
     private static final String DISPLAY_ALL_BOOKS = "select title, author, publisher, subject, language from book";
     private static final String DELETE_BOOK = "delete from book where ISBN = ?";
-    private static final String SEARCH_BOOK = "select * from book where title like ?";
     private static final String FIND_BY_TITLE = "select * from book where title like ?";
     public BookDAO() {
         this.dbHelper = DatabaseHelper.getInstance();
@@ -32,9 +31,8 @@ public class BookDAO implements DAO<Book> {
                 String subject = rs.getString("SUBJECT");
                 String language = rs.getString("LANGUAGE");
                 int quantity = rs.getInt("QUANTITY");
-                int isAvailable = rs.getInt("isAvail");
                 int borrowed = rs.getInt("Borrowed");
-                books.add(new Book(isbn, title, author, subject, language, quantity, isAvailable, borrowed));
+                books.add(new Book(isbn, title, author, subject, language, quantity, borrowed));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -56,9 +54,8 @@ public class BookDAO implements DAO<Book> {
                 String subject = rs.getString("SUBJECT");
                 String language = rs.getString("LANGUAGE");
                 int quantity = rs.getInt("QUANTITY");
-                int isAvailable = rs.getInt("isAvail");
                 int borrowed = rs.getInt("Borrowed");
-                return Optional.of(new Book(isbn, title, author, subject, language, quantity, isAvailable, borrowed));
+                return Optional.of(new Book(isbn, title, author, subject, language, quantity, borrowed));
             }
         }
         catch (SQLException e) {
@@ -83,5 +80,8 @@ public class BookDAO implements DAO<Book> {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    public void delete(Book book) {
     }
 }

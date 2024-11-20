@@ -109,7 +109,8 @@ public class StudentDAO implements DAO<Student> {
             }
         }
     }
-
+    public void delete(Student student) {
+        String DELETE_BY_ID = "DELETE FROM users WHERE id = ?";
+    }
 
 }
-    
