@@ -35,8 +35,14 @@ public class StudentHomePage {
 
     private void handleManageBook() {
         try {
+            // Lấy Stage hiện tại (HomePage)
+            Stage currentStage = (Stage) manageBookButton.getScene().getWindow();
+
             // Tải FXML và mở cửa sổ "Manage Book"
             openNewWindow("/ManageBookStudent.fxml", "Manage Books Student");
+
+            // Đóng cửa sổ hiện tại (HomePage)
+            currentStage.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
