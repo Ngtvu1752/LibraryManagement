@@ -49,6 +49,8 @@ public class ManageBook {
 
     private GoogleBooksService googleBooksService = new GoogleBooksService();
 
+    private BookDAO bookDAO = new BookDAO();
+
     public void initialize() {
         isbnField.setOnMouseClicked(event -> {
             if (isbnField.getText().isEmpty()) {
@@ -205,32 +207,18 @@ public class ManageBook {
         String author = authorField.getText();
         String language = languageField.getText();
         int quantity = Integer.parseInt(quantityField.getText());
-
-        String sql = "INSERT INTO BOOK (ISBN, TITLE, AUTHOR, LANGUAGE, QUANTITY, Borrowed) VALUES (?, ?, ?, ?, ?, ?)";
-
-        try (Connection conn = dbHelper.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, isbn);
-            pstmt.setString(2, title);
-            pstmt.setString(3, author);
-            pstmt.setString(4, language);
-            pstmt.setInt(5, quantity);
-            pstmt.setInt(6, 0); // `Borrowed` khởi tạo bằng 0 vì sách chưa bị mượn
-
-            int rowsAffected = pstmt.executeUpdate();
-            if (rowsAffected > 0) {
-                // Hiển thị hộp thoại thành công
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setHeaderText(null);
-                alert.setContentText("Book saved successfully!");
-                alert.showAndWait();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Book book = new Book(isbn, title, author, language, quantity);
+        boolean addBook = bookDAO.save(book);
+        if (addBook) {
+            // Hiển thị hộp thoại thành công
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText(null);
+            alert.setContentText("Book saved successfully!");
+            alert.showAndWait();
         }
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

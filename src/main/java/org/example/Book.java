@@ -4,16 +4,14 @@ public class Book {
     private String ISPN;
     private String title;
     private String author;
-    private String subject;
     private String language;
     private int quantity;
     private int borrowed;
 
-    public Book (String ISPN, String title, String author, String subject, String language, int quantity, int borrowed) {
+    public Book (String ISPN, String title, String author, String language, int quantity, int borrowed) {
         this.ISPN = ISPN;
         this.title = title;
         this.author = author;
-        this.subject = subject;
         this.language = language;
         this.quantity = quantity;
         this.borrowed = borrowed;
@@ -23,7 +21,6 @@ public class Book {
         this.ISPN = ISPN;
         this.title = title;
         this.author = author;
-        this.subject = subject;
         this.language = language;
         this.quantity = quantity;
     }
@@ -38,10 +35,6 @@ public class Book {
 
     public String getAuthor() {
         return author;
-    }
-
-    public String getSubject() {
-        return subject;
     }
 
     public String getLanguage() {

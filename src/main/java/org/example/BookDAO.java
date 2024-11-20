@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class BookDAO implements DAO<Book> {
     private final DatabaseHelper dbHelper;
-    private static final String INSERT = "insert into book values(?,?,?,?,?,?,?)";
+    private static final String INSERT = "insert into book values(?,?,?,?,?,?)";
     private static final String SELECT_ALL = "select * from book";
     private static final String DISPLAY_ALL_BOOKS = "select title, author, publisher, subject, language from book";
     private static final String DELETE_BOOK = "delete from book where ISBN = ?";
@@ -28,11 +28,10 @@ public class BookDAO implements DAO<Book> {
                 String isbn = rs.getString("ISBN");
                 String title = rs.getString("TITLE");
                 String author = rs.getString("AUTHOR");
-                String subject = rs.getString("SUBJECT");
                 String language = rs.getString("LANGUAGE");
                 int quantity = rs.getInt("QUANTITY");
                 int borrowed = rs.getInt("Borrowed");
-                books.add(new Book(isbn, title, author, subject, language, quantity, borrowed));
+                books.add(new Book(isbn, title, author, language, quantity, borrowed));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -49,13 +48,11 @@ public class BookDAO implements DAO<Book> {
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 String isbn = rs.getString("ISBN");
-                String bookTitle = rs.getString("TITLE");
                 String author = rs.getString("AUTHOR");
-                String subject = rs.getString("SUBJECT");
                 String language = rs.getString("LANGUAGE");
                 int quantity = rs.getInt("QUANTITY");
                 int borrowed = rs.getInt("Borrowed");
-                return Optional.of(new Book(isbn, title, author, subject, language, quantity, borrowed));
+                return Optional.of(new Book(isbn, title, author, language, quantity, borrowed));
             }
         }
         catch (SQLException e) {
@@ -69,10 +66,10 @@ public class BookDAO implements DAO<Book> {
             pstmt.setString(1, book.getISPN());
             pstmt.setString(2, book.getTitle());
             pstmt.setString(3, book.getAuthor());
-            pstmt.setString(5, book.getSubject());
-            pstmt.setString(6, book.getLanguage());
-            pstmt.setInt(7, book.getQuantity());
-            pstmt.executeQuery();
+            pstmt.setString(4, book.getLanguage());
+            pstmt.setInt(5, book.getQuantity());
+            pstmt.setInt(6, book.getBorrowed());
+            pstmt.executeUpdate();
             System.out.println("Add book successfully");
             return true;
         }

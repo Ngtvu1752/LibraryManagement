@@ -59,7 +59,6 @@ public class NewBook {
                 titleField.setText(book.getTitle());
                 authorField.setText(book.getAuthor());
                 languageField.setText(book.getLanguage());
-                subjectField.setText(book.getSubject());
             } else {
                 showAlert("No Data", "No book found with the provided ISBN.");
             }
