@@ -11,12 +11,12 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="687.0" prefWidth="1075.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ManageBookStudent">
+<AnchorPane prefHeight="687.0" prefWidth="1075.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ManageBookStudent">
     <children>
         <AnchorPane prefHeight="687.0" prefWidth="368.0" style="-fx-background-color: #D3A29D;">
          <children>
-            <TextField layoutX="43.0" layoutY="180.0" prefHeight="37.0" prefWidth="283.0" stylesheets="@find.css" />
-            <Label layoutX="53.0" layoutY="189.0" text="Enter ISBN here:" textFill="GREY">
+            <TextField fx:id="isbnField" layoutX="43.0" layoutY="180.0" prefHeight="37.0" prefWidth="283.0" stylesheets="@find.css" />
+            <Label fx:id="isbnLabel" layoutX="53.0" layoutY="189.0" text="Enter ISBN here:" textFill="GREY">
                <font>
                   <Font size="15.0" />
                </font>
@@ -26,7 +26,7 @@
                   <Font size="50.0" />
                </font>
             </Label>
-            <Button layoutX="115.0" layoutY="241.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="149.0" text="Issue Book" />
+            <Button fx:id="issueBookButton" layoutX="115.0" layoutY="241.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="149.0" text="Issue Book" />
             <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="129.0" layoutY="253.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@IssueBook.png" />

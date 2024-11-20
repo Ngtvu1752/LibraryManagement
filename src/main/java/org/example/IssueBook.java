@@ -4,13 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 
-public class BorrowService {
+public class IssueBook {
     private DatabaseHelper dbHelper = DatabaseHelper.getInstance();
 
     public boolean borrowBook(int userId, String isbn) {
         String checkAvailabilitySql = "Select QUANTITY, Borrowed from BOOK where isbn = ?";
-        String insertBorrowSql = "INSERT INTO BORROW(student_id, isbn, borrow_date, is_returned) VALUES (?, ?, ?, ?)";
+        String insertIssueBooksql = "INSERT INTO issuebook(student_id,ISBN,borrow_date,return_date,is_returned,late_fee) VALUES ( ?, ?, ?, ?,?,?)";
         String updateBookSql = "UPDATE BOOK SET Borrowed = Borrowed + 1 WHERE ISBN = ?";
 
         try (Connection conn = dbHelper.connect()) {
@@ -27,16 +29,26 @@ public class BorrowService {
                     return false;
                 }
             }
-            try(PreparedStatement insertStmt = conn.prepareStatement(insertBorrowSql)) {
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertIssueBooksql)) {
                 insertStmt.setInt(1, userId);
                 insertStmt.setString(2, isbn);
-                insertStmt.setDate(3, new java.sql.Date(System.currentTimeMillis()));
-                insertStmt.setBoolean(4, false);
+                insertStmt.setDate(3, new java.sql.Date(System.currentTimeMillis()));  // Set borrow date to current date
+
+                // Set return date to 1 month after borrow date
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                calendar.add(Calendar.MONTH, 1);  // Add 1 month to the current date
+                Date returnDate = new java.sql.Date(calendar.getTimeInMillis());
+                insertStmt.setDate(4, (java.sql.Date) returnDate);
+
+                insertStmt.setBoolean(5, false);  // Not yet returned
+                insertStmt.setDouble(6, 0);
                 insertStmt.executeUpdate();
             }
+
             try(PreparedStatement updateStmt = conn.prepareStatement(updateBookSql)) {
                 updateStmt.setString(1, isbn);
-                updateStmt.executeQuery();
+                updateStmt.executeUpdate();
             }
             return true;
         } catch (SQLException e) {
