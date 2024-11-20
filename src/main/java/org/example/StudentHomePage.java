@@ -1,6 +1,5 @@
 package org.example;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,53 +14,55 @@ import java.io.IOException;
 public class StudentHomePage {
 
     @FXML
+    private Button manageStudentButton;
+
+    @FXML
+    private Button manageBookButton;
+
+    @FXML
     private Button returnBookButton;
 
     @FXML
     private Button logoutButton;
 
     @FXML
-    private Button manageBookButton;
-
-    @FXML
-    void handleReturnBook(ActionEvent event) {
-        System.out.println("Return Book button clicked");
-        // Điều hướng đến giao diện trả sách
+    public void initialize() {
+        // Thiết lập sự kiện cho các nút
+        manageBookButton.setOnAction(event -> handleManageBook());
+        returnBookButton.setOnAction(event -> handleReturnBook());
+        logoutButton.setOnAction(event -> handleLogout());
     }
 
-    @FXML
-    void handleLogout(ActionEvent event) {
+    private void handleManageBook() {
         try {
-            // Load file FXML của cửa sổ Login
+            // Tải FXML và mở cửa sổ "Manage Book"
+            openNewWindow("/ManageBookStudent.fxml", "Manage Books Student");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleReturnBook() {
+        System.out.println("Return Book button clicked!");
+        // Thêm logic xử lý trả sách nếu cần
+    }
+
+    private void handleLogout() {
+        try {
+            // Tải file FXML của cửa sổ Login
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Login.fxml"));
             Parent loginRoot = fxmlLoader.load();
 
             // Lấy Stage hiện tại (HomePage)
             Stage currentStage = (Stage) logoutButton.getScene().getWindow();
 
-            // Tạo một Scene mới cho cửa sổ Login
+            // Tạo Scene mới từ giao diện Login
             Scene loginScene = new Scene(loginRoot);
 
             // Hiển thị màn hình Login
             currentStage.setScene(loginScene);
             currentStage.setTitle("Login");
             currentStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleManageBook() {
-        try {
-            // Lấy Stage hiện tại (HomePage)
-            Stage currentStage = (Stage) manageBookButton.getScene().getWindow();
-
-            // Tải FXML và mở cửa sổ "Manage Book"
-            openNewWindow("/ManageBookStudent.fxml", "Manage Books Student");
-
-            // Đóng cửa sổ hiện tại (HomePage)
-            currentStage.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
