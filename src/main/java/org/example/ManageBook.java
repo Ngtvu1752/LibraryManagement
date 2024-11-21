@@ -183,7 +183,7 @@ public class ManageBook {
                 }
                 authorField.setText(book.getAuthor());
                 if (authorField.getText() != null && !authorField.getText().isEmpty()) {
-                    authorLabel.setVisible(false);  // Ẩn label khi có thông tin
+                    authorLabel.setVisible(false)   ;  // Ẩn label khi có thông tin
                 }
                 languageField.setText(book.getLanguage());
                 if (languageField.getText() != null && !languageField.getText().isEmpty()) {

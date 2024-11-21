@@ -20,8 +20,8 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="isbnField" layoutX="31.0" layoutY="102.0" opacity="0.1" prefHeight="31.0" prefWidth="250.0" style="-fx-text-fill: blue;" />
-            <Label fx:id="isbnLabel" layoutX="36.0" layoutY="107.0" text="Enter ISBN....." textFill="GREY">
+            <TextField fx:id="isbnField" layoutX="31.0" layoutY="102.0" opacity="0.1" prefHeight="31.0" prefWidth="250.0" style="-fx-font-style: blue;" />
+            <Label fx:id="isbnLabel" layoutX="36.0" layoutY="107.0" style="-fx-text-fill: white;" text="Enter ISBN....." textFill="GREY">
                <font>
                   <Font size="15.0" />
                </font>
@@ -43,7 +43,7 @@
                </image>
             </ImageView>
             <TextField fx:id="titleField" layoutX="32.0" layoutY="178.0" opacity="0.1" prefHeight="31.0" prefWidth="247.0" />
-            <Label fx:id="titleLabel" layoutX="35.0" layoutY="184.0" text="Enter Title...." textFill="GREY">
+            <Label fx:id="titleLabel" layoutX="35.0" layoutY="184.0" style="-fx-text-fill: white;" text="Enter Title...." textFill="GREY">
                <font>
                   <Font size="15.0" />
                </font>
@@ -60,7 +60,7 @@
                </image>
             </ImageView>
             <TextField fx:id="authorField" layoutX="32.0" layoutY="259.0" opacity="0.1" prefHeight="31.0" prefWidth="247.0" />
-            <Label fx:id="authorLabel" layoutX="34.0" layoutY="263.0" text="Enter Author Name...." textFill="GREY">
+            <Label fx:id="authorLabel" layoutX="34.0" layoutY="263.0" style="-fx-text-fill: white;" text="Enter Author Name...." textFill="GREY">
                <font>
                   <Font size="15.0" />
                </font>
@@ -77,7 +77,7 @@
                </image>
             </ImageView>
             <TextField fx:id="languageField" layoutX="34.0" layoutY="334.0" opacity="0.1" prefHeight="31.0" prefWidth="245.0" />
-            <Label fx:id="languageLabel" layoutX="36.0" layoutY="338.0" text="Enter Language...." textFill="GREY">
+            <Label fx:id="languageLabel" layoutX="36.0" layoutY="338.0" style="-fx-text-fill: white;" text="Enter Language...." textFill="GREY">
                <font>
                   <Font size="15.0" />
                </font>
@@ -94,7 +94,7 @@
                </image>
             </ImageView>
             <TextField fx:id="quantityField" layoutX="35.0" layoutY="412.0" opacity="0.1" prefHeight="31.0" prefWidth="247.0" />
-            <Label fx:id="quantityLabel" layoutX="37.0" layoutY="416.0" text="Enter Quantity...." textFill="GREY">
+            <Label layoutX="37.0" layoutY="416.0" style="-fx-text-fill: white;" text="Enter Quantity...." textFill="GREY">
                <font>
                   <Font size="15.0" />
                </font>
