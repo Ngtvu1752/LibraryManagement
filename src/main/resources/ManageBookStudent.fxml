@@ -33,7 +33,7 @@
                </image>
             </ImageView>
          </children></AnchorPane>
-        <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="96.0" style="-fx-background-color: #EBDD1C5;" text="Back">
+        <Button fx:id="backButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="96.0" style="-fx-background-color: #EBDD1C5;" text="Back">
             <font>
                 <Font size="19.0" />
             </font>

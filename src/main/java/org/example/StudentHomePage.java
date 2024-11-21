@@ -31,6 +31,7 @@ public class StudentHomePage {
         manageBookButton.setOnAction(event -> handleManageBook());
         returnBookButton.setOnAction(event -> handleReturnBook());
         logoutButton.setOnAction(event -> handleLogout());
+
     }
 
     private void handleManageBook() {
