@@ -1,5 +1,7 @@
 package org.example;
 
+import javafx.collections.ObservableList;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +15,11 @@ public class StudentDAO implements DAO<Student> {
 
     public StudentDAO() {
         this.dbHelper = DatabaseHelper.getInstance();
+    }
+
+    @Override
+    public ObservableList<Student> getObservableList() {
+        return null;
     }
 
     @Override
