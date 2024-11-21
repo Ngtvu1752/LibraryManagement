@@ -12,7 +12,7 @@ public class IssueBook {
 
     public boolean borrowBook(int userId, String isbn) {
         String checkAvailabilitySql = "Select QUANTITY, Borrowed from BOOK where isbn = ?";
-        String insertIssueBooksql = "INSERT INTO issuebook(student_id,ISBN,borrow_date,return_date,is_returned,late_fee) VALUES ( ?, ?, ?, ?,?,?)";
+        String insertIssueBooksql = "INSERT INTO issuebook(student_id,ISBN,borrow_date,due_date,is_returned) VALUES ( ?, ?, ?,?,?)";
         String updateBookSql = "UPDATE BOOK SET Borrowed = Borrowed + 1 WHERE ISBN = ?";
 
         try (Connection conn = dbHelper.connect()) {
@@ -37,12 +37,10 @@ public class IssueBook {
                 // Set return date to 1 month after borrow date
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.add(Calendar.MONTH, 1);  // Add 1 month to the current date
-                Date returnDate = new java.sql.Date(calendar.getTimeInMillis());
-                insertStmt.setDate(4, (java.sql.Date) returnDate);
-
+                calendar.add(Calendar.MONTH, 12);  // Add 1 month to the current date
+                Date dueDate = new java.sql.Date(calendar.getTimeInMillis());
+                insertStmt.setDate(4, (java.sql.Date) dueDate);
                 insertStmt.setBoolean(5, false);  // Not yet returned
-                insertStmt.setDouble(6, 0);
                 insertStmt.executeUpdate();
             }
 
@@ -53,6 +51,7 @@ public class IssueBook {
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println(e.getMessage());
             return false;
         }
     }

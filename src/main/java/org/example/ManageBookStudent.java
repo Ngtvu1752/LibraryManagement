@@ -40,15 +40,10 @@ public class ManageBookStudent {
 
     private void handleIssueBook() {
         User studentId = SessionManager.getCurrentUser();
-        int userId = Integer.parseInt(studentId.username);
+        int userId = studentId.getId();
         String isbn = isbnField.getText();
-
         IssueBook issueBook = new IssueBook();
-
-        // mượn cuốn sách
         boolean success = issueBook.borrowBook(userId, isbn);
-
-        // Hiển thị hộp thoại
         if (success) {
             // thành công
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

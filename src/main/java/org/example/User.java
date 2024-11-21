@@ -6,6 +6,7 @@ public abstract class User {
     protected String name;
     protected String securityQuestion;
     protected String Answer;
+    protected int id;
 
     public String getSecurityQuestion() {
         return securityQuestion;
@@ -21,6 +22,15 @@ public abstract class User {
 
     public void setAnswer(String answer) {
         Answer = answer;
+    }
+
+    public User(int id, String username, String password, String name, String securityQuestion, String Answer) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.securityQuestion = securityQuestion;
+        this.Answer = Answer;
+        this.id = id;
     }
 
     public User(String username, String password, String name, String securityQuestion, String Answer) {
@@ -53,6 +63,14 @@ public abstract class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public abstract String getRole();

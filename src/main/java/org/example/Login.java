@@ -83,11 +83,12 @@ public class Login {
                 String question = rs.getString("question");
                 String answer = rs.getString("answer");
                 String name = rs.getString("name");
+                int id = rs.getInt("id");
                 if (storedPassword.equals(password) || PasswordUtil.checkPassword(password, storedPassword)) {
                     if (role.equals("admin")) {
                         return new Admin(username, password, name, question, answer);
                     } else if (role.equals("student")) {
-                        return new Student(username, password, name, question, answer);
+                        return new Student(id, username, password, name, question, answer);
                     }
                 } else {
                     System.out.println("sai mk");
