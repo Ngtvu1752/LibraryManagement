@@ -1,10 +1,14 @@
 package org.example;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -169,6 +173,7 @@ public class ManageBook {
             }
         });
         addButton.setOnAction(event -> saveBookToDatabase());
+        backButton.setOnAction(event -> handleBackButton());
         deleteButton.setOnAction(event -> {
         });
     }
@@ -216,6 +221,26 @@ public class ManageBook {
             alert.setHeaderText(null);
             alert.setContentText("Book saved successfully!");
             alert.showAndWait();
+        }
+    }
+    private void handleBackButton() {
+        try {
+            // Tải file FXML của cửa sổ
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/HomePage.fxml"));
+            Parent homePageRoot = fxmlLoader.load();
+
+            // Lấy Stage hiện tại (MangeBook)
+            Stage currentStage = (Stage) backButton.getScene().getWindow();
+
+            // Tạo Scene mới từ giao diện HomePage
+            Scene studentHomePageScene = new Scene(homePageRoot);
+
+            // Hiển thị màn hình Login
+            currentStage.setScene(studentHomePageScene);
+            currentStage.setTitle("HomePage");
+            currentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
