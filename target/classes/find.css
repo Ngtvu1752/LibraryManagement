@@ -1,8 +1,0 @@
-.text-field {
-    -fx-background-radius: 20; /* Bo góc của TextField */
-    -fx-border-radius: 20; /* Bo góc viền */
-    -fx-border-color: gray; /* Màu viền */
-    -fx-border-width: 1; /* Độ dày của viền */
-    -fx-padding: 5 10; /* Căn lề bên trong */
-    -fx-background-color: white; /* Màu nền */
-}
