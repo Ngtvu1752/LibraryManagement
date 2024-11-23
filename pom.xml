@@ -12,7 +12,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -25,7 +25,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.32</version> <!-- Kiểm tra phiên bản mới nhất -->
+            <version>8.0.32</version> <!-- Kiểm tra phiên b ản mới nhất -->
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -37,6 +37,11 @@
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
         </dependency>
 
 
