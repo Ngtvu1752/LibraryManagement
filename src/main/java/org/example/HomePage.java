@@ -34,28 +34,6 @@ public class HomePage {
         logoutButton.setOnAction(event -> handleLogout());
     }
 
-    private void handleNewBook() {
-        User currentUser = SessionManager.getCurrentUser();
-        if (!currentUser.getRole().equals("admin")) {
-            showAlert("Access Denied", "Only Admin can add books.");
-            return;
-        }
-        try {
-            // Load file FXML của cửa sổ NewBook
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/NewBook.fxml"));
-            Parent newBookRoot = fxmlLoader.load();
-
-            // Tạo một Stage mới cho cửa sổ NewBook
-            Stage newBookStage = new Stage();
-            newBookStage.setTitle("New Book");
-            newBookStage.initModality(Modality.APPLICATION_MODAL); // Chặn các tương tác với cửa sổ khác
-            newBookStage.setScene(new Scene(newBookRoot));
-            newBookStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void handleManageStudent() {
         try {
             // Tải FXML và mở cửa sổ "Manage Student"
@@ -66,28 +44,25 @@ public class HomePage {
     }
 
     private void handleManageBook() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ManageBook.fxml"));
-            Parent root = fxmlLoader.load();
-            Stage currentBookStage = (Stage) manageBookButton.getScene().getWindow();
-            Stage manageBookStage = new Stage();
-            manageBookStage.setScene(new Scene(root));
-            manageBookStage.show();
-
-            currentBookStage.hide();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
+        SceneController.getInstance().switchScene("ManageBook");
+//        try {
+//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ManageBook.fxml"));
+//            Parent root = fxmlLoader.load();
+//            Stage currentBookStage = (Stage) manageBookButton.getScene().getWindow();
+//            Stage manageBookStage = new Stage();
+//            manageBookStage.setScene(new Scene(root));
+//            manageBookStage.show();
+//
+//            currentBookStage.hide();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//
+//        }
     }
 
     private void handleReturnBook() {
         System.out.println("Return Book button clicked");
-    }
-
-    private void handleFindBook() {
-        System.out.println("Find Book button clicked");
     }
 
     private void handleLogout() {
@@ -95,8 +70,6 @@ public class HomePage {
             // Load file FXML của cửa sổ Login
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Login.fxml"));
             Parent loginRoot = fxmlLoader.load();
-
-            // Lấy Stage hiện tại (HomePage)
             Stage currentStage = (Stage) logoutButton.getScene().getWindow();
 
             // Tạo một Scene mới cho cửa sổ Login

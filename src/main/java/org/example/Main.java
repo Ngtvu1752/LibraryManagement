@@ -10,12 +10,45 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Tải file FXML
-        Parent root = FXMLLoader.load(getClass().getResource("/login.fxml"));
+        try {
+            Parent homeRoot = FXMLLoader.load(getClass().getResource("/HomePage.fxml"));
+            Scene homeScene = new Scene(homeRoot);
+            SceneManage.addScene("HomePage", homeScene);
 
-        primaryStage.setTitle("Login Application");
-        primaryStage.setScene(new Scene(root, 700, 538)); // Kích thước cửa sổ
-        primaryStage.setResizable(false);
-        primaryStage.show(); // Hiển thị cửa sổ
+            Parent StudentHomePageRoot = FXMLLoader.load(getClass().getResource("/StudentHomePage.fxml"));
+            Scene StudentHomePageScene = new Scene(StudentHomePageRoot);
+            SceneManage.addScene("StudentHomePage", StudentHomePageScene);
+
+            Parent loginRoot = FXMLLoader.load(getClass().getResource("/login.fxml"));
+            Scene loginScene = new Scene(loginRoot);
+            SceneManage.addScene("Login", loginScene);
+
+            Parent signUpRoot = FXMLLoader.load(getClass().getResource("/signUp.fxml"));
+            Scene signUpScene = new Scene(signUpRoot);
+            SceneManage.addScene("SignUp", signUpScene);
+
+            Parent manageBookRoot = FXMLLoader.load(getClass().getResource("/ManageBook.fxml"));
+            Scene manageBookScene = new Scene(manageBookRoot);
+            SceneManage.addScene("ManageBook", manageBookScene);
+
+            Parent manageBookStudentRoot = FXMLLoader.load(getClass().getResource("/ManageBookStudent.fxml"));
+            Scene manageBookStudentScene = new Scene(manageBookStudentRoot);
+            SceneManage.addScene("ManageBookStudent", manageBookStudentScene);
+
+            Parent manageStudentRoot = FXMLLoader.load(getClass().getResource("/ManageStudent.fxml"));
+            Scene manageStudentScene = new Scene(manageStudentRoot);
+            SceneManage.addScene("ManageStudent", manageStudentScene);
+
+            SceneController sceneController = SceneController.getInstance();
+            sceneController.setStage(primaryStage);
+
+            primaryStage.setScene(SceneManage.getScene("Login"));
+            primaryStage.setTitle("Library Management");
+            primaryStage.setResizable(false);
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

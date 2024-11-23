@@ -249,17 +249,7 @@ public class ManageBook {
     }
 
     private void handleBackButton() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/HomePage.fxml"));
-            Parent homePageRoot = fxmlLoader.load();
-            Stage currentStage = (Stage) backButton.getScene().getWindow();
-            Scene studentHomePageScene = new Scene(homePageRoot);
-            currentStage.setScene(studentHomePageScene);
-            currentStage.setTitle("HomePage");
-            currentStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SceneController.getInstance().switchScene("HomePage");
     }
 
     private void showAlert(String title, String message) {
