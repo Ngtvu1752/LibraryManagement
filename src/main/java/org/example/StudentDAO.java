@@ -1,5 +1,6 @@
 package org.example;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.Connection;
@@ -12,14 +13,29 @@ import java.util.Optional;
 
 public class StudentDAO implements DAO<Student> {
     private final DatabaseHelper dbHelper;
-
+    private static final String DISPLAY_STUDENTS = "SELECT id, username, name FROM student";
     public StudentDAO() {
         this.dbHelper = DatabaseHelper.getInstance();
     }
 
     @Override
     public ObservableList<Student> getObservableList() {
-        return null;
+        ObservableList<Student> students = FXCollections.observableArrayList();
+        try (Connection conn = dbHelper.connect();
+            PreparedStatement pstmt = conn.prepareStatement(DISPLAY_STUDENTS)) {
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String username = rs.getString("username");
+                    String name = rs.getString("name");
+                    Student student = new Student(id, username, name);
+                    students.add(student);
+                }
+            }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return students;
     }
 
     @Override

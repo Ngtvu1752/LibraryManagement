@@ -121,31 +121,31 @@ public class Login {
 
 
     private void handleSignUp() {
-        SceneController.getInstance().switchScene("SignUp");
-//        try {
-//            // Tạo một stage mới
-//            Stage signUpStage = new Stage();
-//
-//            // Tải file FXML cho giao diện đăng ký
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/signUp.fxml"));
-//            Parent root = loader.load();
-//            System.out.println(getClass().getResource("/signUp.fxml")); // Kiểm tra xem có null hay không
-//
-//            // Tạo một scene mới và gán cho stage
-//            Scene scene = new Scene(root);
-//            signUpStage.setScene(scene);
-//
-//            // Thiết lập tiêu đề và hiển thị stage
-//            signUpStage.setTitle("Sign Up");
-//            signUpStage.show();
-//
-//            // Nếu muốn ẩn cửa sổ hiện tại
-//            Stage currentStage = (Stage) signUpButton.getScene().getWindow(); // Dùng signUpButton
-//            currentStage.hide();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            showAlert("Error", "Could not open sign up page.");
-//        }
+//        SceneController.getInstance().switchScene("SignUp");
+        try {
+            // Tạo một stage mới
+            Stage signUpStage = new Stage();
+
+            // Tải file FXML cho giao diện đăng ký
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/signUp.fxml"));
+            Parent root = loader.load();
+            System.out.println(getClass().getResource("/signUp.fxml")); // Kiểm tra xem có null hay không
+
+            // Tạo một scene mới và gán cho stage
+            Scene scene = new Scene(root);
+            signUpStage.setScene(scene);
+
+            // Thiết lập tiêu đề và hiển thị stage
+            signUpStage.setTitle("Sign Up");
+            signUpStage.show();
+
+            // Nếu muốn ẩn cửa sổ hiện tại
+            Stage currentStage = (Stage) signUpButton.getScene().getWindow(); // Dùng signUpButton
+            currentStage.hide();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Could not open sign up page.");
+        }
     }
 
     private void handleForgotPassword() {

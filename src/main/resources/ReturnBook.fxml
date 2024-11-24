@@ -9,10 +9,9 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="655.0" prefWidth="1342.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ReturnBook">
    <children>
-      <AnchorPane prefHeight="653.0" prefWidth="482.0">
+      <AnchorPane prefHeight="687.0" prefWidth="368.0">
          <children>
             <ImageView fitHeight="273.0" fitWidth="472.0" layoutX="5.0" layoutY="243.0" pickOnBounds="true" preserveRatio="true">
                <image>

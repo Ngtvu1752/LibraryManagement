@@ -11,23 +11,23 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="687.0" prefWidth="1075.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ManageBookStudent">
+<AnchorPane prefHeight="687.0" prefWidth="1075.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ManageBookStudent">
     <children>
-        <AnchorPane prefHeight="687.0" prefWidth="368.0" style="-fx-background-color: #D3A29D;">
+        <AnchorPane prefHeight="687.0" prefWidth="287.0" style="-fx-background-color: #D3A29D;">
          <children>
-            <TextField fx:id="isbnField" layoutX="43.0" layoutY="180.0" prefHeight="37.0" prefWidth="283.0" stylesheets="@find.css" />
-            <Label fx:id="isbnLabel" layoutX="53.0" layoutY="189.0" text="Enter ISBN here:" textFill="GREY">
+            <TextField fx:id="isbnField" layoutX="11.0" layoutY="181.0" prefHeight="38.0" prefWidth="255.0" stylesheets="@find.css" />
+            <Label fx:id="isbnLabel" layoutX="14.0" layoutY="189.0" text="Enter ISBN here:" textFill="GREY">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="64.0" layoutY="105.0" text="Issue Book" textFill="#f50808">
+            <Label layoutX="21.0" layoutY="96.0" text="Issue Book" textFill="#f50808">
                <font>
                   <Font size="50.0" />
                </font>
             </Label>
-            <Button fx:id="issueBookButton" layoutX="115.0" layoutY="241.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="149.0" text="Issue Book" />
-            <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="129.0" layoutY="253.0" pickOnBounds="true" preserveRatio="true">
+            <Button fx:id="issueBookButton" layoutX="66.0" layoutY="228.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="149.0" text="Issue Book" />
+            <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="85.0" layoutY="241.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@IssueBook.png" />
                </image>
@@ -54,12 +54,13 @@
             </image>
         </ImageView>
         <Line endX="229.0" endY="52.5" layoutX="329.0" layoutY="17.0" startX="537.0" startY="52.5" stroke="ORANGE" />
-        <TableView layoutX="381.0" layoutY="186.0" prefHeight="247.0" prefWidth="691.0">
+        <TableView fx:id="tableBook" layoutX="294.0" layoutY="186.0" prefHeight="247.0" prefWidth="778.0">
             <columns>
-                <TableColumn prefWidth="75.0" text="ISBN" />
-                <TableColumn prefWidth="244.0" text="Title" />
-                <TableColumn prefWidth="234.0" text="Author" />
-                <TableColumn prefWidth="137.0" text="Quantity" />
+                <TableColumn fx:id="isbnColumn" prefWidth="181.5999755859375" text="ISBN" />
+                <TableColumn fx:id="titleColumn" prefWidth="232.80001831054688" text="Title" />
+                <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="233.59991455078125" text="Author" />
+                <TableColumn fx:id="languageColumn" minWidth="0.0" prefWidth="67.199951171875" text="Language" />
+            <TableColumn fx:id="quantityColumn" maxWidth="105.60007324218748" minWidth="1.59991455078125" prefWidth="61.5999755859375" text="Quantity" />
             </columns>
         </TableView>
         <Label layoutX="672.0" layoutY="81.0" text="Find Book" textFill="RED">
@@ -84,12 +85,14 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <TableView layoutX="381.0" layoutY="468.0" prefHeight="213.0" prefWidth="691.0">
+      <TableView fx:id="IssueTableStudent" layoutX="294.0" layoutY="468.0" prefHeight="214.0" prefWidth="778.0">
         <columns>
-          <TableColumn prefWidth="73.0" text="ISBN" />
-          <TableColumn prefWidth="269.0" text="Title" />
-            <TableColumn prefWidth="178.0" text="Issue Date" />
-            <TableColumn prefWidth="170.0" text="Due date" />
+            <TableColumn fx:id="issueIDColumn" prefWidth="98.4000244140625" text="IssueID" />
+          <TableColumn fx:id="issueIsbnColumn" prefWidth="76.0" text="ISBN" />
+          <TableColumn fx:id="issueTitleColumn" prefWidth="333.5999755859375" text="Title" />
+            <TableColumn fx:id="issueDueDateColumn" prefWidth="109.60003662109375" text="Due date" />
+            <TableColumn fx:id="issueStatusColumn" maxWidth="245.60003662109375" prefWidth="69.5999755859375" resizable="false" text="is_returned" />
+            <TableColumn maxWidth="316.800048828125" minWidth="0.0" prefWidth="90.39990234375" text="Option" />
         </columns>
       </TableView>
     </children>

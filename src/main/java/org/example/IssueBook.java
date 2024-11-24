@@ -12,7 +12,7 @@ public class IssueBook {
 
     public boolean borrowBook(int userId, String isbn) {
         String checkAvailabilitySql = "Select QUANTITY, Borrowed from BOOK where isbn = ?";
-        String insertIssueBooksql = "INSERT INTO issuebook(student_id,ISBN,borrow_date,due_date,is_returned) VALUES ( ?, ?, ?,?,?)";
+        String insertIssueBooksql = "INSERT INTO issuebook(student_id,ISBN,borrow_date,due_date) VALUES ( ?, ?, ?,?)";
         String updateBookSql = "UPDATE BOOK SET Borrowed = Borrowed + 1 WHERE ISBN = ?";
 
         try (Connection conn = dbHelper.connect()) {
@@ -40,7 +40,6 @@ public class IssueBook {
                 calendar.add(Calendar.MONTH, 12);  // Add 1 month to the current date
                 Date dueDate = new java.sql.Date(calendar.getTimeInMillis());
                 insertStmt.setDate(4, (java.sql.Date) dueDate);
-                insertStmt.setBoolean(5, false);  // Not yet returned
                 insertStmt.executeUpdate();
             }
 

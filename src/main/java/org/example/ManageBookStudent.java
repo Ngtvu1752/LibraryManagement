@@ -1,13 +1,12 @@
 package org.example;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,7 +23,51 @@ public class ManageBookStudent {
     @FXML
     private Button backButton;
 
+    @FXML
+    private TableView<Book> tableBook;
+
+    @FXML
+    private TableColumn<Book, String> isbnColumn;
+
+    @FXML
+    private TableColumn<Book, String> titleColumn;
+
+    @FXML
+    private TableColumn<Book, String> authorColumn;
+
+    @FXML
+    private TableColumn<Book, String> quantityColumn;
+
+    @FXML
+    private TableColumn<Book, String> languageColumn;
+
+    @FXML
+    private TableView<IssueBookDBHistory> IssueTableStudent;
+
+    @FXML
+    private TableColumn<IssueBookDBHistory, String> issueIDColumn;
+
+    @FXML
+    private TableColumn<IssueBookDBHistory, String> issueIsbnColumn;
+
+    @FXML
+    private TableColumn<IssueBookDBHistory, String> issueTitleColumn;
+
+    @FXML
+    private TableColumn<IssueBookDBHistory, String> issueDueDateColumn;
+
+    @FXML
+    private TableColumn<IssueBookDBHistory, String> issueStatusColumn;
+
+
+    private BookDAO bookDAO = new BookDAO();
+    private IssueBookDBHistoryDAO issueBookDBHistoryDAO = new IssueBookDBHistoryDAO();
     public void initialize() {
+        User currentUser = SessionManager.getCurrentUser();
+        if (currentUser == null) {
+            System.err.println("No user is currently logged in.");
+            return;
+        }
         isbnField.setOnMouseClicked(event -> {
             if (isbnField.getText().isEmpty()) {
                 isbnLabel.setVisible(false);  // Ẩn Label khi người dùng click vào TextField
@@ -43,6 +86,25 @@ public class ManageBookStudent {
         });
         issueBookButton.setOnAction(event -> handleIssueBook());
         backButton.setOnAction(event -> handleBackButton());
+
+        isbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        languageColumn.setCellValueFactory(new PropertyValueFactory<>("language"));
+
+
+        ObservableList<Book> books = bookDAO.getObservableList();
+        tableBook.setItems(books);
+
+        issueIDColumn.setCellValueFactory(new PropertyValueFactory<>("issueBookID"));
+        issueIsbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
+        issueTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        issueDueDateColumn.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
+        issueStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        ObservableList<IssueBookDBHistory> issueBookDBHistories = issueBookDBHistoryDAO.getObservableList();
+        IssueTableStudent.setItems(issueBookDBHistories);
     }
 
     private void handleIssueBook() {
