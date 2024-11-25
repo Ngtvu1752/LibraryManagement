@@ -92,7 +92,7 @@
           <TableColumn fx:id="issueTitleColumn" prefWidth="333.5999755859375" text="Title" />
             <TableColumn fx:id="issueDueDateColumn" prefWidth="109.60003662109375" text="Due date" />
             <TableColumn fx:id="issueStatusColumn" maxWidth="245.60003662109375" prefWidth="69.5999755859375" resizable="false" text="is_returned" />
-            <TableColumn maxWidth="316.800048828125" minWidth="0.0" prefWidth="90.39990234375" text="Option" />
+            <TableColumn fx:id="returnColumn" maxWidth="316.800048828125" minWidth="0.0" prefWidth="90.39990234375" text="Option" />
         </columns>
       </TableView>
     </children>

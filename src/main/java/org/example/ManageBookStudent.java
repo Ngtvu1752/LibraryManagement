@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 
@@ -59,6 +60,9 @@ public class ManageBookStudent {
     @FXML
     private TableColumn<IssueBookDBHistory, String> issueStatusColumn;
 
+    @FXML
+    private TableColumn<IssueBookDBHistory, Void> returnColumn;
+
 
     private BookDAO bookDAO = new BookDAO();
     private IssueBookDBHistoryDAO issueBookDBHistoryDAO = new IssueBookDBHistoryDAO();
@@ -105,6 +109,7 @@ public class ManageBookStudent {
 
         ObservableList<IssueBookDBHistory> issueBookDBHistories = issueBookDBHistoryDAO.getObservableList();
         IssueTableStudent.setItems(issueBookDBHistories);
+        addReturnButtonToTable();
     }
 
     private void handleIssueBook() {
@@ -129,6 +134,33 @@ public class ManageBookStudent {
             alert.showAndWait();
         }
     }
+
+    private void addReturnButtonToTable() {
+        Callback<TableColumn<IssueBookDBHistory, Void>, TableCell<IssueBookDBHistory, Void>> cellFactory = new Callback<TableColumn<IssueBookDBHistory, Void>, TableCell<IssueBookDBHistory, Void>>() {
+            public TableCell<IssueBookDBHistory, Void> call (TableColumn<IssueBookDBHistory, Void> param) {
+                return new TableCell<IssueBookDBHistory, Void>() {
+                    private final Button returnButton = new Button("Return");
+                    {
+                        returnButton.setOnAction(event -> {
+                            IssueBookDBHistory book = IssueTableStudent.getItems().get(getIndex());
+                            System.out.println("return book" + book.getTitle());
+                        });
+                    }
+
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(returnButton);
+                        }
+                    }
+                };
+            }
+        };
+        returnColumn.setCellFactory(cellFactory);
+    }
+
     private void handleBackButton() {
         try {
             // Tải file FXML của cửa sổ
