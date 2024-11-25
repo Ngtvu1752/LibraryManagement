@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -54,9 +56,67 @@ public class IssueBook {
             return false;
         }
     }
-
     public boolean returnBook(int userId, String isbn) {
-        return false;
+        String selectIssueBookSql = "SELECT borrow_id, borrow_date, due_date, is_returned FROM issuebook WHERE student_id = ? AND isbn = ? AND is_returned = 0";
+        String updateIssueBookSql = "UPDATE issuebook SET return_date = ?, is_returned = 1, late_fee = ? WHERE borrow_id = ?";
+        String deleteIssueBookSql = "DELETE FROM issuebook WHERE borrow_id = ?";
+        String updateBookSql = "UPDATE BOOK SET Borrowed = Borrowed - 1 WHERE ISBN = ?";
+
+        try (Connection conn = dbHelper.connect()) {
+            // Lấy bản ghi từ bảng issuebook.
+            try (PreparedStatement selectStmt = conn.prepareStatement(selectIssueBookSql)) {
+                selectStmt.setInt(1, userId);
+                selectStmt.setString(2, isbn);
+                ResultSet rs = selectStmt.executeQuery();
+
+                // Nếu không tìm thấy hoặc cuốn sách đã được trả lại.
+                if (!rs.next()) {
+                    return false;
+                }
+
+                //Lấy ngày mượn và ngày đến hạn
+                LocalDate borrowDate = rs.getDate("borrow_date").toLocalDate();
+                LocalDate dueDate = rs.getDate("due_date").toLocalDate();
+                int borrowId = rs.getInt("borrow_id");
+
+                // Tính phí trễ hạn nếu trả lại sau ngày đáo hạn
+                LocalDate returnDate = LocalDate.now(); // Giả sử ngày trả là ngày hiện tại.
+                long daysLate = ChronoUnit.DAYS.between(dueDate, returnDate);
+
+                // Nếu cuốn sách được trả muộn, hãy tính phí trễ.
+                long lateFee = 0;
+                if (daysLate > 0) {
+                    lateFee = daysLate * 5000; // 5000 VND/ngày
+                }
+
+                //Cập nhật bảng issuebook với ngày trả, phí trễ, và đánh dấu là đã trả.
+                try (PreparedStatement updateStmt = conn.prepareStatement(updateIssueBookSql)) {
+                    updateStmt.setDate(1, java.sql.Date.valueOf(returnDate));
+                    updateStmt.setLong(2, lateFee);
+                    updateStmt.setInt(3, borrowId);
+                    updateStmt.executeUpdate();
+                }
+
+                // Xóa bản ghi khỏi bảng issuebook.
+                try (PreparedStatement deleteStmt = conn.prepareStatement(deleteIssueBookSql)) {
+                    deleteStmt.setInt(1, borrowId);
+                    deleteStmt.executeUpdate();
+                }
+
+                // Cập nhật bảng sách để giảm số lượng sách đã mượn.
+                try (PreparedStatement updateBookStmt = conn.prepareStatement(updateBookSql)) {
+                    updateBookStmt.setString(1, isbn);
+                    updateBookStmt.executeUpdate();
+                }
+
+                return true; // Sách đã được trả thành công và bản ghi đã được xóa.
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
 }
