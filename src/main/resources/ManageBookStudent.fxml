@@ -56,11 +56,12 @@
         <Line endX="229.0" endY="52.5" layoutX="329.0" layoutY="17.0" startX="537.0" startY="52.5" stroke="ORANGE" />
         <TableView fx:id="tableBook" layoutX="294.0" layoutY="186.0" prefHeight="247.0" prefWidth="778.0">
             <columns>
-                <TableColumn fx:id="isbnColumn" prefWidth="181.5999755859375" text="ISBN" />
-                <TableColumn fx:id="titleColumn" prefWidth="232.80001831054688" text="Title" />
-                <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="233.59991455078125" text="Author" />
-                <TableColumn fx:id="languageColumn" minWidth="0.0" prefWidth="67.199951171875" text="Language" />
-            <TableColumn fx:id="quantityColumn" maxWidth="105.60007324218748" minWidth="1.59991455078125" prefWidth="61.5999755859375" text="Quantity" />
+                <TableColumn fx:id="isbnColumn" prefWidth="122.4000244140625" text="ISBN" />
+                <TableColumn fx:id="titleColumn" prefWidth="165.5999755859375" text="Title" />
+                <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="168.00006103515625" text="Author" />
+                <TableColumn fx:id="languageColumn" minWidth="0.0" prefWidth="160.7999267578125" text="Language" />
+            <TableColumn fx:id="quantityColumn" maxWidth="136.8001708984375" minWidth="1.59991455078125" prefWidth="85.5999755859375" text="Quantity" />
+            <TableColumn fx:id="optionColumn" maxWidth="85.5999755859375" minWidth="1.59991455078125" prefWidth="72.0001220703125" text="Option" />
             </columns>
         </TableView>
         <Label layoutX="672.0" layoutY="81.0" text="Find Book" textFill="RED">

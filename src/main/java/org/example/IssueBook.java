@@ -56,10 +56,9 @@ public class IssueBook {
             return false;
         }
     }
-    public boolean returnBook(int userId, String isbn) {
+    public long returnBook(int userId, String isbn) {
         String selectIssueBookSql = "SELECT borrow_id, borrow_date, due_date, is_returned FROM issuebook WHERE student_id = ? AND isbn = ? AND is_returned = 0";
-        String updateIssueBookSql = "UPDATE issuebook SET return_date = ?, is_returned = 1, late_fee = ? WHERE borrow_id = ?";
-        String deleteIssueBookSql = "DELETE FROM issuebook WHERE borrow_id = ?";
+        String updateIssueBookSql = "UPDATE issuebook SET return_date = ?, is_returned = 'Yes', late_fee = ? WHERE borrow_id = ?";
         String updateBookSql = "UPDATE BOOK SET Borrowed = Borrowed - 1 WHERE ISBN = ?";
 
         try (Connection conn = dbHelper.connect()) {
@@ -71,7 +70,7 @@ public class IssueBook {
 
                 // Nếu không tìm thấy hoặc cuốn sách đã được trả lại.
                 if (!rs.next()) {
-                    return false;
+                    return -1;
                 }
 
                 //Lấy ngày mượn và ngày đến hạn
@@ -97,25 +96,19 @@ public class IssueBook {
                     updateStmt.executeUpdate();
                 }
 
-                // Xóa bản ghi khỏi bảng issuebook.
-                try (PreparedStatement deleteStmt = conn.prepareStatement(deleteIssueBookSql)) {
-                    deleteStmt.setInt(1, borrowId);
-                    deleteStmt.executeUpdate();
-                }
-
                 // Cập nhật bảng sách để giảm số lượng sách đã mượn.
                 try (PreparedStatement updateBookStmt = conn.prepareStatement(updateBookSql)) {
                     updateBookStmt.setString(1, isbn);
                     updateBookStmt.executeUpdate();
                 }
 
-                return true; // Sách đã được trả thành công và bản ghi đã được xóa.
+                return lateFee;
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
-            return false;
+            return -1;
         }
     }
 
