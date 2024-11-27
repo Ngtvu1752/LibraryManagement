@@ -70,7 +70,7 @@ public class ManageBook {
 
     private final GoogleBooksService googleBooksService = new GoogleBooksService();
     private final BookDAO bookDAO = BookDAO.getInstance();
-
+    private String imageUrl;
     public void initialize() {
         isbnField.setOnMouseClicked(event -> {
             if (isbnField.getText().isEmpty()) {
@@ -211,6 +211,7 @@ public class ManageBook {
         try {
             Book book = googleBooksService.fetchBookDetails(isbn);
             if (book != null) {
+                setImageUrl(book.getImageUrl());
                 titleField.setText(book.getTitle());
                 if (titleField.getText() != null && !titleField.getText().isEmpty()) {
                     titleLabel.setVisible(false);  // Ẩn label khi có thông tin
@@ -241,7 +242,7 @@ public class ManageBook {
         String author = authorField.getText();
         String language = languageField.getText();
         int quantity = Integer.parseInt(quantityField.getText());
-        Book book = new Book(isbn, title, author, language, quantity);
+        Book book = new Book(isbn, title, author, language, getImageUrl() ,quantity);
         boolean addBook = bookDAO.save(book);
         if (addBook) {
             // Hiển thị hộp thoại thành công
@@ -257,6 +258,14 @@ public class ManageBook {
         SceneController.getInstance().switchScene("HomePage");
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -264,4 +273,5 @@ public class ManageBook {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
 }

@@ -7,6 +7,7 @@ public class Book {
     private String language;
     private int quantity;
     private int borrowed;
+    private String imageUrl;
 
     public Book (String ISPN, String title, String author, String language, int quantity, int borrowed) {
         this.isbn  = ISPN;
@@ -15,6 +16,7 @@ public class Book {
         this.language = language;
         this.quantity = quantity;
         this.borrowed = borrowed;
+        this.imageUrl = null;
     }
 
     public Book(String ISPN, String title, String author, String language, int quantity) {
@@ -23,6 +25,16 @@ public class Book {
         this.author = author;
         this.language = language;
         this.quantity = quantity;
+        this.imageUrl = imageUrl;
+    }
+
+    public Book(String ISPN, String title, String author, String language, String imageUrl, int quantity) {
+        this.isbn = ISPN;
+        this.title = title;
+        this.author = author;
+        this.language = language;
+        this.quantity = quantity;
+        this.imageUrl = imageUrl;
     }
 
     public String getIsbn() {
@@ -47,5 +59,13 @@ public class Book {
 
     public int getBorrowed() {
         return borrowed;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

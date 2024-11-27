@@ -65,8 +65,12 @@ public class GoogleBooksService {
                         ? volumeInfo.getJSONArray("authors").getString(0)
                         : "Unknown Author";
                 String language = volumeInfo.optString("language", "Unknown Language");
+                String imageUrl = null;
+                if (volumeInfo.has("imageLinks") && volumeInfo.getJSONObject("imageLinks").has("thumbnail")) {
+                    imageUrl = volumeInfo.getJSONObject("imageLinks").getString("thumbnail");
+                }
 
-                return new Book(isbn, title, author, language, 5);
+                return new Book(isbn, title, author, language, imageUrl, 5);
             } else {
                 return null;
             }

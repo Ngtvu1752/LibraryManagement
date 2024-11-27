@@ -24,6 +24,9 @@ public class ManageBookStudent {
     private TextField isbnField;
 
     @FXML
+    private ImageView imageView;
+
+    @FXML
     private Button issueBookButton;
     @FXML
     private Button backButton;
@@ -217,6 +220,8 @@ public class ManageBookStudent {
 
                         viewButton.setOnAction(event -> {
                             Book book = getTableView().getItems().get(getIndex());
+                            String imageUrl = bookDAO.getImageUrl(book.getIsbn());
+                            displayBookImage(imageUrl);
                             System.out.println("Returning book: " + book.getTitle());
                         });
 
@@ -237,26 +242,38 @@ public class ManageBookStudent {
         optionColumn.setCellFactory(cellFactory);
     }
 
+    public void displayBookImage(String imageUrl) {
+        try {
+            if (imageUrl != null) {
+                Image image = new Image(imageUrl, true);
+
+                imageView.setImage(image);
+                imageView.setFitHeight(177);
+                imageView.setFitWidth(140);
+                imageView.setPreserveRatio(true);
+                imageView.setSmooth(true);
+                image.errorProperty().addListener((obs, oldError, newError) -> {
+                    if (newError != null) {
+                        System.out.println("Failed to load img: " + imageUrl);
+                        imageView.setImage(new Image("/placeholder.jpg"));
+                    }
+                });
+            } else {
+                System.out.println("Image is null!");
+                imageView.setImage(new Image("/placeholder.jpg"));
+                imageView.setFitHeight(177);
+                imageView.setFitWidth(140);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            imageView.setImage(new Image("/placeholder.jpg"));
+            imageView.setFitHeight(177);
+            imageView.setFitWidth(140);
+        }
+    }
+
     private void handleBackButton() {
         SceneController.getInstance().switchScene("StudentHomePage");
-//        try {
-//            // Tải file FXML của cửa sổ
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/StudentHomePage.fxml"));
-//            Parent studentHomePageRoot = fxmlLoader.load();
-//
-//            // Lấy Stage hiện tại (MangeBookStudent)
-//            Stage currentStage = (Stage) backButton.getScene().getWindow();
-//
-//            // Tạo Scene mới từ giao diện StudentHomePage
-//            Scene studentHomePageScene = new Scene(studentHomePageRoot);
-//
-//            // Hiển thị màn hình Login
-//            currentStage.setScene(studentHomePageScene);
-//            currentStage.setTitle("StudentHomePage");
-//            currentStage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     private void showAlert(String title, String message) {

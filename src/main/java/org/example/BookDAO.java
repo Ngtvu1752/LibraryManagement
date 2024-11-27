@@ -11,11 +11,13 @@ import java.util.Optional;
 public class BookDAO implements DAO<Book> {
     private final DatabaseHelper dbHelper;
     private static BookDAO instance;
-    private static final String INSERT = "insert into book values(?,?,?,?,?,?)";
+    private static final String INSERT = "insert into book values(?,?,?,?,?,?,?)";
     private static final String SELECT_ALL = "select * from book";
     private static final String DISPLAY_ALL_BOOKS = "select isbn,title, author, language, quantity from book";
     private static final String DELETE_BOOK = "delete from book where ISBN = ?";
     private static final String FIND_BY_TITLE = "select * from book where title like ?";
+    private static final String query = "SELECT image_url FROM BOOK WHERE ISBN = ?";
+
     public BookDAO() {
         this.dbHelper = DatabaseHelper.getInstance();
     }
@@ -101,6 +103,7 @@ public class BookDAO implements DAO<Book> {
             pstmt.setString(4, book.getLanguage());
             pstmt.setInt(5, book.getQuantity());
             pstmt.setInt(6, book.getBorrowed());
+            pstmt.setString(7, book.getImageUrl());
             pstmt.executeUpdate();
             System.out.println("Add book successfully");
             return true;
@@ -109,6 +112,20 @@ public class BookDAO implements DAO<Book> {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    public String getImageUrl(String isbn) {
+        try(Connection conn = dbHelper.connect();
+            PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, isbn);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("image_url");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void delete(Book book) {
