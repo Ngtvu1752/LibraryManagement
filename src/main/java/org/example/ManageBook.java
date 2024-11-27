@@ -68,8 +68,8 @@ public class ManageBook {
 
     DatabaseHelper dbHelper = DatabaseHelper.getInstance();
 
-    private GoogleBooksService googleBooksService = new GoogleBooksService();
-    private BookDAO bookDAO = new BookDAO();
+    private final GoogleBooksService googleBooksService = new GoogleBooksService();
+    private final BookDAO bookDAO = BookDAO.getInstance();
 
     public void initialize() {
         isbnField.setOnMouseClicked(event -> {
@@ -188,8 +188,13 @@ public class ManageBook {
                 isbnField.setOnAction(event -> fetchBookDetails(newValue.trim()));
             }
         });
-        addButton.setOnAction(event -> saveBookToDatabase());
-        deleteButton.setOnAction(event -> {});
+        addButton.setOnAction(event -> {
+            saveBookToDatabase();
+            ObservableList<Book> books = bookDAO.getObservableList();
+            tableBook.setItems(books);
+        });
+        deleteButton.setOnAction(event -> {
+        });
         backButton.setOnAction(event -> handleBackButton());
 
         isbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
@@ -212,7 +217,7 @@ public class ManageBook {
                 }
                 authorField.setText(book.getAuthor());
                 if (authorField.getText() != null && !authorField.getText().isEmpty()) {
-                    authorLabel.setVisible(false)   ;  // Ẩn label khi có thông tin
+                    authorLabel.setVisible(false);  // Ẩn label khi có thông tin
                 }
                 languageField.setText(book.getLanguage());
                 if (languageField.getText() != null && !languageField.getText().isEmpty()) {

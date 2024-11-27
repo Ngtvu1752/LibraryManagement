@@ -10,6 +10,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class StudentHomePage {
 
@@ -35,17 +36,17 @@ public class StudentHomePage {
     }
 
     private void handleManageBook() {
-        try {
-            // Lấy Stage hiện tại (HomePage)
-            Stage currentStage = (Stage) manageBookButton.getScene().getWindow();
-
-            // Tải FXML và mở cửa sổ "Manage Book"
-            openNewWindow("/ManageBookStudent.fxml", "Manage Books Student");
-
-            // Đóng cửa sổ hiện tại (HomePage)
-            currentStage.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (SceneManage.getScene("ManageBookStudent") != null) {
+            SceneController.getInstance().switchScene("ManageBookStudent");
+        } else {
+            try {
+                Parent manageBookStudentRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/ManageBookStudent.fxml")));
+                Scene manageBookStudentScene = new Scene(manageBookStudentRoot);
+                SceneManage.addScene("ManageBookStudent", manageBookStudentScene);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            SceneController.getInstance().switchScene("ManageBookStudent");
         }
     }
 

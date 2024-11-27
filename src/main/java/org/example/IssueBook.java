@@ -10,8 +10,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class IssueBook {
-    private DatabaseHelper dbHelper = DatabaseHelper.getInstance();
-
+    private final DatabaseHelper dbHelper = DatabaseHelper.getInstance();
+    private final IssueBookDBHistoryDAO issueBookDBHistoryDAO = IssueBookDBHistoryDAO.getInstance();
     public boolean borrowBook(int userId, String isbn) {
         String checkAvailabilitySql = "Select QUANTITY, Borrowed from BOOK where isbn = ?";
         String insertIssueBooksql = "INSERT INTO issuebook(student_id,ISBN,borrow_date,due_date) VALUES ( ?, ?, ?,?)";

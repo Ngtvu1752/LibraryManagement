@@ -7,18 +7,29 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.Optional;
-
 public class IssueBookDBHistoryDAO implements DAO<IssueBookDBHistory> {
     private final DatabaseHelper dbHelper;
+    private static IssueBookDBHistoryDAO instance;
     private static final String TABLE_NAME = "select * from IssueBook";
     private static final String ISSUE_TABLE =
             "select borrow_id, issuebook.ISBN, TITLE, due_date, is_returned\n" +
-            "from issuebook join BOOK B on B.ISBN = issuebook.ISBN\n" +
+                    "from issuebook join BOOK B on B.ISBN = issuebook.ISBN\n" +
                     "where student_id = ?";
+    private static final String INSERT = "INSERT INTO issuebook(student_id,ISBN,borrow_date,due_date) VALUES ( ?, ?, ?,?)";
 
     public IssueBookDBHistoryDAO() {
         this.dbHelper = DatabaseHelper.getInstance();
+    }
+
+    public static IssueBookDBHistoryDAO getInstance() {
+        if (instance == null) {
+            synchronized (IssueBookDBHistoryDAO.class) {
+                if (instance == null) {
+                    instance = new IssueBookDBHistoryDAO();
+                }
+            }
+        }
+        return instance;
     }
 
     public List<IssueBookDBHistory> getAll() {
@@ -46,8 +57,8 @@ public class IssueBookDBHistoryDAO implements DAO<IssueBookDBHistory> {
 
     public ObservableList<IssueBookDBHistory> getObservableList() {
         ObservableList<IssueBookDBHistory> issueBookDBHistories = FXCollections.observableArrayList();
-        try(Connection conn = dbHelper.connect();
-            PreparedStatement stmt = conn.prepareStatement(ISSUE_TABLE)) {
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement stmt = conn.prepareStatement(ISSUE_TABLE)) {
             User currentUser = SessionManager.getCurrentUser();
             if (currentUser == null) {
                 throw new IllegalStateException("No user is currently logged in.");
@@ -70,7 +81,19 @@ public class IssueBookDBHistoryDAO implements DAO<IssueBookDBHistory> {
     }
 
     public boolean save(IssueBookDBHistory issueBookDBHistory) {
-        return true;
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement pstmt = conn.prepareStatement(INSERT)) {
+            pstmt.setInt(1, issueBookDBHistory.getStudentId());
+            pstmt.setString(2, issueBookDBHistory.getIsbn());
+            pstmt.setDate(3, issueBookDBHistory.getBorrowDate());
+            pstmt.setDate(4, issueBookDBHistory.getDueDate());
+            pstmt.executeUpdate();
+            System.out.println("Issue Book sucessfully saved.");
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
     public void delete(IssueBookDBHistory issueBookDBHistory) {

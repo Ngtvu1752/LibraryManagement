@@ -32,7 +32,12 @@ public class IssueBookDBHistory {
         this.status = status;
     }
 
-    public IssueBookDBHistory(int issueBookID, String isbn, String title, Date borrowDate, Date dueDate) {}
+    public IssueBookDBHistory(int issueBookID, String isbn, Date borrowDate, Date dueDate) {
+        this.isbn = isbn;
+        this.issueBookID = issueBookID;
+        this.borrowDate = borrowDate;
+        this.dueDate = dueDate;
+    }
 
     public int getIssueBookID() {
         return issueBookID;

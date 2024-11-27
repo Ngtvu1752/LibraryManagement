@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public class BookDAO implements DAO<Book> {
     private final DatabaseHelper dbHelper;
+    private static BookDAO instance;
     private static final String INSERT = "insert into book values(?,?,?,?,?,?)";
     private static final String SELECT_ALL = "select * from book";
     private static final String DISPLAY_ALL_BOOKS = "select isbn,title, author, language, quantity from book";
@@ -17,6 +18,17 @@ public class BookDAO implements DAO<Book> {
     private static final String FIND_BY_TITLE = "select * from book where title like ?";
     public BookDAO() {
         this.dbHelper = DatabaseHelper.getInstance();
+    }
+
+    public static BookDAO getInstance() {
+        if (instance == null) {
+            synchronized (BookDAO.class) {
+                if (instance == null) {
+                    instance = new BookDAO();
+                }
+            }
+        }
+        return instance;
     }
 
     public List<Book> getAll() {
