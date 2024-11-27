@@ -10,6 +10,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class HomePage {
 
@@ -44,7 +45,18 @@ public class HomePage {
     }
 
     private void handleManageBook() {
-        SceneController.getInstance().switchScene("ManageBook");
+        if (SceneManage.getScene("ManageBook") != null) {
+            SceneController.getInstance().switchScene("ManageBook");
+        } else {
+            try {
+                Parent manageBookStudentRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/ManageBook.fxml")));
+                Scene manageBookStudentScene = new Scene(manageBookStudentRoot);
+                SceneManage.addScene("ManageBook", manageBookStudentScene);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            SceneController.getInstance().switchScene("ManageBook");
+        }
 //        try {
 //            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ManageBook.fxml"));
 //            Parent root = fxmlLoader.load();
@@ -67,12 +79,14 @@ public class HomePage {
 
     private void handleLogout() {
         try {
-            // Load file FXML của cửa sổ Login
+            // Tải file FXML của cửa sổ Login
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Login.fxml"));
             Parent loginRoot = fxmlLoader.load();
+
+            // Lấy Stage hiện tại (HomePage)
             Stage currentStage = (Stage) logoutButton.getScene().getWindow();
 
-            // Tạo một Scene mới cho cửa sổ Login
+            // Tạo Scene mới từ giao diện Login
             Scene loginScene = new Scene(loginRoot);
 
             // Hiển thị màn hình Login

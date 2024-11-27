@@ -7,8 +7,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+
 
 import java.io.IOException;
 
@@ -43,6 +47,9 @@ public class ManageBookStudent {
     private TableColumn<Book, String> languageColumn;
 
     @FXML
+    private TableColumn<Book, Void> optionColumn;
+
+    @FXML
     private TableView<IssueBookDBHistory> IssueTableStudent;
 
     @FXML
@@ -64,14 +71,15 @@ public class ManageBookStudent {
     private TableColumn<IssueBookDBHistory, Void> returnColumn;
 
 
-    private BookDAO bookDAO = new BookDAO();
-    private IssueBookDBHistoryDAO issueBookDBHistoryDAO = new IssueBookDBHistoryDAO();
+    private final BookDAO bookDAO = BookDAO.getInstance();
+    private final IssueBookDBHistoryDAO issueBookDBHistoryDAO = IssueBookDBHistoryDAO.getInstance();
+
     public void initialize() {
-        User currentUser = SessionManager.getCurrentUser();
-        if (currentUser == null) {
-            System.err.println("No user is currently logged in.");
-            return;
-        }
+//        User currentUser = SessionManager.getCurrentUser();
+//        if (currentUser == null) {
+//            System.err.println("No user is currently logged in.");
+//            return;
+//        }
         isbnField.setOnMouseClicked(event -> {
             if (isbnField.getText().isEmpty()) {
                 isbnLabel.setVisible(false);  // Ẩn Label khi người dùng click vào TextField
@@ -88,7 +96,11 @@ public class ManageBookStudent {
                 isbnLabel.setVisible(true);  // Hiện Label khi TextField trống và mất tiêu điểm
             }
         });
-        issueBookButton.setOnAction(event -> handleIssueBook());
+        issueBookButton.setOnAction(event -> {
+            handleIssueBook();
+            ObservableList<IssueBookDBHistory> issueBookDBHistories = issueBookDBHistoryDAO.getObservableList();
+            IssueTableStudent.setItems(issueBookDBHistories);
+        });
         backButton.setOnAction(event -> handleBackButton());
 
         isbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
@@ -110,6 +122,7 @@ public class ManageBookStudent {
         ObservableList<IssueBookDBHistory> issueBookDBHistories = issueBookDBHistoryDAO.getObservableList();
         IssueTableStudent.setItems(issueBookDBHistories);
         addReturnButtonToTable();
+        addViewAndRateButtonToTable();
     }
 
     private void handleIssueBook() {
@@ -135,14 +148,34 @@ public class ManageBookStudent {
         }
     }
 
+    private void handleReturnBook(String isbn) {
+        User studentId = SessionManager.getCurrentUser();
+        int userId = studentId.getId();
+        IssueBook issueBook = new IssueBook();
+        long success = issueBook.returnBook(userId, isbn);
+        if (success > 0) {
+            showAlert("Returned book successfully", "Bạn đã trả sách muộn: " + (success / 5000) + "ngày\n"
+                    + "Số tiền cần nộp phạt: " + success + "VNĐ");
+        } else if (success == 0) {
+            showAlert("Returned book successfully", "Cảm ơn vì đã mượn sách");
+        } else {
+            showAlert("Error", "Sách đã được trả");
+        }
+
+    }
+
     private void addReturnButtonToTable() {
         Callback<TableColumn<IssueBookDBHistory, Void>, TableCell<IssueBookDBHistory, Void>> cellFactory = new Callback<TableColumn<IssueBookDBHistory, Void>, TableCell<IssueBookDBHistory, Void>>() {
-            public TableCell<IssueBookDBHistory, Void> call (TableColumn<IssueBookDBHistory, Void> param) {
+            public TableCell<IssueBookDBHistory, Void> call(TableColumn<IssueBookDBHistory, Void> param) {
                 return new TableCell<IssueBookDBHistory, Void>() {
                     private final Button returnButton = new Button("Return");
+
                     {
                         returnButton.setOnAction(event -> {
                             IssueBookDBHistory book = IssueTableStudent.getItems().get(getIndex());
+                            handleReturnBook(book.getIsbn());
+                            ObservableList<IssueBookDBHistory> issueBookDBHistories = issueBookDBHistoryDAO.getObservableList();
+                            IssueTableStudent.setItems(issueBookDBHistories);
                             System.out.println("return book" + book.getTitle());
                         });
                     }
@@ -161,25 +194,76 @@ public class ManageBookStudent {
         returnColumn.setCellFactory(cellFactory);
     }
 
-    private void handleBackButton() {
-        try {
-            // Tải file FXML của cửa sổ
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/StudentHomePage.fxml"));
-            Parent studentHomePageRoot = fxmlLoader.load();
+    private void addViewAndRateButtonToTable() {
+        Callback<TableColumn<Book, Void>, TableCell<Book, Void>> cellFactory = new Callback<TableColumn<Book, Void>, TableCell<Book, Void>>() {
+            public TableCell<Book, Void> call(TableColumn<Book, Void> param) {
+                return new TableCell<Book, Void>() {
+                    Image starImage = new Image(getClass().getResource("/star.png").toExternalForm());
+                    private final ImageView rateImageView = new ImageView(starImage);
 
-            // Lấy Stage hiện tại (MangeBookStudent)
-            Stage currentStage = (Stage) backButton.getScene().getWindow();
+                    private final Button viewButton = new Button("View");
 
-            // Tạo Scene mới từ giao diện StudentHomePage
-            Scene studentHomePageScene = new Scene(studentHomePageRoot);
+                    private final HBox buttonBox = new HBox(5);
 
-            // Hiển thị màn hình Login
-            currentStage.setScene(studentHomePageScene);
-            currentStage.setTitle("StudentHomePage");
-            currentStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                    {
+                        rateImageView.setFitHeight(20);
+                        rateImageView.setFitWidth(20);
+                        rateImageView.setPreserveRatio(true);
+
+                        rateImageView.setOnMouseClicked(event -> {
+                            Book book = getTableView().getItems().get(getIndex());
+                            System.out.println("Rating book: " + book.getTitle());
+                        });
+
+                        viewButton.setOnAction(event -> {
+                            Book book = getTableView().getItems().get(getIndex());
+                            System.out.println("Returning book: " + book.getTitle());
+                        });
+
+                        buttonBox.getChildren().addAll(rateImageView, viewButton);
+                    }
+
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(buttonBox);
+                        }
+                    }
+                };
+            }
+        };
+        optionColumn.setCellFactory(cellFactory);
     }
 
+    private void handleBackButton() {
+        SceneController.getInstance().switchScene("StudentHomePage");
+//        try {
+//            // Tải file FXML của cửa sổ
+//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/StudentHomePage.fxml"));
+//            Parent studentHomePageRoot = fxmlLoader.load();
+//
+//            // Lấy Stage hiện tại (MangeBookStudent)
+//            Stage currentStage = (Stage) backButton.getScene().getWindow();
+//
+//            // Tạo Scene mới từ giao diện StudentHomePage
+//            Scene studentHomePageScene = new Scene(studentHomePageRoot);
+//
+//            // Hiển thị màn hình Login
+//            currentStage.setScene(studentHomePageScene);
+//            currentStage.setTitle("StudentHomePage");
+//            currentStage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

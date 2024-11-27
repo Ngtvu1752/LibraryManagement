@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class Login {
 
@@ -112,10 +113,24 @@ public class Login {
     }
 
     private void openHomePageAdmin() {
+        try {
+            Parent homeRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/HomePage.fxml")));
+            Scene homeScene = new Scene(homeRoot);
+            SceneManage.addScene("HomePage", homeScene);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         SceneController.getInstance().switchScene("HomePage");
     }
 
     private void openHomePageStudent() {
+        try {
+            Parent StudentHomePageRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/StudentHomePage.fxml")));
+            Scene StudentHomePageScene = new Scene(StudentHomePageRoot);
+            SceneManage.addScene("StudentHomePage", StudentHomePageScene);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         SceneController.getInstance().switchScene("StudentHomePage");
     }
 
