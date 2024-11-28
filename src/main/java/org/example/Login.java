@@ -166,6 +166,22 @@ public class Login {
     private void handleForgotPassword() {
         // Xử lý quên mật khẩu (có thể mở một cửa sổ mới hoặc gửi yêu cầu đặt lại mật khẩu)
         showAlert("Info", "Redirecting to Forgot Password page...");
+        try {
+            // Load the ForgotPassword scene
+            Stage forgotPasswordStage = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/forgotPassword.fxml"));
+            Parent root = loader.load();
+            System.out.println(getClass().getResource("/forgotPassword.fxml"));
+            Scene scene = new Scene(root);
+            forgotPasswordStage.setScene(scene);
+            forgotPasswordStage.setTitle("Forgot Password");
+            forgotPasswordStage.show();
+            Stage currentStage = (Stage) forgotPasswordButton.getScene().getWindow();
+            currentStage.hide();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Could not open Forgot Password page.");
+        }
     }
 
     private void showAlert(String title, String message) {
