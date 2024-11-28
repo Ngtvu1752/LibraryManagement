@@ -56,8 +56,8 @@ public class BookDAO implements DAO<Book> {
     @Override
     public ObservableList<Book> getObservableList() {
         ObservableList<Book> books = FXCollections.observableArrayList();
-        try(Connection conn = dbHelper.connect();
-            PreparedStatement stmt = conn.prepareStatement(DISPLAY_ALL_BOOKS)) {
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement stmt = conn.prepareStatement(DISPLAY_ALL_BOOKS)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 String isbn = rs.getString("ISBN");
@@ -78,7 +78,7 @@ public class BookDAO implements DAO<Book> {
 
     public Optional<Book> findByTitle(String title) {
         try (Connection conn = dbHelper.connect();
-        PreparedStatement pstmt = conn.prepareStatement(FIND_BY_TITLE)) {
+             PreparedStatement pstmt = conn.prepareStatement(FIND_BY_TITLE)) {
             pstmt.setString(1, title);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -89,15 +89,15 @@ public class BookDAO implements DAO<Book> {
                 int borrowed = rs.getInt("Borrowed");
                 return Optional.of(new Book(isbn, title, author, language, quantity, borrowed));
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return Optional.empty();
     }
+
     public boolean save(Book book) {
         try (Connection conn = dbHelper.connect();
-         PreparedStatement pstmt = conn.prepareStatement(INSERT)) {
+             PreparedStatement pstmt = conn.prepareStatement(INSERT)) {
             pstmt.setString(1, book.getIsbn());
             pstmt.setString(2, book.getTitle());
             pstmt.setString(3, book.getAuthor());
@@ -108,16 +108,15 @@ public class BookDAO implements DAO<Book> {
             pstmt.executeUpdate();
             System.out.println("Add book successfully");
             return true;
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
         }
     }
 
     public String getImageUrl(String isbn) {
-        try(Connection conn = dbHelper.connect();
-            PreparedStatement pstmt = conn.prepareStatement(query)) {
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, isbn);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -129,6 +128,46 @@ public class BookDAO implements DAO<Book> {
         return null;
     }
 
-    public void delete(Book book) {
+    public boolean delete(Book book) {
+        // Kiểm tra xem sách có đang được mượn hay không.
+        String checkBorrowedSql = "SELECT Borrowed FROM book WHERE ISBN = ?";
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement checkStmt = conn.prepareStatement(checkBorrowedSql)) {
+            checkStmt.setString(1, book.getIsbn());
+            ResultSet rs = checkStmt.executeQuery();
+            if (rs.next()) {
+                int borrowed = rs.getInt("Borrowed");
+                if (borrowed > 0) {
+                    // Nếu có được mượn, không thể xóa.
+                    System.out.println("Cannot delete the book. It is currently borrowed.");
+                    return false;
+                }
+            } else {
+                // Sách không tìm thấy trong database.
+                System.out.println("Book not found in the database.");
+                return false;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        // Nếu không được mượn, xóa sách
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement deleteStmt = conn.prepareStatement(DELETE_BOOK)) {
+            deleteStmt.setString(1, book.getIsbn());
+            int rowsAffected = deleteStmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Book deleted successfully.");
+                return true;  // cuốn sách đã bị xóa.
+            } else {
+                System.out.println("No rows affected. Book not found or already deleted.");
+                return false;  // sách không được tìm thấy
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
+
 }

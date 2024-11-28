@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -66,6 +67,9 @@ public class ManageBook {
 
     @FXML
     private TableColumn<Book, String> languageColumn;
+
+    @FXML
+    private TableColumn<Book, String> deleteColumn;
 
     DatabaseHelper dbHelper = DatabaseHelper.getInstance();
 
@@ -207,6 +211,7 @@ public class ManageBook {
 //        books = bookDAO.getObservableList();
 //        tableBook.setItems(books);
         fetchBookInBackground();
+        addDeleteButtonToTable();
     }
 
     private void fetchBookInBackground() {
@@ -224,11 +229,12 @@ public class ManageBook {
 
         task.setOnFailed(event -> {
             Throwable exception = task.getException();
-            showAlert("Error" , "failed to load books.");
+            showAlert("Error", "failed to load books.");
             exception.printStackTrace();
         });
         new Thread(task).start();
     }
+
     private void fetchBookDetails(String isbn) {
         Task<Book> fetchBookTask = new Task<Book>() {
             @Override
@@ -261,7 +267,7 @@ public class ManageBook {
         fetchBookTask.setOnFailed(event -> {
             Throwable exception = fetchBookTask.getException();
             exception.printStackTrace();
-            showAlert("Error" , "failed to load book details.");
+            showAlert("Error", "failed to load book details.");
         });
         new Thread(fetchBookTask).start();
 //        try {
@@ -298,7 +304,7 @@ public class ManageBook {
         String author = authorField.getText();
         String language = languageField.getText();
         int quantity = Integer.parseInt(quantityField.getText());
-        Book book = new Book(isbn, title, author, language, getImageUrl() ,quantity);
+        Book book = new Book(isbn, title, author, language, getImageUrl(), quantity);
         boolean addBook = bookDAO.save(book);
         if (addBook) {
             // Hiển thị hộp thoại thành công
@@ -310,6 +316,40 @@ public class ManageBook {
             books.add(book);
         }
     }
+
+    private void addDeleteButtonToTable() {
+        Callback<TableColumn<Book, String>, TableCell<Book, String>> cellFactory = new Callback<TableColumn<Book, String>, TableCell<Book, String>>() {
+            public TableCell<Book, String> call(TableColumn<Book, String> param) {
+                return new TableCell<Book, String>() {
+                    private final Button deleteButton = new Button("Delete");
+
+                    {
+                        deleteButton.setOnAction(event -> {
+                            Book bookToDelete = getTableView().getItems().get(getIndex());
+                            boolean isDeleted = bookDAO.delete(bookToDelete);
+                            if (isDeleted) {
+                                getTableView().getItems().remove(bookToDelete);  // Remove from table
+                                showAlert("Success", "Book deleted successfully.");
+                            } else {
+                                showAlert("Error", "Failed to delete the book.");
+                            }
+                        });
+                    }
+
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(deleteButton);
+                        }
+                    }
+                };
+            }
+        };
+        deleteColumn.setCellFactory(cellFactory);
+    }
+
 
     private void handleBackButton() {
         SceneController.getInstance().switchScene("HomePage");
