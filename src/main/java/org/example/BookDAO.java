@@ -71,6 +71,7 @@ public class BookDAO implements DAO<Book> {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            throw new RuntimeException("Database query failed");
         }
         return books;
     }

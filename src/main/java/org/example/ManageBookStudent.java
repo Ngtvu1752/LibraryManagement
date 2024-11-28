@@ -1,6 +1,7 @@
 package org.example;
 
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -71,9 +72,11 @@ public class ManageBookStudent {
     private TableColumn<IssueBookDBHistory, String> issueStatusColumn;
 
     @FXML
-    private TableColumn<IssueBookDBHistory, Void> returnColumn;
+    private TableColumn<IssueBookDBHistory,
 
+            Void> returnColumn;
 
+    private ObservableList<Book> books;
     private final BookDAO bookDAO = BookDAO.getInstance();
     private final IssueBookDBHistoryDAO issueBookDBHistoryDAO = IssueBookDBHistoryDAO.getInstance();
 
@@ -113,8 +116,7 @@ public class ManageBookStudent {
         languageColumn.setCellValueFactory(new PropertyValueFactory<>("language"));
 
 
-        ObservableList<Book> books = bookDAO.getObservableList();
-        tableBook.setItems(books);
+        fetchBookInBackground();
 
         issueIDColumn.setCellValueFactory(new PropertyValueFactory<>("issueBookID"));
         issueIsbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
@@ -126,6 +128,27 @@ public class ManageBookStudent {
         IssueTableStudent.setItems(issueBookDBHistories);
         addReturnButtonToTable();
         addViewAndRateButtonToTable();
+    }
+
+    private void fetchBookInBackground() {
+        Task<ObservableList<Book>> task = new Task<ObservableList<Book>>() {
+            protected ObservableList<Book> call() throws Exception {
+                return bookDAO.getObservableList();
+            }
+        };
+
+        task.setOnSucceeded(event -> {
+            books = task.getValue();
+            tableBook.setItems(books);
+            System.out.println("Book loads successfully");
+        });
+
+        task.setOnFailed(event -> {
+            Throwable exception = task.getException();
+            showAlert("Error" , "failed to load books.");
+            exception.printStackTrace();
+        });
+        new Thread(task).start();
     }
 
     private void handleIssueBook() {
@@ -220,6 +243,10 @@ public class ManageBookStudent {
 
                         viewButton.setOnAction(event -> {
                             Book book = getTableView().getItems().get(getIndex());
+                            isbnField.setText(book.getIsbn());
+                            if (!isbnField.getText().isEmpty()) {
+                                isbnLabel.setVisible(false);
+                            }
                             String imageUrl = bookDAO.getImageUrl(book.getIsbn());
                             displayBookImage(imageUrl);
                             System.out.println("Returning book: " + book.getTitle());

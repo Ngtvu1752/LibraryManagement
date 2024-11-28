@@ -1,6 +1,7 @@
 package org.example;
 
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -71,6 +72,8 @@ public class ManageBook {
     private final GoogleBooksService googleBooksService = new GoogleBooksService();
     private final BookDAO bookDAO = BookDAO.getInstance();
     private String imageUrl;
+    private ObservableList<Book> books;
+
     public void initialize() {
         isbnField.setOnMouseClicked(event -> {
             if (isbnField.getText().isEmpty()) {
@@ -190,8 +193,6 @@ public class ManageBook {
         });
         addButton.setOnAction(event -> {
             saveBookToDatabase();
-            ObservableList<Book> books = bookDAO.getObservableList();
-            tableBook.setItems(books);
         });
         deleteButton.setOnAction(event -> {
         });
@@ -203,37 +204,92 @@ public class ManageBook {
         languageColumn.setCellValueFactory(new PropertyValueFactory<>("language"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
-        ObservableList<Book> books = bookDAO.getObservableList();
-        tableBook.setItems(books);
+//        books = bookDAO.getObservableList();
+//        tableBook.setItems(books);
+        fetchBookInBackground();
     }
 
+    private void fetchBookInBackground() {
+        Task<ObservableList<Book>> task = new Task<ObservableList<Book>>() {
+            protected ObservableList<Book> call() throws Exception {
+                return bookDAO.getObservableList();
+            }
+        };
+
+        task.setOnSucceeded(event -> {
+            books = task.getValue();
+            tableBook.setItems(books);
+            System.out.println("Book loads successfully");
+        });
+
+        task.setOnFailed(event -> {
+            Throwable exception = task.getException();
+            showAlert("Error" , "failed to load books.");
+            exception.printStackTrace();
+        });
+        new Thread(task).start();
+    }
     private void fetchBookDetails(String isbn) {
-        try {
-            Book book = googleBooksService.fetchBookDetails(isbn);
+        Task<Book> fetchBookTask = new Task<Book>() {
+            @Override
+            protected Book call() throws Exception {
+                return googleBooksService.fetchBookDetails(isbn);
+            }
+        };
+
+        fetchBookTask.setOnSucceeded(event -> {
+            Book book = fetchBookTask.getValue();
             if (book != null) {
                 setImageUrl(book.getImageUrl());
                 titleField.setText(book.getTitle());
+                authorField.setText(book.getAuthor());
+                languageField.setText(book.getLanguage());
                 if (titleField.getText() != null && !titleField.getText().isEmpty()) {
                     titleLabel.setVisible(false);  // Ẩn label khi có thông tin
                 }
-                authorField.setText(book.getAuthor());
                 if (authorField.getText() != null && !authorField.getText().isEmpty()) {
                     authorLabel.setVisible(false);  // Ẩn label khi có thông tin
                 }
-                languageField.setText(book.getLanguage());
                 if (languageField.getText() != null && !languageField.getText().isEmpty()) {
                     languageLabel.setVisible(false);  // Ẩn label khi có thông tin
                 }
             } else {
                 showAlert("No Data", "No book found with the provided ISBN.");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Error", "Failed to fetch book details. Check your internet connection or API key.");
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            showAlert("Error", e.getMessage());
-        }
+        });
+
+        fetchBookTask.setOnFailed(event -> {
+            Throwable exception = fetchBookTask.getException();
+            exception.printStackTrace();
+            showAlert("Error" , "failed to load book details.");
+        });
+        new Thread(fetchBookTask).start();
+//        try {
+//            Book book = googleBooksService.fetchBookDetails(isbn);
+//            if (book != null) {
+//                setImageUrl(book.getImageUrl());
+//                titleField.setText(book.getTitle());
+//                if (titleField.getText() != null && !titleField.getText().isEmpty()) {
+//                    titleLabel.setVisible(false);  // Ẩn label khi có thông tin
+//                }
+//                authorField.setText(book.getAuthor());
+//                if (authorField.getText() != null && !authorField.getText().isEmpty()) {
+//                    authorLabel.setVisible(false);  // Ẩn label khi có thông tin
+//                }
+//                languageField.setText(book.getLanguage());
+//                if (languageField.getText() != null && !languageField.getText().isEmpty()) {
+//                    languageLabel.setVisible(false);  // Ẩn label khi có thông tin
+//                }
+//            } else {
+//                showAlert("No Data", "No book found with the provided ISBN.");
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            showAlert("Error", "Failed to fetch book details. Check your internet connection or API key.");
+//        } catch (RuntimeException e) {
+//            e.printStackTrace();
+//            showAlert("Error", e.getMessage());
+//        }
     }
 
     private void saveBookToDatabase() {
@@ -251,11 +307,17 @@ public class ManageBook {
             alert.setHeaderText(null);
             alert.setContentText("Book saved successfully!");
             alert.showAndWait();
+            books.add(book);
         }
     }
 
     private void handleBackButton() {
         SceneController.getInstance().switchScene("HomePage");
+        isbnField.setText("");
+        titleField.setText("");
+        authorField.setText("");
+        languageField.setText("");
+        quantityField.setText("");
     }
 
     public String getImageUrl() {
