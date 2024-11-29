@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="625.0" prefWidth="1044.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ManageBook">
+<AnchorPane prefHeight="625.0" prefWidth="1044.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ManageBook">
    <children>
       <AnchorPane prefHeight="626.0" prefWidth="309.0" style="-fx-background-color: #D3A29D;">
          <children>
@@ -104,44 +104,52 @@
                <font>
                   <Font size="16.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="23.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons8-add-book-100.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
             <Button fx:id="updateButton" layoutX="104.0" layoutY="492.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="96.0" style="-fx-background-color: #EBDD1C5;" text="Update">
                <font>
                   <Font size="16.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons8-update-100.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
             <Button fx:id="deleteButton" layoutX="204.0" layoutY="492.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="96.0" style="-fx-background-color: #EBDD1C5;" text="Delete">
                <font>
                   <Font size="16.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons8-delete-100.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
-            <ImageView fitHeight="23.0" fitWidth="24.0" layoutX="13.0" layoutY="500.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@icons8-add-book-100.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="19.0" fitWidth="19.0" layoutX="106.0" layoutY="502.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@icons8-update-100.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="19.0" fitWidth="19.0" layoutX="210.0" layoutY="501.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@icons8-delete-100.png" />
-               </image>
-            </ImageView>
          </children>
       </AnchorPane>
       <Button fx:id="backButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="96.0" style="-fx-background-color: #EBDD1C5;" text="Back">
          <font>
             <Font size="19.0" />
          </font>
+         <graphic>
+            <ImageView fitHeight="51.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@icons8-back-16.png" />
+               </image>
+            </ImageView>
+         </graphic>
       </Button>
-      <ImageView fitHeight="51.0" fitWidth="24.0" layoutX="2.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@icons8-back-16.png" />
-         </image>
-      </ImageView>
       <Label layoutX="609.0" layoutY="14.0" text="Manage Books" textFill="#ffa100">
          <font>
             <Font size="39.0" />

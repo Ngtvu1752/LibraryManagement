@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.Rating?>
 
 <AnchorPane prefHeight="687.0" prefWidth="1075.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ManageBookStudent">
     <children>
@@ -36,7 +37,8 @@
                      </image>
                   </ImageView>
                </graphic></Button>
-            <ImageView fx:id="imageView" fitHeight="177.0" fitWidth="140.0" layoutX="51.0" layoutY="330.0" pickOnBounds="true" preserveRatio="false" />
+            <ImageView fx:id="imageView" fitHeight="177.0" fitWidth="140.0" layoutX="74.0" layoutY="330.0" pickOnBounds="true" preserveRatio="false" />
+            <Rating layoutX="53.0" layoutY="519.0" />
          </children></AnchorPane>
         <Button fx:id="backButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="96.0" style="-fx-background-color: #EBDD1C5;" text="Back">
             <font>
