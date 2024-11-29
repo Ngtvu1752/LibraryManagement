@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import org.controlsfx.control.Rating;
 
 import java.util.HashSet;
 import java.util.List;
@@ -86,6 +87,9 @@ public class ManageBookStudent {
 
     @FXML
     private VBox suggestionBox;
+
+    @FXML
+    private Rating rating;
 
     private ObservableList<Book> books;
     private final BookDAO bookDAO = BookDAO.getInstance();
@@ -198,7 +202,16 @@ public class ManageBookStudent {
         }
 
     }
-
+    private void displayRating(String ISBN) {
+        rating.setVisible(true);
+        rating.setManaged(true);
+        rating.setRating(Math.round(bookDAO.getRatingScore(ISBN) / Math.max(bookDAO.getRatingCount(ISBN), 1)));
+        rating.setOnMouseClicked(event -> {
+            double newRating = rating.getRating();
+            bookDAO.incrementRatingCount(ISBN);
+            bookDAO.addRatingScore(ISBN, (int) newRating);
+        });
+    }
     private void addReturnButtonToTable() {
         Callback<TableColumn<IssueBookDBHistory, Void>, TableCell<IssueBookDBHistory, Void>> cellFactory = new Callback<TableColumn<IssueBookDBHistory, Void>, TableCell<IssueBookDBHistory, Void>>() {
             public TableCell<IssueBookDBHistory, Void> call(TableColumn<IssueBookDBHistory, Void> param) {
@@ -258,6 +271,7 @@ public class ManageBookStudent {
                             }
                             String imageUrl = bookDAO.getImageUrl(book.getIsbn());
                             displayBookImage(imageUrl);
+                            displayRating(book.getIsbn());
                             System.out.println("Returning book: " + book.getTitle());
                         });
 
@@ -353,7 +367,6 @@ public class ManageBookStudent {
             }
         });
     }
-
     public void displayBookImage(String imageUrl) {
         try {
             if (imageUrl != null) {

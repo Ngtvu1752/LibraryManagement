@@ -17,7 +17,8 @@ public class BookDAO implements DAO<Book> {
     private static final String DELETE_BOOK = "delete from book where ISBN = ?";
     private static final String FIND_BY_TITLE = "select * from book where title like ?";
     private static final String query = "SELECT image_url FROM BOOK WHERE ISBN = ?";
-
+    private static final String UPDATE_RATING_SCORE = "UPDATE book SET ratingScore = ratingScore + ? WHERE ISBN = ?";
+    private static final String UPDATE_RATING_COUNT = "UPDATE book SET ratingCount = ratingCount + 1 WHERE ISBN = ?";
     public BookDAO() {
         this.dbHelper = DatabaseHelper.getInstance();
     }
@@ -127,7 +128,36 @@ public class BookDAO implements DAO<Book> {
         }
         return null;
     }
-
+    public int getRatingCount(String isbn) {
+        String str = "SELECT ratingCount FROM book WHERE ISBN = ?";
+        int ratingCount = 0;
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, isbn);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                ratingCount = rs.getInt("ratingCount");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ratingCount;
+    }
+    public int getRatingScore(String isbn) {
+        String str2 = "SELECT ratingScore FROM book WHERE ISBN = ?";
+        int ratingScore = 0;
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, isbn);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                ratingScore = rs.getInt("ratingScore");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ratingScore;
+    }
     public boolean delete(Book book) {
         // Kiểm tra xem sách có đang được mượn hay không.
         String checkBorrowedSql = "SELECT Borrowed FROM book WHERE ISBN = ?";
@@ -166,6 +196,31 @@ public class BookDAO implements DAO<Book> {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            return false;
+        }
+    }
+    // Cập nhật ratingCount mỗi khi người dùng bấm vào Rating
+    public boolean incrementRatingCount(String isbn) {
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement pstmt = conn.prepareStatement(UPDATE_RATING_COUNT)) {
+            pstmt.setString(1, isbn);  // Sử dụng ISBN để xác định sách
+            int rowsAffected = pstmt.executeUpdate();  // Cập nhật ratingCount
+            return rowsAffected > 0;  // Nếu có ít nhất 1 dòng được cập nhật, trả về true
+        } catch (SQLException e) {
+            System.out.println("Error updating rating count: " + e.getMessage());
+            return false;
+        }
+    }
+    // Cộng điểm vào ratingScore
+    public boolean addRatingScore(String isbn, int rating) {
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement pstmt = conn.prepareStatement(UPDATE_RATING_SCORE)) {
+            pstmt.setInt(1, rating);  // Thêm điểm đánh giá vào ratingScore
+            pstmt.setString(2, isbn);  // Sử dụng ISBN để xác định sách
+            int rowsAffected = pstmt.executeUpdate();  // Cập nhật ratingScore
+            return rowsAffected > 0;  // Nếu có ít nhất 1 dòng được cập nhật, trả về true
+        } catch (SQLException e) {
+            System.out.println("Error updating rating score: " + e.getMessage());
             return false;
         }
     }
