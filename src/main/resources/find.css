@@ -6,3 +6,7 @@
     -fx-padding: 5 10; /* Căn lề bên trong */
     -fx-background-color: white; /* Màu nền */
 }
+.text-field.suggestions-visible {
+    -fx-background-radius: 20 20 0 0; /* Chỉ bo góc trên */
+    -fx-border-radius: 20 20 0 0; /* Chỉ bo góc trên */
+}

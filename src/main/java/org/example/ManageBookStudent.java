@@ -1,21 +1,22 @@
 package org.example;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
-
-import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ManageBookStudent {
 
@@ -23,6 +24,12 @@ public class ManageBookStudent {
 
     @FXML
     private TextField isbnField;
+
+    @FXML
+    private TextField searchField;
+
+    @FXML
+    private Button searchButton;
 
     @FXML
     private ImageView imageView;
@@ -72,20 +79,19 @@ public class ManageBookStudent {
     private TableColumn<IssueBookDBHistory, String> issueStatusColumn;
 
     @FXML
-    private TableColumn<IssueBookDBHistory,
+    private TableColumn<IssueBookDBHistory, Void> returnColumn;
 
-            Void> returnColumn;
+    @FXML
+    private ScrollPane suggestionScrollPane;
+
+    @FXML
+    private VBox suggestionBox;
 
     private ObservableList<Book> books;
     private final BookDAO bookDAO = BookDAO.getInstance();
     private final IssueBookDBHistoryDAO issueBookDBHistoryDAO = IssueBookDBHistoryDAO.getInstance();
 
     public void initialize() {
-//        User currentUser = SessionManager.getCurrentUser();
-//        if (currentUser == null) {
-//            System.err.println("No user is currently logged in.");
-//            return;
-//        }
         isbnField.setOnMouseClicked(event -> {
             if (isbnField.getText().isEmpty()) {
                 isbnLabel.setVisible(false);  // Ẩn Label khi người dùng click vào TextField
@@ -128,6 +134,9 @@ public class ManageBookStudent {
         IssueTableStudent.setItems(issueBookDBHistories);
         addReturnButtonToTable();
         addViewAndRateButtonToTable();
+        searchButton.setOnAction(event -> {findBook(); System.out.println(searchField.getText());});
+//        searchField.addEventFilter();
+        setupAutoCompleteWithListView();
     }
 
     private void fetchBookInBackground() {
@@ -269,6 +278,82 @@ public class ManageBookStudent {
         optionColumn.setCellFactory(cellFactory);
     }
 
+    private void findBook() {
+        String keyword = searchField.getText().toLowerCase().trim();
+        if (keyword.isEmpty()) {
+            tableBook.setItems(books);
+            return;
+        }
+
+        ObservableList<Book> filteredBooks = FXCollections.observableArrayList();
+        for (Book book : books) {
+            if (book.getTitle().toLowerCase().contains(keyword) || book.getAuthor().toLowerCase().contains(keyword)) {
+                filteredBooks.add(book);
+            }
+        }
+        tableBook.setItems(filteredBooks);
+    }
+
+    private void setupAutoCompleteWithListView() {
+//        suggestionBox = new VBox();
+//        suggestionBox.setPadding(new Insets(5));
+        suggestionScrollPane.setVisible(false);
+        suggestionScrollPane.setManaged(false);
+        suggestionScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        suggestionScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            suggestionBox.getChildren().clear();
+
+            if (!newValue.trim().isEmpty()) {
+                Set<String> suggestions = new HashSet<>();
+
+                for (Book book : books) {
+                    String lowerCaseInput = newValue.toLowerCase();
+
+                    if (book.getTitle().toLowerCase().contains(lowerCaseInput)) {
+                        suggestions.add(book.getTitle());
+                    }
+                    if (book.getAuthor().toLowerCase().contains(lowerCaseInput)) {
+                        suggestions.add(book.getAuthor());
+                    }
+                }
+
+                List<String> limitedSuggestions = suggestions.stream()
+                        .limit(7)
+                        .collect(Collectors.toList());
+
+                for (String suggestion : limitedSuggestions) {
+                    Label suggestionLabel = new Label(suggestion);
+                    suggestionLabel.setStyle("-fx-font-size: 12 ; -fx-padding: 2px; -fx-background-color: white; -fx-cursor: hand;");
+//                    suggestionLabel.setMaxWidth(Double.MAX_VALUE);
+                    suggestionLabel.setOnMouseClicked(event -> {
+                        searchField.setText(suggestionLabel.getText());
+                        suggestionScrollPane.setVisible(false);
+                        suggestionScrollPane.setManaged(false);
+                        searchField.getStyleClass().remove("suggestions-visible");
+                    });
+                    suggestionBox.getChildren().add(suggestionLabel);
+                }
+
+                boolean hasSuggestions = !suggestions.isEmpty();
+                if (hasSuggestions) {
+                    suggestionScrollPane.setPrefHeight(Math.min(150, limitedSuggestions.size() * 28));
+                    if (!searchField.getStyleClass().contains("suggestions-visible")) {
+                        searchField.getStyleClass().add("suggestions-visible");
+                    }
+                } else {
+                    searchField.getStyleClass().remove("suggestions-visible");
+                }
+                suggestionScrollPane.setVisible(hasSuggestions);
+                suggestionScrollPane.setManaged(hasSuggestions);
+            } else {
+                suggestionScrollPane.setVisible(false);
+                suggestionScrollPane.setManaged(false);
+                searchField.getStyleClass().remove("suggestions-visible");
+            }
+        });
+    }
+
     public void displayBookImage(String imageUrl) {
         try {
             if (imageUrl != null) {
@@ -277,7 +362,6 @@ public class ManageBookStudent {
                 imageView.setImage(image);
                 imageView.setFitHeight(177);
                 imageView.setFitWidth(140);
-                imageView.setPreserveRatio(true);
                 imageView.setSmooth(true);
                 image.errorProperty().addListener((obs, oldError, newError) -> {
                     if (newError != null) {
