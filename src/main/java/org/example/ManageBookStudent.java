@@ -241,22 +241,11 @@ public class ManageBookStudent {
             public TableCell<Book, Void> call(TableColumn<Book, Void> param) {
                 return new TableCell<Book, Void>() {
                     Image starImage = new Image(getClass().getResource("/star.png").toExternalForm());
-                    private final ImageView rateImageView = new ImageView(starImage);
-
                     private final Button viewButton = new Button("View");
 
                     private final HBox buttonBox = new HBox(5);
 
                     {
-                        rateImageView.setFitHeight(20);
-                        rateImageView.setFitWidth(20);
-                        rateImageView.setPreserveRatio(true);
-
-                        rateImageView.setOnMouseClicked(event -> {
-                            Book book = getTableView().getItems().get(getIndex());
-                            System.out.println("Rating book: " + book.getTitle());
-                        });
-
                         viewButton.setOnAction(event -> {
                             Book book = getTableView().getItems().get(getIndex());
                             isbnField.setText(book.getIsbn());
@@ -269,7 +258,7 @@ public class ManageBookStudent {
                             System.out.println("Returning book: " + book.getTitle());
                         });
 
-                        buttonBox.getChildren().addAll(rateImageView, viewButton);
+                        buttonBox.getChildren().addAll(viewButton);
                     }
 
                     protected void updateItem(Void item, boolean empty) {
@@ -372,6 +361,7 @@ public class ManageBookStudent {
             double newRating = rating.getRating();
             //bookDAO.incrementRatingCount(ISBN);
             bookDAO.addRatingScore(ISBN, (int) newRating, userId);
+            rating.setRating(Math.round((float) bookDAO.getRatingScore(ISBN) / Math.max(bookDAO.getRatingCount(ISBN), 1)));
         });
     }
 

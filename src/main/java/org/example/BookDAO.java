@@ -268,9 +268,7 @@ public class BookDAO implements DAO<Book> {
             return false;
         }
     }
-    public boolean addRatedUser(String isbn, int userId) {
-        // Lấy danh sách RatedUser hiện tại
-        String ratedUsers = getRatedUsers(isbn);
+    public boolean addRatedUser(String isbn, int userId) {String ratedUsers = getRatedUsers(isbn);
 
         if (ratedUsers != null && ratedUsers.contains(String.valueOf(userId))) {
             // Nếu người dùng đã đánh giá sách, không cho phép đánh giá lại
@@ -282,10 +280,8 @@ public class BookDAO implements DAO<Book> {
         if (ratedUsers == null || ratedUsers.isEmpty()) {
             ratedUsers = String.valueOf(userId);
         } else {
-            ratedUsers += "," + userId; // Thêm userId vào danh sách hiện tại
+            ratedUsers += "," + userId;
         }
-
-        // Cập nhật lại danh sách RatedUser trong cơ sở dữ liệu
         return updateRatedUsers(isbn, ratedUsers);
     }
 
