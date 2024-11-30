@@ -363,13 +363,15 @@ public class ManageBookStudent {
     }
 
     private void displayRating(String ISBN) {
+        User studentId = SessionManager.getCurrentUser();
+        int userId = studentId.getId();
         rating.setVisible(true);
         rating.setManaged(true);
         rating.setRating(Math.round((float) bookDAO.getRatingScore(ISBN) / Math.max(bookDAO.getRatingCount(ISBN), 1)));
         rating.setOnMouseClicked(event -> {
             double newRating = rating.getRating();
-            bookDAO.incrementRatingCount(ISBN);
-            bookDAO.addRatingScore(ISBN, (int) newRating);
+            //bookDAO.incrementRatingCount(ISBN);
+            bookDAO.addRatingScore(ISBN, (int) newRating, userId);
         });
     }
 
