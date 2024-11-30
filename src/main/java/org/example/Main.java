@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.util.Objects;
@@ -23,7 +24,7 @@ public class Main extends Application {
 
             SceneController sceneController = SceneController.getInstance();
             sceneController.setStage(primaryStage);
-
+            primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/bookshelf.png"))));
             primaryStage.setScene(SceneManage.getScene("Login"));
             primaryStage.setTitle("Library Management");
             primaryStage.setResizable(false);
