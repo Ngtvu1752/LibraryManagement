@@ -6,6 +6,9 @@ public class IssueBookDBHistory {
     private int issueBookID;
     private String isbn;
     private int studentId;
+    private String studentName;
+    private String className;
+    private String schoolName;
     private String title;
     private Date borrowDate;
     private Date returnDate;
@@ -32,11 +35,15 @@ public class IssueBookDBHistory {
         this.status = status;
     }
 
-    public IssueBookDBHistory(int issueBookID, String isbn, Date borrowDate, Date dueDate) {
+    public IssueBookDBHistory(int id, String name, String className, String schoolName, String isbn, Date dueDate, String status, double lateFee) {
+        this.studentId = id;
+        this.studentName = name;
+        this.className = className;
+        this.schoolName = schoolName;
         this.isbn = isbn;
-        this.issueBookID = issueBookID;
-        this.borrowDate = borrowDate;
         this.dueDate = dueDate;
+        this.status = status;
+        this.lateFee = lateFee;
     }
 
     public int getIssueBookID() {
@@ -89,6 +96,30 @@ public class IssueBookDBHistory {
 
     public Date getDueDate() {
         return dueDate;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
     }
 
     public void setDueDate(Date dueDate) {

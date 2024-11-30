@@ -93,8 +93,10 @@ public class Login {
                     }
                 } else {
                     System.out.println("sai mk");
-                    showAlert("Error", "Incorrect account or password");
+                    return null;
                 }
+            } else {
+                return null;
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

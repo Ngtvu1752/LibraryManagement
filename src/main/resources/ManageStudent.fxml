@@ -8,61 +8,64 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="625.0" prefWidth="1044.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ManageBook">
+<AnchorPane prefHeight="625.0" prefWidth="1044.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ManageStudent">
     <children>
-        <AnchorPane prefHeight="626.0" prefWidth="309.0" style="-fx-background-color: #D3A29D;">
+        <AnchorPane prefHeight="626.0" prefWidth="1044.0" style="-fx-background-color: #D3A29D;">
             <children>
                 <Label layoutX="32.0" layoutY="124.0" text="Enter Student ID:" textFill="WHITE">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="isbnField" layoutX="33.0" layoutY="157.0" opacity="0.5" prefHeight="31.0" prefWidth="250.0" stylesheets="@textfill.css" />
+                <TextField fx:id="isbnField" layoutX="33.0" layoutY="157.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
                 <Label fx:id="isbnLabel" layoutX="40.0" layoutY="163.0" style="-fx-text-fill: white;" text="Enter ID...." textFill="GREY">
                     <font>
                         <Font size="15.0" />
                     </font>
                 </Label>
-                <Line endX="171.5" endY="-1.0" layoutX="110.0" layoutY="192.0" startX="-74.5" startY="-1.0" stroke="WHITE" />
+                <Line endX="100.40000915527344" endY="-0.9999847412109375" layoutX="110.0" layoutY="192.0" startX="-74.5" startY="-1.0" stroke="WHITE" />
                 <Label layoutX="33.0" layoutY="206.0" text="Enter Student Name:" textFill="WHITE">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="titleField" layoutX="33.0" layoutY="234.0" opacity="0.5" prefHeight="31.0" prefWidth="250.0" stylesheets="@textfill.css" />
+                <TextField fx:id="titleField" layoutX="33.0" layoutY="234.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
                 <Label fx:id="titleLabel" layoutX="39.0" layoutY="240.0" style="-fx-text-fill: white;" text="Enter name...." textFill="GREY">
                     <font>
                         <Font size="15.0" />
                     </font>
                 </Label>
-                <Line endX="91.0" endY="-1.0" layoutX="-52.0" layoutY="269.0" startX="336.5" startY="-1.0" stroke="WHITE" />
+                <Line endX="91.0" endY="-1.0" layoutX="-52.0" layoutY="269.0" startX="259.20001220703125" startY="-1.0" stroke="WHITE" />
                 <Label layoutX="35.0" layoutY="282.0" text="Enter Class:" textFill="WHITE">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="authorField" layoutX="33.0" layoutY="315.0" opacity="0.5" prefHeight="31.0" prefWidth="250.0" stylesheets="@textfill.css" />
+                <TextField fx:id="authorField" layoutX="33.0" layoutY="315.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
                 <Label fx:id="authorLabel" layoutX="38.0" layoutY="319.0" style="-fx-text-fill: white;" text="Enter class...." textFill="GREY">
                     <font>
                         <Font size="15.0" />
                     </font>
                 </Label>
-                <Line endX="89.5" layoutX="-53.0" layoutY="350.0" startX="333.5" stroke="WHITE" />
+                <Line endX="89.5" layoutX="-53.0" layoutY="350.0" startX="261.0" stroke="WHITE" />
                 <Label layoutX="32.0" layoutY="360.0" prefHeight="24.0" prefWidth="159.0" text="Enter School:" textFill="WHITE">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="languageField" layoutX="33.0" layoutY="387.0" opacity="0.5" prefHeight="31.0" prefWidth="250.0" stylesheets="@textfill.css" />
+                <TextField fx:id="languageField" layoutX="33.0" layoutY="387.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
                 <Label fx:id="languageLabel" layoutX="40.0" layoutY="391.0" style="-fx-text-fill: white;" text="Enter school...." textFill="GREY">
                     <font>
                         <Font size="15.0" />
                     </font>
                 </Label>
-                <Line endX="100.0" layoutX="-66.0" layoutY="422.0" startX="348.5" stroke="WHITE" />
+                <Line endX="100.0" layoutX="-66.0" layoutY="422.0" startX="274.79998779296875" stroke="WHITE" />
                 <Button fx:id="updateButton" layoutX="14.0" layoutY="446.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="96.0" style="-fx-background-color: #EBDD1C5;" text="Update">
                     <font>
                         <Font size="16.0" />
@@ -75,7 +78,7 @@
                       </ImageView>
                </graphic>
                 </Button>
-                <Button fx:id="deleteButton" layoutX="199.0" layoutY="446.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="96.0" style="-fx-background-color: #EBDD1C5;" text="Delete">
+                <Button fx:id="deleteButton" layoutX="118.0" layoutY="446.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="96.0" style="-fx-background-color: #EBDD1C5;" text="Delete">
                     <font>
                         <Font size="16.0" />
                     </font>
@@ -107,6 +110,48 @@
                   <Image url="@icons8-school-100.png" />
                </image>
             </ImageView>
+              <Label layoutX="224.0" layoutY="159.0" text="Student details:">
+                  <font>
+                      <Font name="System Bold" size="18.0" />
+                  </font>
+              </Label>
+            <ImageView fitHeight="99.0" fitWidth="119.0" layoutX="451.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@icons8-student-male-100.png" />
+               </image>
+            </ImageView>
+              <Label layoutX="543.0" layoutY="23.0" text="Manage Student">
+                  <font>
+                      <Font size="40.0" />
+                  </font>
+               <textFill>
+                  <LinearGradient endX="0.16287875536716345" endY="1.0" startX="0.30303029625704797" startY="0.2045454400958437">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.658823549747467" green="0.8470588326454163" blue="0.8196078538894653" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+              </Label>
+              <Line endX="203.5" endY="52.5" layoutX="249.0" layoutY="40.0" startX="593.4000244140625" startY="52.5" stroke="#a8d8d1" strokeWidth="3.0" />
+              <TextField fx:id="searchField" layoutX="450.0" layoutY="112.0" prefHeight="38.0" prefWidth="309.0" stylesheets="@find.css" />
+              <Button fx:id="searchButton" layoutX="766.0" layoutY="106.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="37.0" style="-fx-background-color: white;" stylesheets="@button.css">
+                  <graphic>
+                      <ImageView fitHeight="28.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                              <Image url="@icons8-find-100-2.png" />
+                          </image>
+                      </ImageView>
+                  </graphic>
+            </Button>
             </children>
         </AnchorPane>
         <Button fx:id="backButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="96.0" style="-fx-background-color: #EBDD1C5;" text="Back">
@@ -121,29 +166,17 @@
               </ImageView>
          </graphic>
         </Button>
-        <Label layoutX="597.0" layoutY="57.0" text="Manage Student" textFill="#ffa100">
-            <font>
-                <Font size="40.0" />
-            </font>
-        </Label>
-        <Line endX="203.5" endY="52.5" layoutX="312.0" layoutY="63.0" startX="562.5" startY="52.5" stroke="ORANGE" />
-        <TableView fx:id="tableBook" layoutX="316.0" layoutY="189.0" prefHeight="408.0" prefWidth="719.0" stylesheets="@style.css">
+        <TableView fx:id="tableBook" layoutX="218.0" layoutY="189.0" prefHeight="408.0" prefWidth="824.0" stylesheets="@style.css">
             <columns>
-                <TableColumn fx:id="isbnColumn" minWidth="0.0" prefWidth="96.5" text="ID" />
-                <TableColumn fx:id="titleColumn" minWidth="0.0" prefWidth="211.5" text="Name" />
-                <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="155.0" text="Class" />
-                <TableColumn fx:id="languageColumn" minWidth="0.0" prefWidth="254.0" resizable="false" text="School" />
+                <TableColumn fx:id="idColumn" minWidth="0.0" prefWidth="48.79998779296875" text="ID" />
+                <TableColumn fx:id="nameColumn" minWidth="0.0" prefWidth="154.40005493164062" text="Name" />
+                <TableColumn fx:id="classColumn" minWidth="0.0" prefWidth="73.60003662109375" text="Class" />
+                <TableColumn fx:id="schoolColumn" minWidth="0.0" resizable="false" text="School" />
+            <TableColumn fx:id="isbnColumn" minWidth="0.0" prefWidth="243.20001220703125" text="ISBN " />
+            <TableColumn fx:id="returnColumn" minWidth="0.0" prefWidth="78.4000244140625" text="is_returned" />
+            <TableColumn fx:id="feeColumn" minWidth="0.0" prefWidth="54.4000244140625" text="late_fee" />
+            <TableColumn fx:id="dueColumn" minWidth="0.0" prefWidth="69.5999755859375" text="Due_date" />
             </columns>
         </TableView>
-        <Label layoutX="316.0" layoutY="161.0" text="Student details:">
-            <font>
-                <Font size="15.0" />
-            </font>
-        </Label>
-      <ImageView fitHeight="99.0" fitWidth="119.0" layoutX="504.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@icons8-student-male-100.png" />
-         </image>
-      </ImageView>
     </children>
 </AnchorPane>

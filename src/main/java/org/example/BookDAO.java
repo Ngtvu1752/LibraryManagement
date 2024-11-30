@@ -11,7 +11,7 @@ import java.util.Optional;
 public class BookDAO implements DAO<Book> {
     private final DatabaseHelper dbHelper;
     private static BookDAO instance;
-    private static final String INSERT = "insert into book values(?,?,?,?,?,?,?)";
+    private static final String INSERT = "insert into book values(?,?,?,?,?,?,?,0,0)";
     private static final String SELECT_ALL = "select * from book";
     private static final String DISPLAY_ALL_BOOKS = "select isbn,title, author, language, quantity from book";
     private static final String DELETE_BOOK = "delete from book where ISBN = ?";
@@ -128,11 +128,12 @@ public class BookDAO implements DAO<Book> {
         }
         return null;
     }
+
     public int getRatingCount(String isbn) {
-        String str = "SELECT ratingCount FROM book WHERE ISBN = ?";
         int ratingCount = 0;
+        String str2 = "SELECT ratingCount FROM book WHERE ISBN = ?";
         try (Connection conn = dbHelper.connect();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+             PreparedStatement pstmt = conn.prepareStatement(str2)) {
             pstmt.setString(1, isbn);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -147,7 +148,7 @@ public class BookDAO implements DAO<Book> {
         String str2 = "SELECT ratingScore FROM book WHERE ISBN = ?";
         int ratingScore = 0;
         try (Connection conn = dbHelper.connect();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+             PreparedStatement pstmt = conn.prepareStatement(str2)) {
             pstmt.setString(1, isbn);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {

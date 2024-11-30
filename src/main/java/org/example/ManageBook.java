@@ -1,20 +1,20 @@
 package org.example;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ManageBook {
 
@@ -23,6 +23,10 @@ public class ManageBook {
     public Label authorLabel;
     public Label languageLabel;
     public Label quantityLabel;
+
+    @FXML
+    private TextField searchField;
+
     @FXML
     private TextField isbnField;
 
@@ -45,7 +49,7 @@ public class ManageBook {
     private Button deleteButton;
 
     @FXML
-    private Button updateButton;
+    private Button searchButton;
 
     @FXML
     private Button backButton;
@@ -71,6 +75,12 @@ public class ManageBook {
     @FXML
     private TableColumn<Book, String> deleteColumn;
 
+    @FXML
+    private ScrollPane suggestionScrollPane;
+
+    @FXML
+    private VBox suggestionBox;
+
     DatabaseHelper dbHelper = DatabaseHelper.getInstance();
 
     private final GoogleBooksService googleBooksService = new GoogleBooksService();
@@ -79,6 +89,12 @@ public class ManageBook {
     private ObservableList<Book> books;
 
     public void initialize() {
+
+        labelClicked(isbnLabel, isbnField);
+        labelClicked(titleLabel, titleField);
+        labelClicked(authorLabel, authorField);
+        labelClicked(languageLabel, languageField);
+        labelClicked(quantityLabel, quantityField);
         isbnField.setOnMouseClicked(event -> {
             if (isbnField.getText().isEmpty()) {
                 isbnLabel.setVisible(false);  // Ẩn Label khi người dùng click vào TextField
@@ -201,15 +217,14 @@ public class ManageBook {
         deleteButton.setOnAction(event -> {
         });
         backButton.setOnAction(event -> handleBackButton());
-
+        searchButton.setOnAction(event -> {findBook(); System.out.println(searchField.getText());});
+//        searchField.addEventFilter();
         isbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         languageColumn.setCellValueFactory(new PropertyValueFactory<>("language"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
-//        books = bookDAO.getObservableList();
-//        tableBook.setItems(books);
         fetchBookInBackground();
         addDeleteButtonToTable();
     }
@@ -270,52 +285,44 @@ public class ManageBook {
             showAlert("Error", "failed to load book details.");
         });
         new Thread(fetchBookTask).start();
-//        try {
-//            Book book = googleBooksService.fetchBookDetails(isbn);
-//            if (book != null) {
-//                setImageUrl(book.getImageUrl());
-//                titleField.setText(book.getTitle());
-//                if (titleField.getText() != null && !titleField.getText().isEmpty()) {
-//                    titleLabel.setVisible(false);  // Ẩn label khi có thông tin
-//                }
-//                authorField.setText(book.getAuthor());
-//                if (authorField.getText() != null && !authorField.getText().isEmpty()) {
-//                    authorLabel.setVisible(false);  // Ẩn label khi có thông tin
-//                }
-//                languageField.setText(book.getLanguage());
-//                if (languageField.getText() != null && !languageField.getText().isEmpty()) {
-//                    languageLabel.setVisible(false);  // Ẩn label khi có thông tin
-//                }
-//            } else {
-//                showAlert("No Data", "No book found with the provided ISBN.");
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            showAlert("Error", "Failed to fetch book details. Check your internet connection or API key.");
-//        } catch (RuntimeException e) {
-//            e.printStackTrace();
-//            showAlert("Error", e.getMessage());
-//        }
     }
 
     private void saveBookToDatabase() {
-        String isbn = isbnField.getText();
-        String title = titleField.getText();
-        String author = authorField.getText();
-        String language = languageField.getText();
-        int quantity = Integer.parseInt(quantityField.getText());
-        Book book = new Book(isbn, title, author, language, getImageUrl(), quantity);
-        boolean addBook = bookDAO.save(book);
-        if (addBook) {
-            // Hiển thị hộp thoại thành công
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText(null);
-            alert.setContentText("Book saved successfully!");
-            alert.showAndWait();
-            books.add(book);
+        try {
+            String isbn = isbnField.getText().trim();
+            if (!isbn.isEmpty()) {
+                String title = titleField.getText().trim();
+                String author = authorField.getText().trim();
+                String language = languageField.getText().trim();
+                String quantityS = quantityField.getText().trim();
+                if (!quantityS.isEmpty()) {
+                    int quantity = Integer.parseInt(quantityS);
+
+                    Book book = new Book(isbn, title, author, language, getImageUrl(), quantity);
+                    boolean addBook = bookDAO.save(book);
+
+                    if (addBook) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Success");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Book saved successfully!");
+                        alert.showAndWait();
+                        books.add(book);
+                    }
+                } else {
+                    showAlert("Error", "Please enter the quantity.");
+                }
+            } else {
+                showAlert("Error", "Please fill in the ISBN.");
+            }
+        } catch (NumberFormatException e) {
+            showAlert("Error", "Invalid quantity. Please enter a valid number.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "An unexpected error occurred.");
         }
     }
+
 
     private void addDeleteButtonToTable() {
         Callback<TableColumn<Book, String>, TableCell<Book, String>> cellFactory = new Callback<TableColumn<Book, String>, TableCell<Book, String>>() {
@@ -350,6 +357,21 @@ public class ManageBook {
         deleteColumn.setCellFactory(cellFactory);
     }
 
+    private void findBook() {
+        String keyword = searchField.getText().toLowerCase().trim();
+        if (keyword.isEmpty()) {
+            tableBook.setItems(books);
+            return;
+        }
+
+        ObservableList<Book> filteredBooks = FXCollections.observableArrayList();
+        for (Book book : books) {
+            if (book.getTitle().toLowerCase().contains(keyword) || book.getAuthor().toLowerCase().contains(keyword)) {
+                filteredBooks.add(book);
+            }
+        }
+        tableBook.setItems(filteredBooks);
+    }
 
     private void handleBackButton() {
         SceneController.getInstance().switchScene("HomePage");
@@ -366,6 +388,16 @@ public class ManageBook {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public void labelClicked(Label myLabel, TextField myTextField) {
+        myLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                myLabel.setVisible(false);
+                myTextField.requestFocus();
+            }
+        });
     }
 
     private void showAlert(String title, String message) {

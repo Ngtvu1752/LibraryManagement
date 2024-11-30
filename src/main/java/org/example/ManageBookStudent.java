@@ -3,12 +3,14 @@ package org.example;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -96,15 +98,16 @@ public class ManageBookStudent {
     private final IssueBookDBHistoryDAO issueBookDBHistoryDAO = IssueBookDBHistoryDAO.getInstance();
 
     public void initialize() {
+        labelClicked(isbnLabel, isbnField);
         isbnField.setOnMouseClicked(event -> {
             if (isbnField.getText().isEmpty()) {
-                isbnLabel.setVisible(false);  // Ẩn Label khi người dùng click vào TextField
+                isbnLabel.setVisible(false);
             }
         });
 
         isbnField.setOnKeyPressed(event -> {
             if (!isbnField.getText().isEmpty()) {
-                isbnLabel.setVisible(false);  // Ẩn Label khi có văn bản trong TextField
+                isbnLabel.setVisible(false);
             }
         });
         isbnField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -202,16 +205,7 @@ public class ManageBookStudent {
         }
 
     }
-    private void displayRating(String ISBN) {
-        rating.setVisible(true);
-        rating.setManaged(true);
-        rating.setRating(Math.round(bookDAO.getRatingScore(ISBN) / Math.max(bookDAO.getRatingCount(ISBN), 1)));
-        rating.setOnMouseClicked(event -> {
-            double newRating = rating.getRating();
-            bookDAO.incrementRatingCount(ISBN);
-            bookDAO.addRatingScore(ISBN, (int) newRating);
-        });
-    }
+
     private void addReturnButtonToTable() {
         Callback<TableColumn<IssueBookDBHistory, Void>, TableCell<IssueBookDBHistory, Void>> cellFactory = new Callback<TableColumn<IssueBookDBHistory, Void>, TableCell<IssueBookDBHistory, Void>>() {
             public TableCell<IssueBookDBHistory, Void> call(TableColumn<IssueBookDBHistory, Void> param) {
@@ -270,7 +264,7 @@ public class ManageBookStudent {
                                 isbnLabel.setVisible(false);
                             }
                             String imageUrl = bookDAO.getImageUrl(book.getIsbn());
-                            displayBookImage(imageUrl);
+                            displayBookImageAsync(imageUrl);
                             displayRating(book.getIsbn());
                             System.out.println("Returning book: " + book.getTitle());
                         });
@@ -367,11 +361,22 @@ public class ManageBookStudent {
             }
         });
     }
+
+    private void displayRating(String ISBN) {
+        rating.setVisible(true);
+        rating.setManaged(true);
+        rating.setRating(Math.round((float) bookDAO.getRatingScore(ISBN) / Math.max(bookDAO.getRatingCount(ISBN), 1)));
+        rating.setOnMouseClicked(event -> {
+            double newRating = rating.getRating();
+            bookDAO.incrementRatingCount(ISBN);
+            bookDAO.addRatingScore(ISBN, (int) newRating);
+        });
+    }
+
     public void displayBookImage(String imageUrl) {
         try {
             if (imageUrl != null) {
                 Image image = new Image(imageUrl, true);
-
                 imageView.setImage(image);
                 imageView.setFitHeight(177);
                 imageView.setFitWidth(140);
@@ -394,6 +399,51 @@ public class ManageBookStudent {
             imageView.setFitHeight(177);
             imageView.setFitWidth(140);
         }
+    }
+
+    public void displayBookImageAsync(String imageUrl) {
+        // Hiển thị placeholder trong khi tải ảnh
+        imageView.setImage(new Image("/placeholder.jpg"));
+        imageView.setFitHeight(177);
+        imageView.setFitWidth(140);
+
+        // Tạo Task để tải ảnh trong luồng riêng
+        Task<Image> loadImageTask = new Task<Image>() {
+            @Override
+            protected Image call() {
+                return new Image(imageUrl, true);
+            }
+        };
+
+        // Khi Task thành công, cập nhật ảnh vào ImageView
+        loadImageTask.setOnSucceeded(event -> {
+            Image image = loadImageTask.getValue();
+            imageView.setImage(image);
+            imageView.setSmooth(true);
+            imageView.setFitHeight(177);
+            imageView.setFitWidth(140);
+        });
+
+        // Khi Task thất bại, hiển thị placeholder
+        loadImageTask.setOnFailed(event -> {
+            System.out.println("Failed to load img: " + imageUrl);
+            imageView.setImage(new Image("/placeholder.jpg"));
+            imageView.setFitHeight(177);
+            imageView.setFitWidth(140);
+        });
+
+        // Chạy Task trong luồng riêng
+        new Thread(loadImageTask).start();
+    }
+
+    public void labelClicked(Label myLabel, TextField myTextField) {
+        myLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                myLabel.setVisible(false);
+                myTextField.requestFocus();
+            }
+        });
     }
 
     private void handleBackButton() {

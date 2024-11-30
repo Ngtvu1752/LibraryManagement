@@ -36,11 +36,17 @@ public class HomePage {
     }
 
     private void handleManageStudent() {
-        try {
-            // Tải FXML và mở cửa sổ "Manage Student"
-            openNewWindow("/ManageStudent.fxml", "Manage Student");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (SceneManage.getScene("ManageStudent") != null) {
+            SceneController.getInstance().switchScene("ManageStudent");
+        } else {
+            try {
+                Parent manageBookStudentRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/ManageStudent.fxml")));
+                Scene manageBookStudentScene = new Scene(manageBookStudentRoot);
+                SceneManage.addScene("ManageStudent", manageBookStudentScene);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            SceneController.getInstance().switchScene("ManageStudent");
         }
     }
 
