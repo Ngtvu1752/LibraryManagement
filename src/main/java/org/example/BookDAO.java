@@ -13,7 +13,7 @@ public class BookDAO implements DAO<Book> {
     private static BookDAO instance;
     private static final String INSERT = "insert into book values(?,?,?,?,?,?,?,0,0,null)";
     private static final String SELECT_ALL = "select * from book";
-    private static final String DISPLAY_ALL_BOOKS = "select isbn,title, author, language, quantity from book";
+    private static final String DISPLAY_ALL_BOOKS = "select isbn,title, author, language, quantity, borrowed from book";
     private static final String DELETE_BOOK = "delete from book where ISBN = ?";
     private static final String FIND_BY_TITLE = "select * from book where title like ?";
     private static final String query = "SELECT image_url FROM BOOK WHERE ISBN = ?";
@@ -67,8 +67,9 @@ public class BookDAO implements DAO<Book> {
                 String author = rs.getString("AUTHOR");
                 String language = rs.getString("LANGUAGE");
                 int quantity = rs.getInt("QUANTITY");
+                int borrowed = rs.getInt("BORROWED");
 
-                Book book = new Book(isbn, title, author, language, quantity);
+                Book book = new Book(isbn, title, author, language, quantity, borrowed);
                 books.add(book);
             }
         } catch (SQLException e) {

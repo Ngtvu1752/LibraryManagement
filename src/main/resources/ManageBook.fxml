@@ -163,8 +163,9 @@
             <TableColumn fx:id="isbnColumn" minWidth="0.0" prefWidth="100.00003051757812" text="ISBN" />
             <TableColumn fx:id="titleColumn" minWidth="0.0" prefWidth="215.99993896484375" text="Title" />
             <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="153.60003662109375" text="Author" />
-            <TableColumn fx:id="languageColumn" minWidth="0.0" prefWidth="100.800048828125" resizable="false" text="Language" />
-            <TableColumn fx:id="quantityColumn" minWidth="0.0" prefWidth="72.7999267578125" resizable="false" text="Quantity" />
+            <TableColumn fx:id="languageColumn" minWidth="0.0" prefWidth="100.800048828125"  text="Language" />
+            <TableColumn fx:id="quantityColumn" minWidth="0.0" prefWidth="72.7999267578125"  text="Quantity" />
+            <TableColumn fx:id="borrowedColumn" minWidth="0.0" prefWidth="160.7999267578125" text="Borrowed" />
             <TableColumn fx:id="deleteColumn" maxWidth="316.800048828125" minWidth="0.0" prefWidth="83.20013427734375" text="Option" />
          </columns>
       </TableView>
