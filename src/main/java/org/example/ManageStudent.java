@@ -53,9 +53,20 @@ public class ManageStudent {
     }
 
     public ObservableList<IssueBookDBHistory> getTableBook() {
-        String INFOR = "SELECT users.id, users.name, users.class, users.school, issuebook.ISBN, issuebook.due_date, issuebook.is_returned, issuebook.late_fee\n" +
-        "FROM issuebook\n" +
-        "JOIN users ON users.id = issuebook.student_id";
+        String INFOR = "SELECT\n" +
+                "    users.id,\n" +
+                "    users.name,\n" +
+                "    users.class,\n" +
+                "    users.school,\n" +
+                "    issuebook.ISBN,\n" +
+                "    issuebook.due_date,\n" +
+                "    issuebook.is_returned,\n" +
+                "    issuebook.late_fee\n" +
+                "FROM\n" +
+                "    users\n" +
+                "LEFT JOIN\n" +
+                "    issuebook ON users.id = issuebook.student_id\n" +
+                "where role = 'student';";
         ObservableList<IssueBookDBHistory> infomations = FXCollections.observableArrayList();
         try (Connection conn = dbHelper.connect();
              PreparedStatement stmt = conn.prepareStatement(INFOR)) {

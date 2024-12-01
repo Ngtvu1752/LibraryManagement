@@ -15,13 +15,10 @@ import java.util.Objects;
 public class StudentHomePage {
 
     @FXML
-    private Button manageStudentButton;
-
-    @FXML
     private Button manageBookButton;
 
     @FXML
-    private Button returnBookButton;
+    private Button profileButton;
 
     @FXML
     private Button logoutButton;
@@ -30,7 +27,7 @@ public class StudentHomePage {
     public void initialize() {
         // Thiết lập sự kiện cho các nút
         manageBookButton.setOnAction(event -> handleManageBook());
-        returnBookButton.setOnAction(event -> handleReturnBook());
+        profileButton.setOnAction(event -> handleProfile());
         logoutButton.setOnAction(event -> handleLogout());
 
     }
@@ -50,9 +47,12 @@ public class StudentHomePage {
         }
     }
 
-    private void handleReturnBook() {
-        System.out.println("Return Book button clicked!");
-        // Thêm logic xử lý trả sách nếu cần
+    private void handleProfile() {
+        try {
+            openNewWindow("/Profile.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void handleLogout() {
@@ -76,12 +76,10 @@ public class StudentHomePage {
         }
     }
 
-    private void openNewWindow(String fxmlPath, String title) throws IOException {
+    private void openNewWindow(String fxmlPath) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = fxmlLoader.load();
-
         Stage stage = new Stage();
-        stage.setTitle(title);
         stage.initModality(Modality.APPLICATION_MODAL); // Chặn tương tác với các cửa sổ khác
         stage.setScene(new Scene(root));
         stage.show();
