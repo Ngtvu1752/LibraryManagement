@@ -138,30 +138,17 @@ public class Login {
 
 
     private void handleSignUp() {
-//        SceneController.getInstance().switchScene("SignUp");
-        try {
-            // Tạo một stage mới
-            Stage signUpStage = new Stage();
-
-            // Tải file FXML cho giao diện đăng ký
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/signUp.fxml"));
-            Parent root = loader.load();
-            System.out.println(getClass().getResource("/signUp.fxml")); // Kiểm tra xem có null hay không
-
-            // Tạo một scene mới và gán cho stage
-            Scene scene = new Scene(root);
-            signUpStage.setScene(scene);
-
-            // Thiết lập tiêu đề và hiển thị stage
-            signUpStage.setTitle("Sign Up");
-            signUpStage.show();
-
-            // Nếu muốn ẩn cửa sổ hiện tại
-            Stage currentStage = (Stage) signUpButton.getScene().getWindow(); // Dùng signUpButton
-            currentStage.hide();
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Error", "Could not open sign up page.");
+        if (SceneManage.getScene("SignUp") != null) {
+            SceneController.getInstance().switchScene("SignUp");
+        } else {
+            try {
+                Parent manageBookStudentRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/signUp.fxml")));
+                Scene manageBookStudentScene = new Scene(manageBookStudentRoot);
+                SceneManage.addScene("SignUp", manageBookStudentScene);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            SceneController.getInstance().switchScene("SignUp");
         }
     }
 
@@ -169,21 +156,16 @@ public class Login {
         // Xử lý quên mật khẩu (có thể mở một cửa sổ mới hoặc gửi yêu cầu đặt lại mật khẩu)
         showAlert("Info", "Redirecting to Forgot Password page...");
         try {
-            // Load the ForgotPassword scene
             Stage forgotPasswordStage = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/forgotPassword.fxml"));
             Parent root = loader.load();
-            System.out.println(getClass().getResource("/forgotPassword.fxml"));
             Scene scene = new Scene(root);
-            forgotPasswordStage.setScene(scene);
-            forgotPasswordStage.setTitle("Forgot Password");
-            forgotPasswordStage.show();
-            Stage currentStage = (Stage) forgotPasswordButton.getScene().getWindow();
-            currentStage.hide();
+            SceneManage.addScene("ForgotPassword", scene);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Could not open Forgot Password page.");
         }
+        SceneController.getInstance().switchScene("ForgotPassword");
     }
 
     private void showAlert(String title, String message) {

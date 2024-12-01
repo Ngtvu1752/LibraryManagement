@@ -97,17 +97,7 @@ public class SignUp {
     }
 
     private void handleBackButton() {
-        try {
-            // Tải FXML cho màn hình đăng nhập
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
-            Scene loginScene = new Scene(loader.load());
-
-            // Lấy stage hiện tại và đặt lại cảnh
-            Stage stage = (Stage) backButton.getScene().getWindow();
-            stage.setScene(loginScene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace(); // Xử lý lỗi nếu có
-        }
+        SceneController.getInstance().switchScene("Login");
+        SceneManage.removeScene("SignUp");
     }
 }
