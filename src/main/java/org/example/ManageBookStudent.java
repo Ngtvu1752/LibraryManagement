@@ -443,6 +443,7 @@ public class ManageBookStudent {
 
     private void handleBackButton() {
         SceneController.getInstance().switchScene("StudentHomePage");
+        SceneManage.removeScene("ManageBookStudent");
     }
 
     private void showAlert(String title, String message) {

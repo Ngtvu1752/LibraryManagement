@@ -266,6 +266,7 @@ public class ManageStudent {
 
     private void handleBackButton() {
         SceneController.getInstance().switchScene("HomePage");
+        SceneManage.removeScene("ManageStudent");
     }
 
     private void showAlert(String title, String message) {
