@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="625.0" prefWidth="1044.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ManageStudent">
+<AnchorPane prefHeight="625.0" prefWidth="1044.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ManageStudent">
     <children>
         <AnchorPane prefHeight="626.0" prefWidth="1044.0" style="-fx-background-color: #D3A29D;">
             <children>
@@ -23,8 +23,8 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="isbnField" layoutX="33.0" layoutY="157.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
-                <Label fx:id="isbnLabel" layoutX="40.0" layoutY="163.0" style="-fx-text-fill: white;" text="Enter ID...." textFill="GREY">
+                <TextField fx:id="studentIDField" layoutX="33.0" layoutY="157.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
+                <Label fx:id="idLabel" layoutX="40.0" layoutY="163.0" style="-fx-text-fill: white;" text="Enter ID...." textFill="GREY">
                     <font>
                         <Font size="15.0" />
                     </font>
@@ -35,8 +35,8 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="titleField" layoutX="33.0" layoutY="234.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
-                <Label fx:id="titleLabel" layoutX="39.0" layoutY="240.0" style="-fx-text-fill: white;" text="Enter name...." textFill="GREY">
+                <TextField fx:id="studentNameFeild" layoutX="33.0" layoutY="234.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
+                <Label fx:id="nameLabel" layoutX="39.0" layoutY="240.0" style="-fx-text-fill: white;" text="Enter name...." textFill="GREY">
                     <font>
                         <Font size="15.0" />
                     </font>
@@ -47,8 +47,8 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="authorField" layoutX="33.0" layoutY="315.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
-                <Label fx:id="authorLabel" layoutX="38.0" layoutY="319.0" style="-fx-text-fill: white;" text="Enter class...." textFill="GREY">
+                <TextField fx:id="classFeild" layoutX="33.0" layoutY="315.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
+                <Label fx:id="classLabel" layoutX="38.0" layoutY="319.0" style="-fx-text-fill: white;" text="Enter class...." textFill="GREY">
                     <font>
                         <Font size="15.0" />
                     </font>
@@ -59,8 +59,8 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="languageField" layoutX="33.0" layoutY="387.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
-                <Label fx:id="languageLabel" layoutX="40.0" layoutY="391.0" style="-fx-text-fill: white;" text="Enter school...." textFill="GREY">
+                <TextField fx:id="schoolField" layoutX="33.0" layoutY="387.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
+                <Label fx:id="schoolLabel" layoutX="40.0" layoutY="391.0" style="-fx-text-fill: white;" text="Enter school...." textFill="GREY">
                     <font>
                         <Font size="15.0" />
                     </font>

@@ -2,21 +2,21 @@ package org.example;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.MouseEvent;
 
 import java.sql.*;
 
 public class ManageStudent {
 
     @FXML
-    private TextField isbnField, titleField, authorField, languageField, searchField;
+    private TextField studentIDField, studentNameFeild, classFeild, schoolField, searchField;
 
     @FXML
-    private Label isbnLabel, titleLabel, authorLabel, languageLabel;
+    private Label idLabel, nameLabel, classLabel, schoolLabel;
 
     @FXML
     private Button updateButton, deleteButton, searchButton, backButton;
@@ -31,9 +31,23 @@ public class ManageStudent {
 
     private ObservableList<IssueBookDBHistory> informations;
     private DatabaseHelper dbHelper = DatabaseHelper.getInstance();
+    private StudentDAO studentDAO = new StudentDAO();
+
     @FXML
     private void initialize() {
 
+        labelClicked(idLabel, studentIDField);
+        labelClicked(nameLabel, studentNameFeild);
+        labelClicked(classLabel, classFeild);
+        labelClicked(schoolLabel, schoolField);
+
+
+        handleFieldVisibility(studentIDField, idLabel);
+        handleFieldVisibility(studentNameFeild, nameLabel);
+        handleFieldVisibility(classFeild, classLabel);
+        handleFieldVisibility(schoolField, schoolLabel);
+
+        // Thiết lập các cột cho TableView
         idColumn.setCellValueFactory(new PropertyValueFactory<>("studentId"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("studentName"));
         classColumn.setCellValueFactory(new PropertyValueFactory<>("className"));
@@ -42,14 +56,74 @@ public class ManageStudent {
         returnColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         feeColumn.setCellValueFactory(new PropertyValueFactory<>("lateFee"));
         dueColumn.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
+
         informations = getTableBook();
         tableBook.setItems(informations);
 
-        // Thêm sự kiện cho các nút
+
+        tableBook.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                studentIDField.setText(String.valueOf(newValue.getStudentId()));
+                studentNameFeild.setText(newValue.getStudentName());
+                classFeild.setText(newValue.getClassName());
+                schoolField.setText(newValue.getSchoolName());
+
+                // Hide labels when fields are populated
+                if (!isFieldEmpty(studentIDField)) {
+                    idLabel.setVisible(false);
+                }
+                if (!isFieldEmpty(studentNameFeild)) {
+                    nameLabel.setVisible(false);
+                }
+                if (!isFieldEmpty(classFeild)) {
+                    classLabel.setVisible(false);
+                }
+                if (!isFieldEmpty(schoolField)) {
+                    schoolLabel.setVisible(false);
+                }
+            }
+        });
+
+
         updateButton.setOnAction(event -> updateStudent());
         deleteButton.setOnAction(event -> deleteStudent());
         searchButton.setOnAction(event -> searchStudent());
         backButton.setOnAction(event -> handleBackButton());
+    }
+
+    // kiểm tra xem feild có rỗng hoặc null hay không.
+    private boolean isFieldEmpty(TextField textField) {
+        return textField.getText() == null || textField.getText().isEmpty();
+    }
+
+    //  ẩn label khi các feild đã được điền thông tin.
+    private void handleFieldVisibility(TextField textField, Label label) {
+        updateLabelVisibility(textField, label);
+        textField.setOnMouseClicked(event -> updateLabelVisibility(textField, label));
+        textField.setOnKeyPressed(event -> updateLabelVisibility(textField, label));
+        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && isFieldEmpty(textField)) {
+                label.setVisible(true);
+            }
+        });
+    }
+
+    private void updateLabelVisibility(TextField textField, Label label) {
+        if (isFieldEmpty(textField)) {
+            label.setVisible(true);
+        } else {
+            label.setVisible(false);
+        }
+    }
+
+    public void labelClicked(Label myLabel, TextField myTextField) {
+        myLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                myLabel.setVisible(false);
+                myTextField.requestFocus();
+            }
+        });
     }
 
     public ObservableList<IssueBookDBHistory> getTableBook() {
@@ -119,9 +193,71 @@ public class ManageStudent {
 
 
     private void updateStudent() {
+        // Lấy thông tin
+        String studentIdText = studentIDField.getText().trim();
+        String studentName = studentNameFeild.getText().trim();
+        String className = classFeild.getText().trim();
+        String schoolName = schoolField.getText().trim();
+
+        // Xác thực input
+        if (studentIdText.isEmpty() || studentName.isEmpty() || className.isEmpty() || schoolName.isEmpty()) {
+            showAlert("Error", "Please fill in all fields.");
+            return;
+        }
+
+        // Kiểm tra msv có phải là một số nguyên hợp lệ hay không.
+        int studentId;
+        try {
+            studentId = Integer.parseInt(studentIdText);
+        } catch (NumberFormatException e) {
+            showAlert("Error", "Student ID must be a number.");
+            return;
+        }
+
+        // Kiểm tra xem msv có thay đổi hay không và nếu mã mới đã tồn tại
+        IssueBookDBHistory selectedStudent = tableBook.getSelectionModel().getSelectedItem();
+        if (selectedStudent != null && selectedStudent.getStudentId() != studentId) {
+            if (studentDAO.isStudentIdExists(studentId)) {
+                showAlert("Error", "The Student ID already exists. Please choose a unique ID.");
+                return;
+            }
+        }
+
+        // giữ nguyên nếu feild trống.
+        String updatedName = studentName.isEmpty() ? selectedStudent.getStudentName() : studentName;
+        String updatedClass = className.isEmpty() ? selectedStudent.getClassName() : className;
+        String updatedSchool = schoolName.isEmpty() ? selectedStudent.getSchoolName() : schoolName;
+
+        // Tạo một đối tượng Sinh viên với thông tin đã cập nhật.
+        Student updatedStudent = new Student(studentId, "", updatedName);
+        updatedStudent.setClassroom(updatedClass);
+        updatedStudent.setSchool(updatedSchool);
+
+        boolean updateSuccess = studentDAO.update(updatedStudent);
+        if (updateSuccess) {
+            showAlert("Success", "Student information updated successfully.");
+            informations = getTableBook();
+            tableBook.setItems(informations);
+        } else {
+            showAlert("Error", "Failed to update student information.");
+        }
     }
 
     private void deleteStudent() {
+        // gọi sinh viên được chọn
+        IssueBookDBHistory selectedStudent = tableBook.getSelectionModel().getSelectedItem();
+        if (selectedStudent != null) {
+            int studentId = selectedStudent.getStudentId();
+            Student studentToDelete = new Student(studentId, "", "", "", "", "student");
+            boolean deleteSuccess = studentDAO.delete(studentToDelete);
+            if (deleteSuccess) {
+                showAlert("Success", "Student deleted successfully.");
+                informations = getTableBook();
+                tableBook.setItems(informations);
+            } else {
+                showAlert("Error", "Failed to delete student.");
+            }
+        }
     }
 
     private void searchStudent() {

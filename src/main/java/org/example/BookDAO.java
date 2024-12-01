@@ -19,6 +19,7 @@ public class BookDAO implements DAO<Book> {
     private static final String query = "SELECT image_url FROM BOOK WHERE ISBN = ?";
     private static final String UPDATE_RATING_SCORE = "UPDATE book SET ratingScore = ratingScore + ? WHERE ISBN = ?";
     private static final String UPDATE_RATING_COUNT = "UPDATE book SET ratingCount = ratingCount + 1 WHERE ISBN = ?";
+
     public BookDAO() {
         this.dbHelper = DatabaseHelper.getInstance();
     }
@@ -144,6 +145,7 @@ public class BookDAO implements DAO<Book> {
         }
         return ratingCount;
     }
+
     public int getRatingScore(String isbn) {
         String str2 = "SELECT ratingScore FROM book WHERE ISBN = ?";
         int ratingScore = 0;
@@ -159,6 +161,7 @@ public class BookDAO implements DAO<Book> {
         }
         return ratingScore;
     }
+
     public boolean delete(Book book) {
         // Kiểm tra xem sách có đang được mượn hay không.
         String checkBorrowedSql = "SELECT Borrowed FROM book WHERE ISBN = ?";
@@ -200,6 +203,11 @@ public class BookDAO implements DAO<Book> {
             return false;
         }
     }
+
+    public boolean update(Book book) {
+        return false;
+    }
+
     // Cập nhật ratingCount mỗi khi người dùng bấm vào Rating
     public boolean incrementRatingCount(String isbn) {
         try (Connection conn = dbHelper.connect();
@@ -212,6 +220,7 @@ public class BookDAO implements DAO<Book> {
             return false;
         }
     }
+
     // Cộng điểm vào ratingScore
     public boolean addRatingScore(String isbn, int rating, int userId) {
         // Kiểm tra xem người dùng đã đánh giá chưa
@@ -255,6 +264,7 @@ public class BookDAO implements DAO<Book> {
         }
         return null;
     }
+
     public boolean updateRatedUsers(String isbn, String updatedRatedUsers) {
         String s = "UPDATE book SET RatedUser = ? WHERE ISBN = ?";
         try (Connection conn = dbHelper.connect();
@@ -268,7 +278,9 @@ public class BookDAO implements DAO<Book> {
             return false;
         }
     }
-    public boolean addRatedUser(String isbn, int userId) {String ratedUsers = getRatedUsers(isbn);
+
+    public boolean addRatedUser(String isbn, int userId) {
+        String ratedUsers = getRatedUsers(isbn);
 
         if (ratedUsers != null && ratedUsers.contains(String.valueOf(userId))) {
             // Nếu người dùng đã đánh giá sách, không cho phép đánh giá lại

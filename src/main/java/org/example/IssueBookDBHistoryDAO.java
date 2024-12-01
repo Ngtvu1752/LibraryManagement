@@ -99,4 +99,9 @@ public class IssueBookDBHistoryDAO implements DAO<IssueBookDBHistory> {
     public boolean delete(IssueBookDBHistory issueBookDBHistory) {
         return false;
     }
+
+
+    public boolean update(IssueBookDBHistory issueBookDBHistory) {
+        return false;
+    }
 }
