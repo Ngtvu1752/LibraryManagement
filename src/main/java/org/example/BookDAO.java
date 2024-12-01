@@ -11,7 +11,7 @@ import java.util.Optional;
 public class BookDAO implements DAO<Book> {
     private final DatabaseHelper dbHelper;
     private static BookDAO instance;
-    private static final String INSERT = "insert into book values(?,?,?,?,?,?,?,0,0)";
+    private static final String INSERT = "insert into book values(?,?,?,?,?,?,?,0,0,null)";
     private static final String SELECT_ALL = "select * from book";
     private static final String DISPLAY_ALL_BOOKS = "select isbn,title, author, language, quantity from book";
     private static final String DELETE_BOOK = "delete from book where ISBN = ?";

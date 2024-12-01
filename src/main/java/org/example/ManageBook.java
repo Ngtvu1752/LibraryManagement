@@ -219,9 +219,7 @@ public class ManageBook {
        // });
         checkButton.setOnAction(event -> {
             String isbn = isbnField.getText().trim();
-
             if (isbn.isEmpty()) {
-                // Hiển thị cảnh báo nếu ISBN chưa được nhập
                 showAlert("Error", "Hãy nhập ISBN.");
             } else {
                 // Gọi hàm kiểm tra sách qua API
