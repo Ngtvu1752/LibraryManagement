@@ -44,9 +44,7 @@ public class ManageBook {
 
     @FXML
     private Button addButton;
-
-    @FXML
-    private Button deleteButton;
+    
 
     @FXML
     private Button searchButton;
@@ -80,6 +78,9 @@ public class ManageBook {
 
     @FXML
     private VBox suggestionBox;
+
+    @FXML
+    private Button checkButton;
 
     DatabaseHelper dbHelper = DatabaseHelper.getInstance();
 
@@ -214,7 +215,18 @@ public class ManageBook {
         addButton.setOnAction(event -> {
             saveBookToDatabase();
         });
-        deleteButton.setOnAction(event -> {
+        //deleteButton.setOnAction(event -> {
+       // });
+        checkButton.setOnAction(event -> {
+            String isbn = isbnField.getText().trim();
+
+            if (isbn.isEmpty()) {
+                // Hiển thị cảnh báo nếu ISBN chưa được nhập
+                showAlert("Error", "Hãy nhập ISBN.");
+            } else {
+                // Gọi hàm kiểm tra sách qua API
+                fetchBookDetails(isbn);
+            }
         });
         backButton.setOnAction(event -> handleBackButton());
         searchButton.setOnAction(event -> {findBook(); System.out.println(searchField.getText());});

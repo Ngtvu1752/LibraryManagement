@@ -124,7 +124,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="184.0" layoutY="62.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="96.0" text="Check">
+            <Button fx:id="checkButton" layoutX="184.0" layoutY="62.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="96.0" text="Check">
                <graphic>
                   <ImageView fitHeight="19.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
                      <image>
