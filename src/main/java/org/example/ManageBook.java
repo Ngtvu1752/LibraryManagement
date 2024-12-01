@@ -71,6 +71,9 @@ public class ManageBook {
     private TableColumn<Book, String> languageColumn;
 
     @FXML
+    private TableColumn<Book, String> borrowedColumn;
+
+    @FXML
     private TableColumn<Book, String> deleteColumn;
 
     @FXML
@@ -234,6 +237,7 @@ public class ManageBook {
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         languageColumn.setCellValueFactory(new PropertyValueFactory<>("language"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        borrowedColumn.setCellValueFactory(new PropertyValueFactory<>("borrowed"));
 
         fetchBookInBackground();
         addDeleteButtonToTable();
@@ -264,7 +268,11 @@ public class ManageBook {
         Task<Book> fetchBookTask = new Task<Book>() {
             @Override
             protected Book call() throws Exception {
-                return googleBooksService.fetchBookDetails(isbn);
+                Book book = googleBooksService.fetchBookDetails(isbn);
+                if(book == null) {
+                    book = googleBooksService.openLibraryAPI(isbn);
+                }
+                return book;
             }
         };
 
@@ -318,6 +326,11 @@ public class ManageBook {
                         alert.setContentText("Book saved successfully!");
                         alert.showAndWait();
                         books.add(book);
+                        isbnField.clear();
+                        titleField.clear();
+                        authorField.clear();
+                        languageField.clear();
+                        quantityField.clear();
                     }
                 } else {
                     showAlert("Error", "Please enter the quantity.");

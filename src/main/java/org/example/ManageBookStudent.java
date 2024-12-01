@@ -18,6 +18,7 @@ import org.controlsfx.control.Rating;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -227,6 +228,8 @@ public class ManageBookStudent {
                         if (empty) {
                             setGraphic(null);
                         } else {
+                            IssueBookDBHistory book = IssueTableStudent.getItems().get(getIndex());
+                            returnButton.setDisable(Objects.equals(book.getStatus(), "Yes"));
                             setGraphic(returnButton);
                         }
                     }
