@@ -70,7 +70,7 @@
                 <TableColumn fx:id="authorColumn" minWidth="0.0" prefWidth="220.7999267578125" text="Author" />
                 <TableColumn fx:id="languageColumn" minWidth="0.0" prefWidth="160.7999267578125" text="Language" />
             <TableColumn fx:id="quantityColumn" maxWidth="136.8001708984375" minWidth="1.59991455078125" prefWidth="85.5999755859375" text="Quantity" />
-            <TableColumn fx:id="optionColumn" maxWidth="85.5999755859375" minWidth="1.59991455078125" prefWidth="72.0001220703125" text="Option" />
+                <TableColumn fx:id="optionColumn" maxWidth="85.5999755859375" minWidth="1.59991455078125" prefWidth="72.0001220703125" text="Option" />
             </columns>
         </TableView>
         <Label layoutX="640.0" layoutY="79.0" text="Find Book" textFill="RED">

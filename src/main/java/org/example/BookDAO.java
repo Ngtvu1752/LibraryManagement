@@ -13,12 +13,13 @@ public class BookDAO implements DAO<Book> {
     private static BookDAO instance;
     private static final String INSERT = "insert into book values(?,?,?,?,?,?,?,0,0,null)";
     private static final String SELECT_ALL = "select * from book";
-    private static final String DISPLAY_ALL_BOOKS = "select isbn,title, author, language, quantity from book";
+    private static final String DISPLAY_ALL_BOOKS = "select isbn,title, author, language, quantity, borrowed from book";
     private static final String DELETE_BOOK = "delete from book where ISBN = ?";
     private static final String FIND_BY_TITLE = "select * from book where title like ?";
     private static final String query = "SELECT image_url FROM BOOK WHERE ISBN = ?";
     private static final String UPDATE_RATING_SCORE = "UPDATE book SET ratingScore = ratingScore + ? WHERE ISBN = ?";
     private static final String UPDATE_RATING_COUNT = "UPDATE book SET ratingCount = ratingCount + 1 WHERE ISBN = ?";
+
     public BookDAO() {
         this.dbHelper = DatabaseHelper.getInstance();
     }
@@ -33,6 +34,22 @@ public class BookDAO implements DAO<Book> {
         }
         return instance;
     }
+
+    public String getBookTitleByIsbn(String isbn) {
+        String query = "SELECT title FROM book WHERE isbn = ?";
+        try (Connection conn = dbHelper.connect();
+                PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, isbn);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("title");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "NULL";
+    }
+
 
     public List<Book> getAll() {
         List<Book> books = new ArrayList<Book>();
@@ -66,8 +83,9 @@ public class BookDAO implements DAO<Book> {
                 String author = rs.getString("AUTHOR");
                 String language = rs.getString("LANGUAGE");
                 int quantity = rs.getInt("QUANTITY");
+                int borrowed = rs.getInt("BORROWED");
 
-                Book book = new Book(isbn, title, author, language, quantity);
+                Book book = new Book(isbn, title, author, language, quantity, borrowed);
                 books.add(book);
             }
         } catch (SQLException e) {
@@ -144,6 +162,7 @@ public class BookDAO implements DAO<Book> {
         }
         return ratingCount;
     }
+
     public int getRatingScore(String isbn) {
         String str2 = "SELECT ratingScore FROM book WHERE ISBN = ?";
         int ratingScore = 0;
@@ -159,6 +178,7 @@ public class BookDAO implements DAO<Book> {
         }
         return ratingScore;
     }
+
     public boolean delete(Book book) {
         // Kiểm tra xem sách có đang được mượn hay không.
         String checkBorrowedSql = "SELECT Borrowed FROM book WHERE ISBN = ?";
@@ -200,6 +220,11 @@ public class BookDAO implements DAO<Book> {
             return false;
         }
     }
+
+    public boolean update(Book book) {
+        return false;
+    }
+
     // Cập nhật ratingCount mỗi khi người dùng bấm vào Rating
     public boolean incrementRatingCount(String isbn) {
         try (Connection conn = dbHelper.connect();
@@ -212,6 +237,7 @@ public class BookDAO implements DAO<Book> {
             return false;
         }
     }
+
     // Cộng điểm vào ratingScore
     public boolean addRatingScore(String isbn, int rating, int userId) {
         // Kiểm tra xem người dùng đã đánh giá chưa
@@ -255,6 +281,7 @@ public class BookDAO implements DAO<Book> {
         }
         return null;
     }
+
     public boolean updateRatedUsers(String isbn, String updatedRatedUsers) {
         String s = "UPDATE book SET RatedUser = ? WHERE ISBN = ?";
         try (Connection conn = dbHelper.connect();
@@ -268,7 +295,9 @@ public class BookDAO implements DAO<Book> {
             return false;
         }
     }
-    public boolean addRatedUser(String isbn, int userId) {String ratedUsers = getRatedUsers(isbn);
+
+    public boolean addRatedUser(String isbn, int userId) {
+        String ratedUsers = getRatedUsers(isbn);
 
         if (ratedUsers != null && ratedUsers.contains(String.valueOf(userId))) {
             // Nếu người dùng đã đánh giá sách, không cho phép đánh giá lại

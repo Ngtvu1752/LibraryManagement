@@ -23,8 +23,8 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="isbnField" layoutX="33.0" layoutY="157.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
-                <Label fx:id="isbnLabel" layoutX="40.0" layoutY="163.0" style="-fx-text-fill: white;" text="Enter ID...." textFill="GREY">
+                <TextField fx:id="studentIDField" layoutX="33.0" layoutY="157.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
+                <Label fx:id="idLabel" layoutX="40.0" layoutY="163.0" style="-fx-text-fill: white;" text="Enter ID...." textFill="GREY">
                     <font>
                         <Font size="15.0" />
                     </font>
@@ -35,8 +35,8 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="titleField" layoutX="33.0" layoutY="234.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
-                <Label fx:id="titleLabel" layoutX="39.0" layoutY="240.0" style="-fx-text-fill: white;" text="Enter name...." textFill="GREY">
+                <TextField fx:id="studentNameFeild" layoutX="33.0" layoutY="234.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
+                <Label fx:id="nameLabel" layoutX="39.0" layoutY="240.0" style="-fx-text-fill: white;" text="Enter name...." textFill="GREY">
                     <font>
                         <Font size="15.0" />
                     </font>
@@ -47,8 +47,8 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="authorField" layoutX="33.0" layoutY="315.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
-                <Label fx:id="authorLabel" layoutX="38.0" layoutY="319.0" style="-fx-text-fill: white;" text="Enter class...." textFill="GREY">
+                <TextField fx:id="classFeild" layoutX="33.0" layoutY="315.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
+                <Label fx:id="classLabel" layoutX="38.0" layoutY="319.0" style="-fx-text-fill: white;" text="Enter class...." textFill="GREY">
                     <font>
                         <Font size="15.0" />
                     </font>
@@ -59,8 +59,8 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="languageField" layoutX="33.0" layoutY="387.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
-                <Label fx:id="languageLabel" layoutX="40.0" layoutY="391.0" style="-fx-text-fill: white;" text="Enter school...." textFill="GREY">
+                <TextField fx:id="schoolField" layoutX="33.0" layoutY="387.0" opacity="0.5" prefHeight="31.0" prefWidth="176.0" stylesheets="@textfill.css" />
+                <Label fx:id="schoolLabel" layoutX="40.0" layoutY="391.0" style="-fx-text-fill: white;" text="Enter school...." textFill="GREY">
                     <font>
                         <Font size="15.0" />
                     </font>
@@ -172,10 +172,11 @@
                 <TableColumn fx:id="nameColumn" minWidth="0.0" prefWidth="154.40005493164062" text="Name" />
                 <TableColumn fx:id="classColumn" minWidth="0.0" prefWidth="73.60003662109375" text="Class" />
                 <TableColumn fx:id="schoolColumn" minWidth="0.0" resizable="false" text="School" />
-            <TableColumn fx:id="isbnColumn" minWidth="0.0" prefWidth="243.20001220703125" text="ISBN " />
-            <TableColumn fx:id="returnColumn" minWidth="0.0" prefWidth="78.4000244140625" text="is_returned" />
-            <TableColumn fx:id="feeColumn" minWidth="0.0" prefWidth="54.4000244140625" text="late_fee" />
-            <TableColumn fx:id="dueColumn" minWidth="0.0" prefWidth="69.5999755859375" text="Due_date" />
+            <TableColumn fx:id="isbnColumn" minWidth="0.0" prefWidth="169.5999755859375" text="ISBN " />
+            <TableColumn fx:id="returnColumn" minWidth="0.0" resizable="false" text="is_returned" />
+            <TableColumn fx:id="feeColumn" minWidth="0.0" prefWidth="75.199951171875" resizable="false" text="late_fee" />
+            <TableColumn fx:id="dueColumn" minWidth="0.0" prefWidth="79.199951171875" resizable="false" text="Due_date" />
+            <TableColumn fx:id="optionColumn" minWidth="0.0" prefWidth="56.79998779296875" resizable="false" text="Option" />
             </columns>
         </TableView>
     </children>

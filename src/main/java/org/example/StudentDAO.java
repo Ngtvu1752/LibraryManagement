@@ -14,6 +14,7 @@ import java.util.Optional;
 public class StudentDAO implements DAO<Student> {
     private final DatabaseHelper dbHelper;
     private static final String DISPLAY_STUDENTS = "SELECT id, username, name FROM student";
+
     public StudentDAO() {
         this.dbHelper = DatabaseHelper.getInstance();
     }
@@ -22,17 +23,16 @@ public class StudentDAO implements DAO<Student> {
     public ObservableList<Student> getObservableList() {
         ObservableList<Student> students = FXCollections.observableArrayList();
         try (Connection conn = dbHelper.connect();
-            PreparedStatement pstmt = conn.prepareStatement(DISPLAY_STUDENTS)) {
-                ResultSet rs = pstmt.executeQuery();
-                while (rs.next()) {
-                    int id = rs.getInt("id");
-                    String username = rs.getString("username");
-                    String name = rs.getString("name");
-                    Student student = new Student(id, username, name);
-                    students.add(student);
-                }
+             PreparedStatement pstmt = conn.prepareStatement(DISPLAY_STUDENTS)) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String username = rs.getString("username");
+                String name = rs.getString("name");
+                Student student = new Student(id, username, name);
+                students.add(student);
             }
-        catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return students;
@@ -65,10 +65,10 @@ public class StudentDAO implements DAO<Student> {
     public Optional<Student> findById(int id) {
         String sql = "SELECT * FROM users WHERE id = ? AND role = 'student'";
         try (Connection conn = dbHelper.connect();
-        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-            if(rs.next()) {
+            if (rs.next()) {
                 String username = rs.getString("username");
                 String password = rs.getString("password");
                 String name = rs.getString("name");
@@ -91,6 +91,21 @@ public class StudentDAO implements DAO<Student> {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    public boolean isStudentIdExists(int studentId) {
+        String checkStudentIdQuery = "SELECT COUNT(*) FROM users WHERE id = ?";
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement stmt = conn.prepareStatement(checkStudentIdQuery)) {
+            stmt.setInt(1, studentId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking student ID: " + e.getMessage());
+        }
+        return false;
     }
 
     public boolean userExists(String username, String password) {
@@ -132,8 +147,42 @@ public class StudentDAO implements DAO<Student> {
             }
         }
     }
+
     public boolean delete(Student student) {
-        return false;
+        String sql = "DELETE FROM users WHERE id = ? AND role = 'student'";
+
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, student.getId());
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Student deleted successfully.");
+                return true;
+            } else {
+                System.out.println("Student not found or cannot be deleted.");
+                return false;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error while deleting student: " + e.getMessage());
+            return false;
+        }
     }
+
+    public boolean update(Student student) {
+        String updateQuery = "UPDATE users SET name = ?, class = ?, school = ? WHERE id = ?";
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+            stmt.setString(1, student.getName());
+            stmt.setString(2, student.getClassroom());
+            stmt.setString(3, student.getSchool());
+            stmt.setInt(4, student.getId());
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Error updating student: " + e.getMessage());
+            return false;
+        }
+    }
+
 
 }
