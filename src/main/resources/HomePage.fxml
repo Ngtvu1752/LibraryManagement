@@ -16,45 +16,34 @@
          </image>
       </ImageView>
 
-      <!-- Return Book Button -->
-      <Button fx:id="returnBookButton" layoutX="275.0" layoutY="97.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="403.0" text="Return Book">
-         <font>
-            <Font size="23.0" />
-         </font></Button>
-      <ImageView fitHeight="53.0" fitWidth="53.0" layoutX="357.0" layoutY="108.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@icons8-return-book-100.png" />
-         </image>
-      </ImageView>
-
       <!-- Logout Button -->
-      <Button fx:id="logoutButton" layoutX="281.0" layoutY="540.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="403.0" text="Logout">
+      <Button fx:id="logoutButton" layoutX="272.0" layoutY="472.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="403.0" text="Logout">
          <font>
             <Font size="23.0" />
          </font></Button>
-      <ImageView fitHeight="53.0" fitWidth="53.0" layoutX="389.0" layoutY="551.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="53.0" fitWidth="53.0" layoutX="380.0" layoutY="483.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons8-logout-100.png" />
          </image>
       </ImageView>
 
       <!-- Manage Student Button -->
-      <Button fx:id="manageStudentButton" layoutX="275.0" layoutY="234.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="403.0" text="Manage Student">
+      <Button fx:id="manageStudentButton" layoutX="272.0" layoutY="183.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="403.0" text="Manage Student">
          <font>
             <Font size="23.0" />
          </font></Button>
-      <ImageView fitHeight="53.0" fitWidth="53.0" layoutX="336.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="53.0" fitWidth="53.0" layoutX="333.0" layoutY="194.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons8-export-collections-48.png" />
          </image>
       </ImageView>
 
       <!-- Manage Book Button -->
-      <Button fx:id="manageBookButton" layoutX="281.0" layoutY="390.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="403.0" text="Manage Book">
+      <Button fx:id="manageBookButton" layoutX="272.0" layoutY="327.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="403.0" text="Manage Book">
          <font>
             <Font size="23.0" />
          </font></Button>
-      <ImageView fitHeight="53.0" fitWidth="53.0" layoutX="355.0" layoutY="401.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="53.0" fitWidth="53.0" layoutX="346.0" layoutY="338.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@icons8-book-100.png" />
          </image>

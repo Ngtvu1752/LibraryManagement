@@ -31,7 +31,6 @@ public class HomePage {
         // Thiết lập sự kiện cho các nút
         manageStudentButton.setOnAction(event -> handleManageStudent());
         manageBookButton.setOnAction(event -> handleManageBook());
-        returnBookButton.setOnAction(event -> handleReturnBook());
         logoutButton.setOnAction(event -> handleLogout());
     }
 
