@@ -65,6 +65,26 @@ public class Book {
         return imageUrl;
     }
 
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }

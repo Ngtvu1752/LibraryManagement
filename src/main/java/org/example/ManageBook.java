@@ -44,7 +44,9 @@ public class ManageBook {
 
     @FXML
     private Button addButton;
-    
+
+    @FXML
+    private Button updateButton;
 
     @FXML
     private Button searchButton;
@@ -85,6 +87,8 @@ public class ManageBook {
     @FXML
     private Button checkButton;
 
+    private Book selectedBook;
+
     DatabaseHelper dbHelper = DatabaseHelper.getInstance();
 
     private final GoogleBooksService googleBooksService = new GoogleBooksService();
@@ -110,13 +114,6 @@ public class ManageBook {
                 isbnLabel.setVisible(false);  // Ẩn Label khi có văn bản trong TextField
             }
         });
-
-//        // Hiện lại Label nếu TextField rỗng
-//        isbnField.textProperty().addListener((observable, oldValue, newValue) -> {
-//            if (newValue.isEmpty()) {
-//                isbnLabel.setVisible(true);  // Hiện Label khi TextField trống
-//            }
-//        });
 
         // Hiện lại Label nếu TextField trống khi mất tiêu điểm
         isbnField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -148,7 +145,6 @@ public class ManageBook {
             }
         });
 
-
         authorField.setOnMouseClicked(event -> {
             if (authorField.getText().isEmpty()) {
                 authorLabel.setVisible(false);  // Ẩn Label khi người dùng click vào TextField
@@ -160,7 +156,6 @@ public class ManageBook {
                 authorLabel.setVisible(false);  // Ẩn Label khi có văn bản trong TextField
             }
         });
-
 
         // Hiện lại Label nếu TextField trống khi mất tiêu điểm
         authorField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -181,7 +176,6 @@ public class ManageBook {
             }
         });
 
-
         // Hiện lại Label nếu TextField trống khi mất tiêu điểm
         languageField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && languageField.getText().isEmpty()) {  // Khi mất tiêu điểm và TextField trống
@@ -200,7 +194,6 @@ public class ManageBook {
                 quantityLabel.setVisible(false);  // Ẩn Label khi có văn bản trong TextField
             }
         });
-
 
         // Hiện lại Label nếu TextField trống khi mất tiêu điểm
         quantityField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -241,6 +234,41 @@ public class ManageBook {
 
         fetchBookInBackground();
         addDeleteButtonToTable();
+
+        tableBook.setOnMouseClicked(event -> {
+            if (tableBook.getSelectionModel().getSelectedItem() != null) {
+                selectedBook = tableBook.getSelectionModel().getSelectedItem();
+                // Hiển thị thông tin sách trong các TextField
+                isbnField.setText(selectedBook.getIsbn());
+                titleField.setText(selectedBook.getTitle());
+                authorField.setText(selectedBook.getAuthor());
+                languageField.setText(selectedBook.getLanguage());
+                quantityField.setText(String.valueOf(selectedBook.getQuantity()));
+                // Ẩn label khi các feild đã được điền thông tin.
+                if (!isFieldEmpty(isbnField)) {
+                    isbnLabel.setVisible(false);
+                }
+                if (!isFieldEmpty(titleField)) {
+                    titleLabel.setVisible(false);
+                }
+                if (!isFieldEmpty(authorField)) {
+                    authorLabel.setVisible(false);
+                }
+                if (!isFieldEmpty(languageField)) {
+                    languageLabel.setVisible(false);
+                }
+                if (!isFieldEmpty(quantityField)) {
+                    quantityLabel.setVisible(false);
+                }
+            }
+        });
+        updateButton.setOnAction(event -> handleUpdateButton());
+
+    }
+
+    // kiểm tra xem feild có rỗng hoặc null hay không.
+    private boolean isFieldEmpty(TextField textField) {
+        return textField.getText() == null || textField.getText().isEmpty();
     }
 
     private void fetchBookInBackground() {
@@ -308,35 +336,56 @@ public class ManageBook {
     private void saveBookToDatabase() {
         try {
             String isbn = isbnField.getText().trim();
-            if (!isbn.isEmpty()) {
-                String title = titleField.getText().trim();
-                String author = authorField.getText().trim();
-                String language = languageField.getText().trim();
-                String quantityS = quantityField.getText().trim();
-                if (!quantityS.isEmpty()) {
-                    int quantity = Integer.parseInt(quantityS);
-
-                    Book book = new Book(isbn, title, author, language, getImageUrl(), quantity);
-                    boolean addBook = bookDAO.save(book);
-
-                    if (addBook) {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Success");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Book saved successfully!");
-                        alert.showAndWait();
-                        books.add(book);
-                        isbnField.clear();
-                        titleField.clear();
-                        authorField.clear();
-                        languageField.clear();
-                        quantityField.clear();
-                    }
+            String title = titleField.getText().trim();
+            String author = authorField.getText().trim();
+            String language = languageField.getText().trim();
+            String quantityStr = quantityField.getText().trim();
+            if (!isbn.isEmpty() && !title.isEmpty() && !author.isEmpty() && !language.isEmpty() && !quantityStr.isEmpty()) {
+                int quantity = Integer.parseInt(quantityStr);
+                Book existingBook = bookDAO.getBookByIsbn(isbn);
+                if (existingBook != null) {
+                    int currentQuantity = existingBook.getQuantity();
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Book Already Exists");
+                    alert.setHeaderText("The book with ISBN " + isbn + " already exists.");
+                    alert.setContentText("Current Quantity: " + currentQuantity + "\nDo you want to add " + quantity + " more books to this quantity?");
+                    alert.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            int updatedQuantity = currentQuantity + quantity;
+                            existingBook.setQuantity(updatedQuantity);
+                            boolean updated = bookDAO.update(existingBook);
+                            if (updated) {
+                                int selectedIndex = tableBook.getSelectionModel().getSelectedIndex();
+                                books.set(selectedIndex, existingBook);
+                                tableBook.refresh();
+                                showAlert("Success", "Book quantity updated successfully.");
+                            } else {
+                                showAlert("Error", "Failed to update the book quantity.");
+                            }
+                        } else {
+                            showAlert("Cancelled", "The operation was cancelled.");
+                        }
+                    });
                 } else {
-                    showAlert("Error", "Please enter the quantity.");
+                    Book newBook = new Book(isbn, title, author, language, getImageUrl(), quantity);
+                    boolean added = bookDAO.save(newBook);
+
+                    if (added) {
+                        books.add(newBook);
+                        tableBook.setItems(books);
+
+                        showAlert("Success", "Book added successfully.");
+                    } else {
+                        showAlert("Error", "Failed to add the new book.");
+                    }
                 }
+                isbnField.clear();
+                titleField.clear();
+                authorField.clear();
+                languageField.clear();
+                quantityField.clear();
             } else {
-                showAlert("Error", "Please fill in the ISBN.");
+                showAlert("Error", "Please fill in all fields.");
             }
         } catch (NumberFormatException e) {
             showAlert("Error", "Invalid quantity. Please enter a valid number.");
@@ -379,6 +428,58 @@ public class ManageBook {
         };
         deleteColumn.setCellFactory(cellFactory);
     }
+
+    private void handleUpdateButton() {
+        if (selectedBook != null) {
+            try {
+                String isbn = isbnField.getText().trim();
+                String title = titleField.getText().trim();
+                String author = authorField.getText().trim();
+                String language = languageField.getText().trim();
+                String quantityS = quantityField.getText().trim();
+                if (!isbn.isEmpty() && !title.isEmpty() && !author.isEmpty() && !language.isEmpty() && !quantityS.isEmpty()) {
+                    int quantity = Integer.parseInt(quantityS);
+                    // Kiểm tra xem ISBN đã tồn tại hay chưa.
+                    if (!isbn.equals(selectedBook.getIsbn()) && bookDAO.isIsbnExist(isbn)) {
+                        showAlert("Error", "ISBN already exists. Please enter a unique ISBN.");
+                        return;
+                    }
+                    // Kiểm tra xem số lượng có lớn hơn hoặc bằng số lượng đã mượn hay không.
+                    int borrowedQuantity = selectedBook.getBorrowed();
+                    if (quantity < borrowedQuantity) {
+                        showAlert("Error", "The quantity cannot be less than the borrowed quantity.");
+                        return;
+                    }
+                    Book updatedBook = new Book(isbn, title, author, language, getImageUrl(), quantity);
+                    boolean updated = bookDAO.update(updatedBook);
+                    if (updated) {
+                        int selectedIndex = tableBook.getSelectionModel().getSelectedIndex();
+                        books.set(selectedIndex, updatedBook);
+                        tableBook.refresh();
+                        showAlert("Success", "Book updated successfully.");
+                        isbnField.clear();
+                        titleField.clear();
+                        authorField.clear();
+                        languageField.clear();
+                        quantityField.clear();
+                        selectedBook = null;
+                    } else {
+                        showAlert("Error", "Failed to update the book.");
+                    }
+                } else {
+                    showAlert("Error", "Please fill in all fields.");
+                }
+            } catch (NumberFormatException e) {
+                showAlert("Error", "Invalid quantity. Please enter a valid number.");
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "An unexpected error occurred.");
+            }
+        } else {
+            showAlert("Error", "Please select a book to update.");
+        }
+    }
+
 
     private void findBook() {
         String keyword = searchField.getText().toLowerCase().trim();

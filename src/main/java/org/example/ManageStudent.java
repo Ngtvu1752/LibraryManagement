@@ -75,7 +75,7 @@ public class ManageStudent {
                 classFeild.setText(newValue.getClassName());
                 schoolField.setText(newValue.getSchoolName());
 
-                // Hide labels when fields are populated
+                // Ẩn label khi các feild đã được điền thông tin.
                 if (!isFieldEmpty(studentIDField)) {
                     idLabel.setVisible(false);
                 }
@@ -278,6 +278,10 @@ public class ManageStudent {
         boolean updateSuccess = studentDAO.update(updatedStudent);
         if (updateSuccess) {
             showAlert("Success", "Student information updated successfully.");
+            studentIDField.clear();
+            studentNameFeild.clear();
+            classFeild.clear();
+            schoolField.clear();
             informations = getTableBook();
             tableBook.setItems(informations);
         } else {

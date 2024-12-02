@@ -49,7 +49,27 @@ public class BookDAO implements DAO<Book> {
         }
         return "NULL";
     }
-
+    public Book getBookByIsbn(String isbn) {
+        String query = "SELECT * FROM book WHERE isbn = ?";
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, isbn);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Book(
+                        rs.getString("isbn"),
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        rs.getString("language"),
+                        rs.getString("image_url"),
+                        rs.getInt("quantity")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public List<Book> getAll() {
         List<Book> books = new ArrayList<Book>();
@@ -222,8 +242,41 @@ public class BookDAO implements DAO<Book> {
     }
 
     public boolean update(Book book) {
-        return false;
+        String query = "UPDATE book SET title = ?, author = ?, language = ?, image_url = ?, quantity = ? WHERE isbn = ?";
+
+        try (Connection connection = dbHelper.connect();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, book.getTitle());
+            statement.setString(2, book.getAuthor());
+            statement.setString(3, book.getLanguage());
+            statement.setString(4, book.getImageUrl());
+            statement.setInt(5, book.getQuantity());
+            statement.setString(6, book.getIsbn());
+
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
+
+    public boolean isIsbnExist(String isbn) {
+        String query = "SELECT COUNT(*) FROM book WHERE isbn = ?";
+        try (Connection connection = dbHelper.connect();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, isbn);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1) > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     // Cập nhật ratingCount mỗi khi người dùng bấm vào Rating
     public boolean incrementRatingCount(String isbn) {
