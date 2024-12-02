@@ -61,6 +61,12 @@ public class SignUp {
         backButton.setOnAction(event -> handleBackButton());
     }
 
+    /**
+     * Xử lý sự kiện khi click nút "Create".
+     * Tạo một tài khoản người dùng mới.
+     *
+     * @throws IllegalArgumentException nếu bất kỳ thông tin nào bị bỏ trống.
+     */
     private void handleCreateButton() {
         // Lấy thông tin từ các trường
         String username = usernameField.getText();

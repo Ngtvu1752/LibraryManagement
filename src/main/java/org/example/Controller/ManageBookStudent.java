@@ -146,11 +146,14 @@ public class ManageBookStudent {
         IssueTableStudent.setItems(issueBookDBHistories);
         addReturnButtonToTable();
         addViewAndRateButtonToTable();
-        searchButton.setOnAction(event -> {findBook(); System.out.println(searchField.getText());});
-//        searchField.addEventFilter();
+        searchButton.setOnAction(event -> {
+            findBook();
+            System.out.println(searchField.getText());
+        });
         setupAutoCompleteWithListView();
     }
 
+    //Lấy danh sách sách từ cơ sở dữ liệu trong một luồng riêng biệt
     private void fetchBookInBackground() {
         Task<ObservableList<Book>> task = new Task<ObservableList<Book>>() {
             protected ObservableList<Book> call() throws Exception {
@@ -166,12 +169,13 @@ public class ManageBookStudent {
 
         task.setOnFailed(event -> {
             Throwable exception = task.getException();
-            showAlert("Error" , "failed to load books.");
+            showAlert("Error", "failed to load books.");
             exception.printStackTrace();
         });
         new Thread(task).start();
     }
 
+    //Xử lý thao tác mượn sách
     private void handleIssueBook() {
         User studentId = SessionManager.getCurrentUser();
         int userId = studentId.getId();
@@ -195,6 +199,11 @@ public class ManageBookStudent {
         }
     }
 
+    /**
+     * Xử lý thao tác trả sách .
+     *
+     * @param isbn ISBN của cuốn sách được trả lại.
+     */
     private void handleReturnBook(String isbn) {
         User studentId = SessionManager.getCurrentUser();
         int userId = studentId.getId();
@@ -211,6 +220,7 @@ public class ManageBookStudent {
 
     }
 
+    //Thêm nút "Return" vào mỗi hàng trong issueBookHistoryTable
     private void addReturnButtonToTable() {
         Callback<TableColumn<IssueBookDBHistory, Void>, TableCell<IssueBookDBHistory, Void>> cellFactory = new Callback<TableColumn<IssueBookDBHistory, Void>, TableCell<IssueBookDBHistory, Void>>() {
             public TableCell<IssueBookDBHistory, Void> call(TableColumn<IssueBookDBHistory, Void> param) {
@@ -243,6 +253,7 @@ public class ManageBookStudent {
         returnColumn.setCellFactory(cellFactory);
     }
 
+    //Thêm ViewAndRateButtons vào mỗi hàng trong bảng book.
     private void addViewAndRateButtonToTable() {
         Callback<TableColumn<Book, Void>, TableCell<Book, Void>> cellFactory = new Callback<TableColumn<Book, Void>, TableCell<Book, Void>>() {
             public TableCell<Book, Void> call(TableColumn<Book, Void> param) {
@@ -298,9 +309,8 @@ public class ManageBookStudent {
         tableBook.setItems(filteredBooks);
     }
 
+    //Thiết lập chức năng tự động hoàn thành cho tìm kiếm sách.
     private void setupAutoCompleteWithListView() {
-//        suggestionBox = new VBox();
-//        suggestionBox.setPadding(new Insets(5));
         suggestionScrollPane.setVisible(false);
         suggestionScrollPane.setManaged(false);
         suggestionScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -400,6 +410,11 @@ public class ManageBookStudent {
         }
     }
 
+    /**
+     * Hiển thị hình ảnh sách dựa trên ISBN được cung cấp.
+     *
+     * @param imageUrl URL của hình ảnh sẽ được hiển thị.
+     */
     public void displayBookImageAsync(String imageUrl) {
         // Hiển thị placeholder trong khi tải ảnh
         imageView.setImage(new Image("/placeholder.jpg"));

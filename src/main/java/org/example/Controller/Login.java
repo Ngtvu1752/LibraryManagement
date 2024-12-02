@@ -73,6 +73,13 @@ public class Login {
         }
     }
 
+    /**
+     * Xác thực người dùng bằng cách kiểm tra thông tin đăng nhập với database.
+     *
+     * @param username Tên người dùng .
+     * @param password Mật khẩu .
+     * @return Người dùng đã xác thực nếu thành công, nếu không thì là null.
+     */
     private User authenticate(String username, String password) {
         String sql = "SELECT * FROM users WHERE username = ? /*AND password = ?*/";
         try (Connection conn = dbHelper.connect();

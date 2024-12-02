@@ -16,6 +16,18 @@ public class IssueBookDBHistory {
     private String status;
     private double lateFee;
 
+    /**
+     * Constructor 1.
+     *
+     * @param issueBookID ID sách.
+     * @param studentId   ID của sinh viên mượn sách.
+     * @param isbn        ISBN của sách đã mượn.
+     * @param borrowDate  ngày mượn sách.
+     * @param returnDate  ngày trả sách.
+     * @param dueDate     ngày đến hạn trả sách.
+     * @param status      trạng thái hiện tại của sách.
+     * @param lateFee     phí trễ(nếu có) cho sách.
+     */
     public IssueBookDBHistory(int issueBookID, int studentId, String isbn, Date borrowDate, Date returnDate, Date dueDate, String status, double lateFee) {
         this.issueBookID = issueBookID;
         this.studentId = studentId;
@@ -27,6 +39,15 @@ public class IssueBookDBHistory {
         this.lateFee = lateFee;
     }
 
+    /**
+     * Constructor 2.
+     *
+     * @param issueBookID ID sách.
+     * @param isbn        ISBN của sách đã mượn.
+     * @param title       tên sách đã mượn.
+     * @param dueDate     ngày đến hạn trả sách.
+     * @param status      trạng thái hiện tại của sách.
+     */
     public IssueBookDBHistory(int issueBookID, String isbn, String title, Date dueDate, String status) {
         this.isbn = isbn;
         this.issueBookID = issueBookID;
@@ -35,6 +56,18 @@ public class IssueBookDBHistory {
         this.status = status;
     }
 
+    /**
+     * Constructor 3.
+     *
+     * @param id         ID của sinh viên đã mượn sách.
+     * @param name       tên của sinh viên đã mượn sách.
+     * @param className  tên lớp của sinh viên.
+     * @param schoolName tên trường của sinh viên.
+     * @param isbn       ISBN của sách đã mượn.
+     * @param dueDate    ngày đến hạn trả sách.
+     * @param status     là trạng thái hiện tại của sách.
+     * @param lateFee    là phí trễ(nếu có) cho cuốn sách.
+     */
     public IssueBookDBHistory(int id, String name, String className, String schoolName, String isbn, Date dueDate, String status, double lateFee) {
         this.studentId = id;
         this.studentName = name;

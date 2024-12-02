@@ -16,6 +16,7 @@ public class NotificationDAO implements DAO<Notification> {
     private NotificationDAO() {
         this.dbHelper = DatabaseHelper.getInstance();
     }
+
     public static NotificationDAO getInstance() {
         if (instance == null) {
             synchronized (NotificationDAO.class) {
@@ -54,6 +55,12 @@ public class NotificationDAO implements DAO<Notification> {
         return notifications;
     }
 
+    /**
+     * Lưu thông báo mới vào database.
+     *
+     * @param notification thông báo được lưu.
+     * @return True nếu lưu thành công, nếu không thì trả về false.
+     */
     public boolean save(Notification notification) {
         String sql = "INSERT INTO notifications (user_id, message, timestamp) VALUES (?, ?, ?)";
         try (Connection conn = dbHelper.connect();

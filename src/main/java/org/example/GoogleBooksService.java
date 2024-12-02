@@ -15,6 +15,13 @@ import java.io.InputStreamReader;
 public class GoogleBooksService {
     private static final String API_KEY = "AIzaSyCi2gzpILaufWLs1G9Neo0w6DpmQSv4w7g";
 
+    /**
+     * Lấy thông tin sách dựa trên ISBN từ Google Books API.
+     *
+     * @param isbn ISBN của sách.
+     * @return Book có thông tin chi tiết đã lấy.
+     * @throws IOException Nếu xảy ra lỗi input-output trong khi gọi API.
+     */
     public Book fetchBookDetails(String isbn) throws IOException {
         String urlString = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn + "&key=" + API_KEY;
         URL url = new URL(urlString);
@@ -34,6 +41,12 @@ public class GoogleBooksService {
         return parseBookDetails(response.toString());
     }
 
+    /**
+     * Phân tích chi tiết sách từ jsonResponse của Google Books API.
+     *
+     * @param jsonResponse .
+     * @return Đối tượng Sách chứa chi tiết sách đã phân tích.
+     */
     public Book parseBookDetails(String jsonResponse) {
         try {
             JSONObject jsonObject = new JSONObject(jsonResponse);
@@ -81,6 +94,12 @@ public class GoogleBooksService {
         }
     }
 
+    /**
+     * Lấy thông tin về sách bằng ISBN.
+     *
+     * @param ISBN ISBN của sách.
+     * @return Book chứa thông tin được lấy từ Open Library.
+     */
     public Book openLibraryAPI(String ISBN) {
         String apiUrl = "https://openlibrary.org/api/books?bibkeys=ISBN:" + ISBN + "&format=json&jscmd=data";
 
@@ -130,7 +149,7 @@ public class GoogleBooksService {
                 System.out.println("Tác giả: " + authors);
                 System.out.println("Ngôn ngữ: " + language);
                 System.out.println("Link ảnh bìa: " + coverImage);
-                return new Book(ISBN  ,title, authors, language, coverImage, 5);
+                return new Book(ISBN, title, authors, language, coverImage, 5);
             } else {
                 System.out.println("Không tìm thấy thông tin cho ISBN: " + ISBN);
             }

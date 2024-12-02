@@ -210,7 +210,7 @@ public class ManageBook {
             saveBookToDatabase();
         });
         //deleteButton.setOnAction(event -> {
-       // });
+        // });
         checkButton.setOnAction(event -> {
             String isbn = isbnField.getText().trim();
             if (isbn.isEmpty()) {
@@ -221,7 +221,10 @@ public class ManageBook {
             }
         });
         backButton.setOnAction(event -> handleBackButton());
-        searchButton.setOnAction(event -> {findBook(); System.out.println(searchField.getText());});
+        searchButton.setOnAction(event -> {
+            findBook();
+            System.out.println(searchField.getText());
+        });
 //        searchField.addEventFilter();
         isbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -295,7 +298,7 @@ public class ManageBook {
             @Override
             protected Book call() throws Exception {
                 Book book = googleBooksService.fetchBookDetails(isbn);
-                if(book == null) {
+                if (book == null) {
                     book = googleBooksService.openLibraryAPI(isbn);
                 }
                 return book;

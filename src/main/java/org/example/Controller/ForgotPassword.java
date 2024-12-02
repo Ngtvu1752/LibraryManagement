@@ -42,7 +42,7 @@ public class ForgotPassword {
 
     private DatabaseHelper dbHelper = DatabaseHelper.getInstance();
 
-    // Initialize method to bind actions to buttons
+    // Thiết lập sự kiện cho các nút
     @FXML
     public void initialize() {
         searchButton.setOnAction(event -> handleSearch());
@@ -128,12 +128,12 @@ public class ForgotPassword {
             e.printStackTrace();
         }
     }
+
     private void handleBackButton() {
         SceneController.getInstance().switchScene("Login");
         SceneManage.removeScene("ForgotPassword");
     }
 
-    // Show an alert to the user
     private void showAlert(String title, String message) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle(title);

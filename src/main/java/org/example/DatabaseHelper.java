@@ -37,6 +37,13 @@ public class DatabaseHelper {
         return connection;
     }
 
+    /**
+     * Kiểm tra xem username và password có trong database không.
+     *
+     * @param username Tên người dùng cần kiểm tra.
+     * @param password Mật ​​khẩu cần kiểm tra.
+     * @return true nếu tên người dùng tồn tại và mật khẩu đúng, nếu không thì trả về false.
+     */
     public boolean userExists(String username, String password) {
         String sql = "SELECT password FROM users WHERE username = ?";
         try (Connection conn = this.connect();

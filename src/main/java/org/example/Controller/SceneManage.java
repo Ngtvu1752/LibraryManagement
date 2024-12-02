@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class SceneManage {
     private static Map<String, Scene> scenes = new HashMap<>();
+
     public static void printAvailableScenes() {
         System.out.println("Available scenes: " + scenes.keySet());
     }

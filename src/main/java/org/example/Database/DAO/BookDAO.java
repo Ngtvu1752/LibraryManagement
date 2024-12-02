@@ -37,10 +37,16 @@ public class BookDAO implements DAO<Book> {
         return instance;
     }
 
+    /**
+     * Lấy tiêu đề của một cuốn sách theo ISBN của nó.
+     *
+     * @param isbn ISBN của cuốn sách.
+     * @return Tiêu đề của cuốn sách hoặc "NULL" nếu không tìm thấy.
+     */
     public String getBookTitleByIsbn(String isbn) {
         String query = "SELECT title FROM book WHERE isbn = ?";
         try (Connection conn = dbHelper.connect();
-                PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, isbn);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -51,6 +57,13 @@ public class BookDAO implements DAO<Book> {
         }
         return "NULL";
     }
+
+    /**
+     * Lấy một cuốn sách theo ISBN.
+     *
+     * @param isbn ISBN của cuốn sách.
+     * @return Book nếu tìm thấy, nếu không thì trả về giá trị null.
+     */
     public Book getBookByIsbn(String isbn) {
         String query = "SELECT * FROM book WHERE isbn = ?";
         try (Connection conn = dbHelper.connect();
@@ -73,6 +86,11 @@ public class BookDAO implements DAO<Book> {
         return null;
     }
 
+    /**
+     * Lấy tất cả sách từ database.
+     *
+     * @return List sách.
+     */
     public List<Book> getAll() {
         List<Book> books = new ArrayList<Book>();
         try (Connection conn = dbHelper.connect();
@@ -117,6 +135,12 @@ public class BookDAO implements DAO<Book> {
         return books;
     }
 
+    /**
+     * Tìm một cuốn sách theo tiêu đề của nó.
+     *
+     * @param title Tiêu đề của cuốn sách cần tìm kiếm.
+     * @return Một Optional chứa Sách nếu tìm thấy, nếu không thì là Optional rỗng.
+     */
     public Optional<Book> findByTitle(String title) {
         try (Connection conn = dbHelper.connect();
              PreparedStatement pstmt = conn.prepareStatement(FIND_BY_TITLE)) {
@@ -136,6 +160,12 @@ public class BookDAO implements DAO<Book> {
         return Optional.empty();
     }
 
+    /**
+     * Lưu newBook vào database.
+     *
+     * @param book Cuốn sách được lưu.
+     * @return True nếu cuốn sách lưu thành công, false nếu không.
+     */
     public boolean save(Book book) {
         try (Connection conn = dbHelper.connect();
              PreparedStatement pstmt = conn.prepareStatement(INSERT)) {
@@ -155,6 +185,12 @@ public class BookDAO implements DAO<Book> {
         }
     }
 
+    /**
+     * Lấy URL hình ảnh sách theo ISBN.
+     *
+     * @param isbn ISBN của cuốn sách.
+     * @return URL hình ảnh sách hoặc null nếu không tìm thấy.
+     */
     public String getImageUrl(String isbn) {
         try (Connection conn = dbHelper.connect();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -169,6 +205,12 @@ public class BookDAO implements DAO<Book> {
         return null;
     }
 
+    /**
+     * Lấy số lượng đánh giá của một cuốn sách.
+     *
+     * @param isbn ISBN của cuốn sách.
+     * @return Số lượng đánh giá của cuốn sách.
+     */
     public int getRatingCount(String isbn) {
         int ratingCount = 0;
         String str2 = "SELECT ratingCount FROM book WHERE ISBN = ?";
@@ -185,6 +227,12 @@ public class BookDAO implements DAO<Book> {
         return ratingCount;
     }
 
+    /**
+     * Lấy điểm đánh giá của một cuốn sách.
+     *
+     * @param isbn ISBN của cuốn sách.
+     * @return Điểm đánh giá của cuốn sách.
+     */
     public int getRatingScore(String isbn) {
         String str2 = "SELECT ratingScore FROM book WHERE ISBN = ?";
         int ratingScore = 0;
@@ -201,6 +249,12 @@ public class BookDAO implements DAO<Book> {
         return ratingScore;
     }
 
+    /**
+     * Xóa một cuốn sách khỏi database theo ISBN.
+     *
+     * @param book cuốn sách sẽ bị xóa.
+     * @return True nếu xóa thành công, nếu không thì trả về false.
+     */
     public boolean delete(Book book) {
         // Kiểm tra xem sách có đang được mượn hay không.
         String checkBorrowedSql = "SELECT Borrowed FROM book WHERE ISBN = ?";
@@ -243,6 +297,12 @@ public class BookDAO implements DAO<Book> {
         }
     }
 
+    /**
+     * Cập nhật thông tin cuốn sách theo ISBN.
+     *
+     * @param book cuốn sách được cập nhật.
+     * @return True nếu thành công, nếu không thì trả về false.
+     */
     public boolean update(Book book) {
         String query = "UPDATE book SET title = ?, author = ?, language = ?, image_url = ?, quantity = ? WHERE isbn = ?";
 

@@ -39,7 +39,7 @@ public class Profile {
         String query = "SELECT name, id, class, school FROM users WHERE id = ?";
 
         try (Connection conn = dbHelper.connect();
-            PreparedStatement pstmt = conn.prepareStatement(query)) {
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, SessionManager.getCurrentUser().getId());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -58,11 +58,16 @@ public class Profile {
         }
     }
 
+    /**
+     * Lưu thông tin người dùng đã update vào database.
+     * Chỉ có thể cập nhật các feild  'fullNameField', 'classField' và 'schoolField'.
+     * studentIdField vẫn không thay đổi.
+     */
     private void saveUserProfile() {
         String updateQuery = "UPDATE users SET name = ?, class = ?, school = ? WHERE id = ?";
 
         try (Connection conn = dbHelper.connect();
-        PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+             PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
             String fullName = fullNameField.getText();
             String studentClass = classField.getText();
             String school = schoolField.getText();

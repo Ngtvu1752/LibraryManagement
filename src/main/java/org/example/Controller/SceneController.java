@@ -28,7 +28,7 @@ public class SceneController {
 
     public void switchScene(String sceneName) {
         Scene scene = SceneManage.getScene(sceneName);
-        if(scene != null) {
+        if (scene != null) {
             stage.setScene(scene);
         } else {
             System.out.println("Scene not found" + sceneName);

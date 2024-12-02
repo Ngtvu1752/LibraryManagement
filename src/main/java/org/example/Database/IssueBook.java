@@ -15,6 +15,15 @@ import java.util.Date;
 public class IssueBook {
     private final DatabaseHelper dbHelper = DatabaseHelper.getInstance();
     private final IssueBookDBHistoryDAO issueBookDBHistoryDAO = IssueBookDBHistoryDAO.getInstance();
+
+    /**
+     * Mượn sách cho người dùng bằng cách cập nhật các bảng 'issuebook' và 'book'.
+     * Kiểm tra xem sách có sẵn không và cập nhật số lượng đã mượn cho cuốn sách.
+     *
+     * @param userId ID của người dùng mượn sách.
+     * @param isbn   ISBN của cuốn sách được mượn.
+     * @return true nếu sách đã được mượn thành công, false nếu sách không có sẵn.
+     */
     public boolean borrowBook(int userId, String isbn) {
         String checkAvailabilitySql = "Select QUANTITY, Borrowed from BOOK where isbn = ?";
         String insertIssueBooksql = "INSERT INTO issuebook(student_id,ISBN,borrow_date,due_date) VALUES ( ?, ?, ?,?)";
@@ -25,9 +34,9 @@ public class IssueBook {
             try (PreparedStatement checkStmt = conn.prepareStatement(checkAvailabilitySql)) {
                 checkStmt.setString(1, isbn);
                 ResultSet rs = checkStmt.executeQuery();
-                if(rs.next()) {
+                if (rs.next()) {
                     int available = rs.getInt("Quantity") - rs.getInt("Borrowed");
-                    if(available <= 0) {
+                    if (available <= 0) {
                         return false;
                     }
                 } else {
@@ -37,9 +46,9 @@ public class IssueBook {
             try (PreparedStatement insertStmt = conn.prepareStatement(insertIssueBooksql)) {
                 insertStmt.setInt(1, userId);
                 insertStmt.setString(2, isbn);
-                insertStmt.setDate(3, new java.sql.Date(System.currentTimeMillis()));  // Set borrow date to current date
+                insertStmt.setDate(3, new java.sql.Date(System.currentTimeMillis()));  // Đặt ngày mượn thành ngày hiện tại
 
-                // Set return date to 1 month after borrow date
+                // Đặt ngày trả lại sau 1 tháng kể từ ngày mượn
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(System.currentTimeMillis());
                 calendar.add(Calendar.MONTH, 12);  // Add 1 month to the current date
@@ -48,7 +57,7 @@ public class IssueBook {
                 insertStmt.executeUpdate();
             }
 
-            try(PreparedStatement updateStmt = conn.prepareStatement(updateBookSql)) {
+            try (PreparedStatement updateStmt = conn.prepareStatement(updateBookSql)) {
                 updateStmt.setString(1, isbn);
                 updateStmt.executeUpdate();
             }
@@ -59,6 +68,15 @@ public class IssueBook {
             return false;
         }
     }
+
+    /**
+     * Trả về một cuốn sách và cập nhật các bản ghi có liên quan trong các bảng 'issuebook' và 'book'.
+     * Tính toán phí trễ nếu cuốn sách được trả sau ngày đến hạn.
+     *
+     * @param userId ID của người dùng trả sách.
+     * @param isbn   ISBN của sách trả.
+     * @return phí trễ (nếu có) khi trả muộn hoặc -1 nếu xảy ra lỗi hoặc không tìm thấy cuốn sách.
+     */
     public long returnBook(int userId, String isbn) {
         String selectIssueBookSql = "SELECT borrow_id, borrow_date, due_date, is_returned FROM issuebook WHERE student_id = ? AND isbn = ? AND is_returned = 0";
         String updateIssueBookSql = "UPDATE issuebook SET return_date = ?, is_returned = 'Yes', late_fee = ? WHERE borrow_id = ?";

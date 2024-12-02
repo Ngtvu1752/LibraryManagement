@@ -40,6 +40,14 @@ public class Notification {
         this.is_read = is_read;
     }
 
+    /**
+     * Constructor 1.
+     * Ban đầu, thông báo được đánh dấu là chưa đọc.
+     *
+     * @param userId    ID của người dùng mà thông báo được gửi đến.
+     * @param message   nội dung tin nhắn của thông báo.
+     * @param timestamp thời gian khi thông báo được tạo.
+     */
     public Notification(int userId, String message, LocalDateTime timestamp) {
         this.userId = userId;
         this.message = message;
@@ -47,7 +55,13 @@ public class Notification {
         this.is_read = false;
     }
 
-    public Notification( String message, boolean is_read) {
+    /**
+     * Constructor 2.
+     *
+     * @param message nội dung tin nhắn của thông báo.
+     * @param is_read trạng thái đã đọc của thông báo.
+     */
+    public Notification(String message, boolean is_read) {
         this.message = message;
         this.is_read = is_read;
     }

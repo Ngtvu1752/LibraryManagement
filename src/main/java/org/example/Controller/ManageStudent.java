@@ -138,6 +138,11 @@ public class ManageStudent {
         });
     }
 
+    /**
+     * Lấy danh sách các số sách cho học sinh.
+     *
+     * @return danh sách IssueBookDBHistory
+     */
     public ObservableList<IssueBookDBHistory> getTableBook() {
         String INFOR = "SELECT\n" +
                 "    users.id,\n" +
@@ -174,6 +179,7 @@ public class ManageStudent {
         return infomations;
     }
 
+    //Thêm nút send vào mỗi hàng trong TableView
     private void addOptionButtonToTable() {
         Callback<TableColumn<IssueBookDBHistory, Void>, TableCell<IssueBookDBHistory, Void>> cellFactory = new Callback<TableColumn<IssueBookDBHistory, Void>, TableCell<IssueBookDBHistory, Void>>() {
             public TableCell<IssueBookDBHistory, Void> call(TableColumn<IssueBookDBHistory, Void> param) {
@@ -203,11 +209,18 @@ public class ManageStudent {
         optionColumn.setCellFactory(cellFactory);
     }
 
+    /**
+     * Gửi thông báo cho sinh viên.
+     *
+     * @param userId  là ID học sinh
+     * @param message là tin nhắn thông báo
+     */
     private void sendNotification(int userId, String message) {
         Notification notification = new Notification(userId, message, LocalDateTime.now());
         notificationDAO.save(notification);
         showAlert("Notification", "Thông báo đã được gửi thành công!");
     }
+
     private void findStudent() {
         String keyword = searchField.getText().trim().toLowerCase();
 
@@ -237,7 +250,7 @@ public class ManageStudent {
         tableBook.setItems(filteredStudents);
     }
 
-
+    //Cập nhật thông tin của học sinh đã chọn.
     private void updateStudent() {
         // Lấy thông tin
         String studentIdText = studentIDField.getText().trim();
@@ -293,6 +306,7 @@ public class ManageStudent {
         }
     }
 
+    //Xóa học sinh đã chọn khỏi database.
     private void deleteStudent() {
         // gọi sinh viên được chọn
         IssueBookDBHistory selectedStudent = tableBook.getSelectionModel().getSelectedItem();

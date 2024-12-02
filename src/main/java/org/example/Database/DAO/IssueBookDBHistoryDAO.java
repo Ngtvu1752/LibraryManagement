@@ -84,6 +84,12 @@ public class IssueBookDBHistoryDAO implements DAO<IssueBookDBHistory> {
         return issueBookDBHistories;
     }
 
+    /**
+     * Lưu bản ghi lịch sử phát hành mới vào database.
+     *
+     * @param issueBookDBHistory IssueBookDBHistory cần lưu.
+     * @return True nếu thành công, nếu không thì là false.
+     */
     public boolean save(IssueBookDBHistory issueBookDBHistory) {
         try (Connection conn = dbHelper.connect();
              PreparedStatement pstmt = conn.prepareStatement(INSERT)) {

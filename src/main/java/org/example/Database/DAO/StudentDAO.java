@@ -64,6 +64,12 @@ public class StudentDAO implements DAO<Student> {
         return students;
     }
 
+    /**
+     * Tìm kiếm sinh viên theo ID.
+     *
+     * @param id ID của sinh viên cần tìm.
+     * @return Một Optional chứa sinh viên nếu tìm thấy hoặc một Optional rỗng nếu không tìm thấy.
+     */
     public Optional<Student> findById(int id) {
         String sql = "SELECT * FROM users WHERE id = ? AND role = 'student'";
         try (Connection conn = dbHelper.connect();
@@ -82,6 +88,12 @@ public class StudentDAO implements DAO<Student> {
         return Optional.empty();
     }
 
+    /**
+     * Kiểm tra xem tên người dùng có tồn tại trong database không.
+     *
+     * @param username Tên người dùng.
+     * @return True nếu tên người dùng tồn tại, nếu không thì trả về false.
+     */
     public boolean usernameExists(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";
         try (Connection conn = dbHelper.connect();
@@ -95,6 +107,12 @@ public class StudentDAO implements DAO<Student> {
         }
     }
 
+    /**
+     * Kiểm tra xem ID sinh viên có tồn tại trong database không.
+     *
+     * @param studentId ID sinh viên.
+     * @return True nếu ID sinh viên tồn tại, nếu không thì trả về false.
+     */
     public boolean isStudentIdExists(int studentId) {
         String checkStudentIdQuery = "SELECT COUNT(*) FROM users WHERE id = ?";
         try (Connection conn = dbHelper.connect();
@@ -124,6 +142,13 @@ public class StudentDAO implements DAO<Student> {
         }
     }
 
+    /**
+     * Lưu một sinh viên mới vào cơ sở dữ liệu.
+     * Kiểm tra xem tên người dùng đã tồn tại chưa trước khi lưu.
+     *
+     * @param student sinh viên.
+     * @return True nếu lưu thành công, nếu không thì trả về false.
+     */
     public boolean save(Student student) {
         String sql = "INSERT INTO users(username, name, password, question, answer, role) VALUES(?,?,?,?,?,?)";
 
@@ -150,6 +175,12 @@ public class StudentDAO implements DAO<Student> {
         }
     }
 
+    /**
+     * Xóa một sinh viên khỏi database.
+     *
+     * @param student sinh viên cần xóa.
+     * @return True nếu xóa thành công, nếu không thì trả về false.
+     */
     public boolean delete(Student student) {
         String sql = "DELETE FROM users WHERE id = ? AND role = 'student'";
 
@@ -170,6 +201,12 @@ public class StudentDAO implements DAO<Student> {
         }
     }
 
+    /**
+     * Cập nhật thông tin sinh viên tồn tại trong database.
+     *
+     * @param student sinh viên.
+     * @return True nếu cập nhật thành công, nếu không thì trả về false.
+     */
     public boolean update(Student student) {
         String updateQuery = "UPDATE users SET name = ?, class = ?, school = ? WHERE id = ?";
         try (Connection conn = dbHelper.connect();

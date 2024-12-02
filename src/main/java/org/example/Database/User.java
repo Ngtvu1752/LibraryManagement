@@ -24,6 +24,16 @@ public abstract class User {
         Answer = answer;
     }
 
+    /**
+     * Constructor 1.
+     *
+     * @param id               ID của người dùng.
+     * @param username         tên người dùng của người dùng.
+     * @param password         mật khẩu của người dùng.
+     * @param name             tên của người dùng.
+     * @param securityQuestion câu hỏi bảo mật của người dùng.
+     * @param Answer           câu trả lời cho câu hỏi bảo mật.
+     */
     public User(int id, String username, String password, String name, String securityQuestion, String Answer) {
         this.username = username;
         this.password = password;
@@ -33,6 +43,15 @@ public abstract class User {
         this.id = id;
     }
 
+    /**
+     * Constructor 2.
+     *
+     * @param username         tên người dùng của người dùng.
+     * @param password         mật khẩu của người dùng.
+     * @param name             tên của người dùng.
+     * @param securityQuestion câu hỏi bảo mật của người dùng.
+     * @param Answer           câu trả lời cho câu hỏi bảo mật.
+     */
     public User(String username, String password, String name, String securityQuestion, String Answer) {
         this.username = username;
         this.password = password;
@@ -41,6 +60,13 @@ public abstract class User {
         this.Answer = Answer;
     }
 
+    /**
+     * Constructor 3.
+     *
+     * @param id       ID của người dùng.
+     * @param username tên người dùng của người dùng.
+     * @param name     tên của người dùng.
+     */
     public User(int id, String username, String name) {
         this.id = id;
         this.username = username;

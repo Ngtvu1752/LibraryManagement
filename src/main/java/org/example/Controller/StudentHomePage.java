@@ -53,9 +53,9 @@ public class StudentHomePage {
     public void initialize() {
         int unRead = getUnreadNotificationCount();
         if (unRead > 0) {
-            unreadText.setText( "(" + unRead + ")" );
+            unreadText.setText("(" + unRead + ")");
         } else {
-            unreadText.setText("(" + 0 + ")" );
+            unreadText.setText("(" + 0 + ")");
         }
         notificationPopup.setVisible(false);
         notificationPopup.setManaged(false);
@@ -68,9 +68,9 @@ public class StudentHomePage {
     private void toggleNotificationPopup() {
         int unRead = getUnreadNotificationCount();
         if (unRead > 0) {
-            unreadText.setText( "(" + unRead + ")" );
+            unreadText.setText("(" + unRead + ")");
         } else {
-            unreadText.setText("(" + 0 + ")" );
+            unreadText.setText("(" + 0 + ")");
         }
         isPopupVisible = !isPopupVisible; // Đảo trạng thái
         notificationPopup.setVisible(isPopupVisible);
@@ -119,7 +119,12 @@ public class StudentHomePage {
         });
     }
 
-
+    /**
+     * Lấy thông báo từ cơ sở dữ liệu cho một người dùng nhất định.
+     *
+     * @param userId ID của người dùng để lấy thông báo.
+     * @return danh sách thông báo cho người dùng.
+     */
     private List<Notification> fetchNotificationsFromDB(int userId) {
         List<Notification> notifications = new ArrayList<>();
         String query = "SELECT message, is_read FROM notifications WHERE user_id = ? ORDER BY timestamp DESC";
@@ -128,7 +133,7 @@ public class StudentHomePage {
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                notifications.add(new Notification(rs.getString("message"),  rs.getBoolean("is_read")));
+                notifications.add(new Notification(rs.getString("message"), rs.getBoolean("is_read")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -136,7 +141,11 @@ public class StudentHomePage {
         return notifications;
     }
 
-
+    /**
+     * Lấy số lượng thông báo chưa đọc của người dùng hiện tại.
+     *
+     * @return số lượng thông báo chưa đọc.
+     */
     private int getUnreadNotificationCount() {
         String query = "SELECT COUNT(*) FROM notifications WHERE user_id = ? AND is_read = 0";
         try (Connection conn = dbHelper.connect();

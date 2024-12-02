@@ -21,9 +21,6 @@ public class HomePage {
     private Button manageBookButton;
 
     @FXML
-    private Button returnBookButton;
-
-    @FXML
     private Button logoutButton;
 
     @FXML
@@ -62,24 +59,6 @@ public class HomePage {
             }
             SceneController.getInstance().switchScene("ManageBook");
         }
-//        try {
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ManageBook.fxml"));
-//            Parent root = fxmlLoader.load();
-//            Stage currentBookStage = (Stage) manageBookButton.getScene().getWindow();
-//            Stage manageBookStage = new Stage();
-//            manageBookStage.setScene(new Scene(root));
-//            manageBookStage.show();
-//
-//            currentBookStage.hide();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//
-//        }
-    }
-
-    private void handleReturnBook() {
-        System.out.println("Return Book button clicked");
     }
 
     private void handleLogout() {
