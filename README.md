@@ -97,6 +97,7 @@ Library Management System là một ứng dụng quản lý thư viện được
 
 ### 5. Hướng dẫn cài đặt
 - Ta tải file .zip của project.
+- Create 1 database như hình ảnh diagram và đặt tên là library_db.
 - Để chạy project, mọi người mở IntelliJ IDEA, mở thư mục LibraryManagement, sử dụng jdk23.0.1 và thêm file .jar vào Project Structure, cài đặt Application trong mục Edit Configuration và thêm VM Options.
 - Kiểm tra file DatabaseHelper, thiết lập các thông tin ứng với phần mềm SQL trong máy.
 - Trong file .pom kiểm tra cài đặt controlsFX cho project bằng maven.
