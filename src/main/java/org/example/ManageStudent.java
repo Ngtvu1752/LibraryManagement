@@ -7,8 +7,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class ManageStudent {
 
@@ -28,10 +31,14 @@ public class ManageStudent {
     private TableColumn<IssueBookDBHistory, String> idColumn, nameColumn, classColumn, schoolColumn, isbnColumn,
             returnColumn, feeColumn, dueColumn;
 
+    @FXML
+    private TableColumn<IssueBookDBHistory, Void> optionColumn;
 
     private ObservableList<IssueBookDBHistory> informations;
     private DatabaseHelper dbHelper = DatabaseHelper.getInstance();
     private StudentDAO studentDAO = new StudentDAO();
+    private final NotificationDAO notificationDAO = NotificationDAO.getInstance();
+    private final BookDAO bookDAO = BookDAO.getInstance();
 
     @FXML
     private void initialize() {
@@ -89,6 +96,7 @@ public class ManageStudent {
         deleteButton.setOnAction(event -> deleteStudent());
         searchButton.setOnAction(event -> searchStudent());
         backButton.setOnAction(event -> handleBackButton());
+        addOptionButtonToTable();
     }
 
     // kiểm tra xem feild có rỗng hoặc null hay không.
@@ -162,6 +170,40 @@ public class ManageStudent {
         return infomations;
     }
 
+    private void addOptionButtonToTable() {
+        Callback<TableColumn<IssueBookDBHistory, Void>, TableCell<IssueBookDBHistory, Void>> cellFactory = new Callback<TableColumn<IssueBookDBHistory, Void>, TableCell<IssueBookDBHistory, Void>>() {
+            public TableCell<IssueBookDBHistory, Void> call(TableColumn<IssueBookDBHistory, Void> param) {
+                return new TableCell<IssueBookDBHistory, Void>() {
+                    private final Button optionButton = new Button("Send");
+
+                    {
+                        optionButton.setOnAction(event -> {
+                            IssueBookDBHistory book = tableBook.getItems().get(getIndex());
+                            String title = bookDAO.getBookTitleByIsbn(book.getIsbn());
+                            String message = "Sách \"" + title + "\" sắp hết hạn. Vui lòng trả đúng hạn.";
+                            sendNotification(book.getStudentId(), message);
+                        });
+                    }
+
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(optionButton);
+                        }
+                    }
+                };
+            }
+        };
+        optionColumn.setCellFactory(cellFactory);
+    }
+
+    private void sendNotification(int userId, String message) {
+        Notification notification = new Notification(userId, message, LocalDateTime.now());
+        notificationDAO.save(notification);
+        showAlert("Notification", "Thông báo đã được gửi thành công!");
+    }
     private void findStudent() {
         String keyword = searchField.getText().trim().toLowerCase();
 

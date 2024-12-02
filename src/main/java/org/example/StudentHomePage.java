@@ -1,15 +1,29 @@
 package org.example;
 
+import javafx.animation.FadeTransition;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class StudentHomePage {
@@ -24,13 +38,104 @@ public class StudentHomePage {
     private Button logoutButton;
 
     @FXML
+    private VBox notificationPopup;
+
+    @FXML
+    private Text unreadText;
+
+    @FXML
+    private ListView<String> notificationList;
+
+    private boolean isPopupVisible = false;
+
+    private final DatabaseHelper dbHelper = DatabaseHelper.getInstance();
+
+    @FXML
     public void initialize() {
-        // Thiết lập sự kiện cho các nút
+        int unRead = getUnreadNotificationCount();
+        if (unRead > 0) {
+            unreadText.setText( "(" + unRead + ")" );
+        } else {
+            unreadText.setText("(" + 0 + ")" );
+        }
+        notificationPopup.setVisible(false);
+        notificationPopup.setManaged(false);
         manageBookButton.setOnAction(event -> handleManageBook());
         profileButton.setOnAction(event -> handleProfile());
         logoutButton.setOnAction(event -> handleLogout());
-
     }
+
+    @FXML
+    private void toggleNotificationPopup() {
+        int unRead = getUnreadNotificationCount();
+        if (unRead > 0) {
+            unreadText.setText( "(" + unRead + ")" );
+        } else {
+            unreadText.setText("(" + 0 + ")" );
+        }
+        isPopupVisible = !isPopupVisible; // Đảo trạng thái
+        notificationPopup.setVisible(isPopupVisible);
+        notificationPopup.setManaged(isPopupVisible);
+        if (isPopupVisible) {
+            loadNotifications();
+            FadeTransition fade = new FadeTransition(Duration.millis(300), notificationPopup);
+            fade.setFromValue(0);
+            fade.setToValue(1);
+            fade.play();
+        }
+    }
+
+    private void loadNotifications() {
+        int userId = SessionManager.getCurrentUser().getId();
+        List<String> notifications = fetchNotificationsFromDB(userId);
+
+        ObservableList<String> items = FXCollections.observableArrayList(notifications);
+        notificationList.setItems(items);
+        markNotificationsAsRead();
+    }
+
+    private List<String> fetchNotificationsFromDB(int userId) {
+        List<String> notifications = new ArrayList<>();
+        String query = "SELECT message FROM notifications WHERE user_id = ?";
+        try (Connection conn = dbHelper.connect();
+                PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                notifications.add(rs.getString("message"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return notifications;
+    }
+
+    private int getUnreadNotificationCount() {
+        String query = "SELECT COUNT(*) FROM notifications WHERE user_id = ? AND is_read = 0";
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, SessionManager.getCurrentUser().getId());
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    private void markNotificationsAsRead() {
+        String query = "UPDATE notifications SET is_read = 1 WHERE user_id = ?";
+        try (Connection conn = dbHelper.connect();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, SessionManager.getCurrentUser().getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void handleManageBook() {
         if (SceneManage.getScene("ManageBookStudent") != null) {
@@ -91,5 +196,7 @@ public class StudentHomePage {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+
     }
+
 }

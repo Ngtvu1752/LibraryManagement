@@ -35,6 +35,22 @@ public class BookDAO implements DAO<Book> {
         return instance;
     }
 
+    public String getBookTitleByIsbn(String isbn) {
+        String query = "SELECT title FROM book WHERE isbn = ?";
+        try (Connection conn = dbHelper.connect();
+                PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, isbn);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("title");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "NULL";
+    }
+
+
     public List<Book> getAll() {
         List<Book> books = new ArrayList<Book>();
         try (Connection conn = dbHelper.connect();
