@@ -47,17 +47,17 @@
 
 ![Screenshot_5](https://github.com/user-attachments/assets/bdc6edbd-aaf8-4007-94bb-c0b1e47660da)
 
-- Quản lí sinh viên: thủ thư có thể sửa, xoá, tìm kiếm thông tin sinh viên
+- Quản lí sinh viên: thủ thư có thể sửa, xoá, tìm kiếm thông tin sinh viên và gửi thông báo khi sinh viên đến hạn trả sách.
 
-![Screenshot_2](https://github.com/user-attachments/assets/6835c82e-9a66-4516-989c-f5315263885b)
+![Screenshot_3](https://github.com/user-attachments/assets/f0ce968e-ebb4-424d-a86d-4641895fe0b5)
 
 - Quản lí sách: thủ thư nhập IBSN để check thông tin tài liệu, thủ thư có thể thêm, sửa, tìm kiếm, xoá sách.
 
 ![Screenshot_1](https://github.com/user-attachments/assets/d78594f8-500c-4678-9bb7-b3d38d7f3126)
 
-Đối với người dùng là sinh viên
+Đối với người dùng là sinh viên: thông báo từ thủ thư hiện ở notifications.
 
-![Screenshot_3](https://github.com/user-attachments/assets/0ab1b714-52f2-4d50-bd01-07e94a47ebde)
+![Screenshot_2](https://github.com/user-attachments/assets/9cc7e4a0-243d-45f5-97e6-3d3000b277c3)
 
 - Profile
 
