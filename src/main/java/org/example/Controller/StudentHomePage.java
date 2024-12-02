@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Controller;
 
 import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
@@ -16,6 +16,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.example.DatabaseHelper;
+import org.example.SceneController;
+import org.example.SceneManage;
+import org.example.SessionManager;
 
 import java.io.IOException;
 import java.sql.Connection;

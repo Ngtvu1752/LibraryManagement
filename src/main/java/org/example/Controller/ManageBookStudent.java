@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.controlsfx.control.Rating;
+import org.example.*;
 
 import java.util.HashSet;
 import java.util.List;

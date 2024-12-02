@@ -1,10 +1,12 @@
-package org.example;
+package org.example.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.example.DatabaseHelper;
+import org.example.SessionManager;
 
 import java.sql.*;
 
