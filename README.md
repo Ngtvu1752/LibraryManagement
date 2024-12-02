@@ -41,7 +41,7 @@
 
 Đăng nhập: nhập vào tên và mật khẩu.
 
-![example](![Screenshot_1](https://github.com/user-attachments/assets/263ca390-f85e-4254-bad2-568c412ca7b4))
+![Screenshot_1](https://github.com/user-attachments/assets/263ca390-f85e-4254-bad2-568c412ca7b4)
 
 Đối với người dùng là thủ thư
 
