@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Controller;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;

@@ -12,11 +12,6 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.example.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 public class ManageBook {
 
     public Label isbnLabel;

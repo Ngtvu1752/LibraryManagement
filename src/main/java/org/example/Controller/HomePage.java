@@ -8,8 +8,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.example.SceneController;
-import org.example.SceneManage;
 
 import java.io.IOException;
 import java.util.Objects;

@@ -6,8 +6,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import org.example.DatabaseHelper;
-import org.example.SceneController;
-import org.example.SceneManage;
 import org.example.Student;
 
 import java.sql.Connection;
