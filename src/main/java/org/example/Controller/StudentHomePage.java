@@ -14,10 +14,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.example.DatabaseHelper;
-import org.example.SceneController;
-import org.example.SceneManage;
-import org.example.SessionManager;
+import org.example.*;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -46,7 +43,7 @@ public class StudentHomePage {
     private Text unreadText;
 
     @FXML
-    private ListView<String> notificationList;
+    private ListView<Notification> notificationList;
 
     private boolean isPopupVisible = false;
 
@@ -90,11 +87,12 @@ public class StudentHomePage {
 
     private void loadNotifications() {
         int userId = SessionManager.getCurrentUser().getId();
-        List<String> notifications = fetchNotificationsFromDB(userId);
+        List<Notification> notifications = fetchNotificationsFromDB(userId);
 
-        ObservableList<String> items = FXCollections.observableArrayList(notifications);
+        ObservableList<Notification> items = FXCollections.observableArrayList(notifications);
         notificationList.setItems(items);
-        notificationList.setCellFactory(listView -> new ListCell<String>() {
+
+        notificationList.setCellFactory(listView -> new ListCell<Notification>() {
             private final Label label = new Label();
 
             {
@@ -104,33 +102,40 @@ public class StudentHomePage {
             }
 
             @Override
-            protected void updateItem(String item, boolean empty) {
+            protected void updateItem(Notification item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setGraphic(null);
                 } else {
-                    label.setText(item);
+                    label.setText(item.getMessage());
+                    if (item.isIs_read()) {
+                        label.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 5px;");
+                    } else {
+                        label.setStyle("-fx-background-color: #ffd700; -fx-padding: 5px;"); // Màu cho thông báo chưa đọc
+                    }
                     setGraphic(label);
                 }
             }
         });
     }
 
-    private List<String> fetchNotificationsFromDB(int userId) {
-        List<String> notifications = new ArrayList<>();
-        String query = "SELECT message FROM notifications WHERE user_id = ?";
+
+    private List<Notification> fetchNotificationsFromDB(int userId) {
+        List<Notification> notifications = new ArrayList<>();
+        String query = "SELECT message, is_read FROM notifications WHERE user_id = ? ORDER BY timestamp DESC";
         try (Connection conn = dbHelper.connect();
-                PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                notifications.add(rs.getString("message"));
+                notifications.add(new Notification(rs.getString("message"),  rs.getBoolean("is_read")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return notifications;
     }
+
 
     private int getUnreadNotificationCount() {
         String query = "SELECT COUNT(*) FROM notifications WHERE user_id = ? AND is_read = 0";

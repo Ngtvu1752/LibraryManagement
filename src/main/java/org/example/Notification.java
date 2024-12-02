@@ -46,4 +46,9 @@ public class Notification {
         this.timestamp = timestamp;
         this.is_read = false;
     }
+
+    public Notification( String message, boolean is_read) {
+        this.message = message;
+        this.is_read = is_read;
+    }
 }
