@@ -41,39 +41,39 @@
 
 Đăng nhập: nhập vào tên và mật khẩu.
 
-![Screenshot_1](https://github.com/user-attachments/assets/263ca390-f85e-4254-bad2-568c412ca7b4)
+![Screenshot_4](https://github.com/user-attachments/assets/c5192e45-259a-4ea6-9881-43c9e0fe78bb)
 
 Đối với người dùng là thủ thư
 
-![example](Screenshot_5.png)
+![Screenshot_5](https://github.com/user-attachments/assets/bdc6edbd-aaf8-4007-94bb-c0b1e47660da)
 
 - Quản lí sinh viên: thủ thư có thể sửa, xoá, tìm kiếm thông tin sinh viên
 
-![example](Screenshot_2.png)
+![Screenshot_2](https://github.com/user-attachments/assets/6835c82e-9a66-4516-989c-f5315263885b)
 
 - Quản lí sách: thủ thư nhập IBSN để check thông tin tài liệu, thủ thư có thể thêm, sửa, tìm kiếm, xoá sách.
 
-![example](Screenshot_2.png)
+![Screenshot_1](https://github.com/user-attachments/assets/d78594f8-500c-4678-9bb7-b3d38d7f3126)
 
 Đối với người dùng là sinh viên
 
-![example](Screenshot_2.png)
+![Screenshot_3](https://github.com/user-attachments/assets/0ab1b714-52f2-4d50-bd01-07e94a47ebde)
 
 - Profile
 
-![example](Screenshot_6.png)
+![Screenshot_6](https://github.com/user-attachments/assets/3a77fc94-ddeb-4642-9bb6-94d3ab1b77d1)
 
 - Quản lí sách: sinh viên có thể tìm kiếm sách, xem thông tin sách, mượn, trả và đánh giá sách.
 
-![example](Screenshot_7.png)
+![Screenshot_7](https://github.com/user-attachments/assets/d37b6116-d1aa-45ee-b531-433c584164cf)
 
 Quên mật khẩu: người dùng có thể lấy lại mật khẩu bằng cách nhập id để tìm kiếm và trả lời đúng security answer.
 
-![example](Screenshot_9.png)
+![Screenshot_9](https://github.com/user-attachments/assets/5166a152-ae06-4bf7-ba10-3a56cd0b07ec)
 
 Đăng kí: Nếu chưa có tài khoản, sinh viên có thể đăng kí tài khoản.
 
-![example](Screenshot_8.png)
+![Screenshot_8](https://github.com/user-attachments/assets/d0dd0d36-75f4-4a27-9c92-166fb95be36a)
 
 ## Demo
 
