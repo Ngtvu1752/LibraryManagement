@@ -1,12 +1,15 @@
-package org.example;
+package org.example.Database.DAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.example.Database.IssueBookDBHistory;
+import org.example.Database.User;
+import org.example.DatabaseHelper;
+import org.example.SessionManager;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class IssueBookDBHistoryDAO implements DAO<IssueBookDBHistory> {
     private final DatabaseHelper dbHelper;

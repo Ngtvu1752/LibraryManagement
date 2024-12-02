@@ -1,4 +1,7 @@
-package org.example;
+package org.example.Database;
+
+import org.example.Database.DAO.IssueBookDBHistoryDAO;
+import org.example.DatabaseHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -11,6 +11,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.example.*;
+import org.example.Database.Book;
+import org.example.Database.DAO.BookDAO;
 
 public class ManageBook {
 

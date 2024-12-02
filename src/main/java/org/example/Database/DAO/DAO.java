@@ -1,9 +1,8 @@
-package org.example;
+package org.example.Database.DAO;
 
 import javafx.collections.ObservableList;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface DAO<T> {
     List<T> getAll();

@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.Database.User;
+
 public class SessionManager {
     private static User currentUser;
 

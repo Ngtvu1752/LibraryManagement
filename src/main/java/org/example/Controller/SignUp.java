@@ -10,6 +10,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import org.example.*;
+import org.example.Database.Student;
+import org.example.Database.DAO.StudentDAO;
 
 public class SignUp {
 

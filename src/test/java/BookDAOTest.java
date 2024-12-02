@@ -2,8 +2,8 @@
 //import static org.junit.Assert.*;
 //
 //import javafx.collections.ObservableList;
-//import org.example.Book;
-//import org.example.BookDAO;
+//import org.example.Database.Book;
+//import org.example.Database.DAO.DAO.BookDAO;
 //import org.example.DatabaseHelper;
 //import org.junit.Before;
 //import org.junit.Test;

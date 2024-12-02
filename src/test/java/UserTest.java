@@ -1,5 +1,5 @@
-import org.example.Admin;
-import org.example.User;
+import org.example.Database.Admin;
+import org.example.Database.User;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

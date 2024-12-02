@@ -16,6 +16,9 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.controlsfx.control.Rating;
 import org.example.*;
+import org.example.Database.*;
+import org.example.Database.DAO.BookDAO;
+import org.example.Database.DAO.IssueBookDBHistoryDAO;
 
 import java.util.HashSet;
 import java.util.List;

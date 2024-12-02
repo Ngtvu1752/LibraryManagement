@@ -11,6 +11,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.example.*;
+import org.example.Database.Admin;
+import org.example.Database.Student;
+import org.example.Database.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

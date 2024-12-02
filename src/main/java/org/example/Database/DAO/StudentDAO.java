@@ -1,7 +1,9 @@
-package org.example;
+package org.example.Database.DAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.example.Database.Student;
+import org.example.DatabaseHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

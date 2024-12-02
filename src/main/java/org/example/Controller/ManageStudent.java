@@ -9,6 +9,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import org.example.*;
+import org.example.Database.*;
+import org.example.Database.DAO.BookDAO;
+import org.example.Database.DAO.NotificationDAO;
+import org.example.Database.DAO.StudentDAO;
 
 import java.sql.*;
 import java.time.LocalDateTime;

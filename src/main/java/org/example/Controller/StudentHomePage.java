@@ -14,6 +14,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.*;
+import org.example.Database.Notification;
 
 import java.io.IOException;
 import java.sql.Connection;

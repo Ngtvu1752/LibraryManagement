@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Database;
 
 public class Book {
     private String isbn;

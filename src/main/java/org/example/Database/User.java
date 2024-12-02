@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Database;
 
 public abstract class User {
     protected String username;

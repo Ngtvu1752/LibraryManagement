@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Database;
 
 public class Student extends User {
     public static final String role = "student";
