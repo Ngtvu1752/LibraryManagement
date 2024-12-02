@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,6 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import org.example.*;
 
 import java.util.HashSet;
 import java.util.List;

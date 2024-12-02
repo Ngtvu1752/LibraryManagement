@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.Rating?>
 
-<AnchorPane prefHeight="687.0" prefWidth="1075.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ManageBookStudent">
+<AnchorPane prefHeight="687.0" prefWidth="1075.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.Controller.ManageBookStudent">
     <children>
         <AnchorPane prefHeight="687.0" prefWidth="287.0" style="-fx-background-color: #D3A29D;">
          <children>
