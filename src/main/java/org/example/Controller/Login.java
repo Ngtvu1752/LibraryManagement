@@ -65,7 +65,6 @@ public class Login {
                 } else {
                     openHomePageAdmin();
                 }
-                SceneManage.removeScene("Login");
             } else {
                 showAlert("Error", "Invalid Student ID or Password.");
             }

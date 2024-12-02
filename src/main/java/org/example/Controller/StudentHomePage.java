@@ -7,9 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -85,6 +83,7 @@ public class StudentHomePage {
             FadeTransition fade = new FadeTransition(Duration.millis(300), notificationPopup);
             fade.setFromValue(0);
             fade.setToValue(1);
+            markNotificationsAsRead();
             fade.play();
         }
     }
@@ -95,7 +94,26 @@ public class StudentHomePage {
 
         ObservableList<String> items = FXCollections.observableArrayList(notifications);
         notificationList.setItems(items);
-        markNotificationsAsRead();
+        notificationList.setCellFactory(listView -> new ListCell<String>() {
+            private final Label label = new Label();
+
+            {
+                label.setWrapText(true);
+                label.setMaxWidth(180);
+                label.setStyle("-fx-padding: 5px;");
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    label.setText(item);
+                    setGraphic(label);
+                }
+            }
+        });
     }
 
     private List<String> fetchNotificationsFromDB(int userId) {
